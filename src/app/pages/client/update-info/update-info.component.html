@@ -1,0 +1,232 @@
+<section class="p-4 mt-5">
+    <div class="flex flex-col items-center 
+        sm:ml-[240px] sm:mr-[200px] 
+        ml-4 mr-4 
+        space-y-4 sm:space-y-0 sm:flex-row sm:justify-between">
+
+        <div class="flex items-center gap-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                <path fill="#000"
+                    d="M16.9 5c-.2-.6-.8-1-1.4-1h-11c-.7 0-1.2.4-1.4 1L1 11v8c0 .5.5 1 1 1h1c.5 0 1-.5 1-1v-1h4.3c-.2-.6-.3-1.3-.3-2c0-2.4 1.1-4.5 2.7-6H3l1.5-4.5h11l.8 2.5c.6 0 1.2.1 1.7.3zM4.5 12c.8 0 1.5.7 1.5 1.5S5.3 15 4.5 15S3 14.3 3 13.5S3.7 12 4.5 12M23 17h-2v2h-2v-2h-2v-2h2v-2h2v2h2zm-8.5-1c.8 0 1.5-1.2 1.5-2c0-1.1-.9-2-2-2h-3v2h3v1h-2v2h2v1h-3v2h3c1.1 0 2-.9 2-2c0-.8-.7-2-1.5-2" />
+            </svg>
+
+            <h2 class="text-xl titles">Reservation Details</h2>
+        </div>
+
+        <div class="relative">
+            <button type="button" class="flex items-center px-4 py-2 space-x-2 text-white bg-black rounded details"
+                (click)="toggleDropdown()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                        <circle cx="18" cy="15" r="3" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path
+                            d="M10 15H6a4 4 0 0 0-4 4v2m19.7-4.6l-.9-.3m-5.6-2.2l-.9-.3m2.3 5.1l.3-.9m2.2-5.6l.3-.9m.2 7.4l-.4-1m-2.4-5.4l-.4-1m-2.1 5.3l1-.4m5.4-2.4l1-.4" />
+                    </g>
+                </svg>
+                <span>Settings</span>
+            </button>
+
+            
+            <div *ngIf="dropdownOpen" class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-lg">
+                <ul>
+                    <li class="px-4 py-2 cursor-pointer details hover:bg-gray-200" (click)="openModalEdit()">Edit
+                        Profile</li>
+                    <li class="px-4 py-2 cursor-pointer details hover:bg-gray-200" (click)="openDeleteAccountModal()">
+                        Delete Account</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Modal Client Update  -->
+<div class="fixed inset-0 z-50 overflow-y-auto" *ngIf="isModalOpenEditProfile">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div
+            class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-[#F4F1F1] rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 duration-300 ease-out">
+
+
+
+            <div class="flex items-center mb-6">
+                <div class="flex-shrink-0 mr-4">
+                    <div class="flex items-center justify-center w-12 h-12 bg-white rounded-full">
+
+                        <svg class="w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24">
+                            <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 21v-2a4 4 0 0 1 4-4h2m10 1c0 4-2.5 6-3.5 6S15 20 15 16c1 0 2.5-.5 3.5-1.5c1 1 2.5 1.5 3.5 1.5M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl text-gray-900 titles">Client Data
+                    Update</h3>
+            </div>
+            <div class="mt-4">
+                <div class="flex space-x-4">
+                    <div class="relative flex-1 mb-4">
+                        <input type="text" [(ngModel)]="clientData.name" name="name" placeholder="Name"
+                            class="w-full p-3 pr-12 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"
+                            class="absolute transform -translate-y-1/2 right-3 top-1/2">
+                            <path fill="black"
+                                d="M152 80a8 8 0 0 1 8-8h88a8 8 0 0 1 0 16h-88a8 8 0 0 1-8-8m96 40h-88a8 8 0 0 0 0 16h88a8 8 0 0 0 0-16m0 48h-64a8 8 0 0 0 0 16h64a8 8 0 0 0 0-16m-96.25 22a8 8 0 0 1-5.76 9.74a7.6 7.6 0 0 1-2 .26a8 8 0 0 1-7.75-6c-6.16-23.94-30.34-42-56.25-42s-50.09 18.05-56.25 42a8 8 0 0 1-15.5-4c5.59-21.71 21.84-39.29 42.46-48a48 48 0 1 1 58.58 0c20.63 8.71 36.88 26.29 42.47 48M80 136a32 32 0 1 0-32-32a32 32 0 0 0 32 32" />
+                        </svg>
+                    </div>
+
+                    <div class="relative flex-1 mb-4">
+                        <input type="text" [(ngModel)]="clientData.identification" name="identification"
+                            placeholder="Identification"
+                            class="w-full p-3 pr-12 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            class="absolute transform -translate-y-1/2 right-3 top-1/2">
+                            <path fill="black" fill-rule="evenodd"
+                                d="M10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12s0-5.657 1.172-6.828S6.229 4 10 4m3.25 5a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75m1 3a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75m1 3a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1-.75-.75M11 9a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-2 8c4 0 4-.895 4-2s-1.79-2-4-2s-4 .895-4 2s0 2 4 2"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4">
+                    <div class="relative flex-1 mb-4">
+                        <input type="text" [(ngModel)]="clientData.address" name="address" placeholder="Address"
+                            class="w-full p-3 pr-12 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024"
+                            class="absolute transform -translate-y-1/2 right-3 top-1/2">
+                            <path fill="black"
+                                d="M512 512a192 192 0 1 0 0-384a192 192 0 0 0 0 384m0 64a256 256 0 1 1 0-512a256 256 0 0 1 0 512" />
+                            <path fill="black"
+                                d="M512 512a32 32 0 0 1 32 32v256a32 32 0 1 1-64 0V544a32 32 0 0 1 32-32" />
+                            <path fill="black"
+                                d="M384 649.088v64.96C269.76 732.352 192 771.904 192 800c0 37.696 139.904 96 320 96s320-58.304 320-96c0-28.16-77.76-67.648-192-85.952v-64.96C789.12 671.04 896 730.368 896 800c0 88.32-171.904 160-384 160s-384-71.68-384-160c0-69.696 106.88-128.96 256-150.912" />
+                        </svg>
+                    </div>
+
+                    <div class="relative flex-1 mb-4">
+                        <input type="text" [(ngModel)]="clientData.contact" name="contact" placeholder="Contact"
+                            class="w-full p-3 pr-12 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            class="absolute transform -translate-y-1/2 right-3 top-1/2">
+                            <path fill="black"
+                                d="m15.1 15.027l.545.517zm.456-.48l-.544-.516zm2.417-.335l-.374.65zm1.91 1.1l-.374.65zm.539 3.446l.543.517zm-1.42 1.496l-.545-.517zm-1.326.71l.074.745zm-9.86-4.489l.543-.516zm-4.064-9.55a.75.75 0 1 0-1.498.081zm5.439 1.88l.544.517zm.287-.302l.543.517zm.156-2.81l.613-.433zM8.374 3.91l-.613.433zm-3.656-.818a.75.75 0 0 0 1.087 1.033zm6.345 9.964l.544-.517zm-.399 6.756a.75.75 0 1 0 .798-1.27zm4.449.246a.75.75 0 0 0-.307 1.469zm.532-4.514l.455-.48l-1.088-1.033l-.455.48zm1.954-.682l1.91 1.1l.749-1.3l-1.911-1.1zm2.279 3.38l-1.42 1.495l1.087 1.034l1.42-1.496zM8.359 15.959c-3.876-4.081-4.526-7.523-4.607-9.033l-1.498.08c.1 1.85.884 5.634 5.018 9.986zm1.376-6.637l.286-.302l-1.087-1.033l-.287.302zm.512-4.062L8.986 3.477l-1.225.866l1.26 1.783zM9.19 8.805a38 38 0 0 0-.545-.515l-.002.002l-.003.003l-.05.058a1.6 1.6 0 0 0-.23.427c-.098.275-.15.639-.084 1.093c.13.892.715 2.091 2.242 3.7l1.088-1.034c-1.428-1.503-1.78-2.428-1.846-2.884c-.032-.22 0-.335.013-.372l.008-.019l-.028.037l-.018.02zm1.328 4.767c1.523 1.604 2.673 2.234 3.55 2.377c.451.073.816.014 1.092-.095a1.5 1.5 0 0 0 .422-.25l.035-.034l.014-.014l.007-.006l.003-.003l.001-.002s.002-.001-.542-.518c-.544-.516-.543-.517-.543-.518l.002-.001l.002-.003l.006-.005l.047-.042q.014-.008-.005.001c-.02.008-.11.04-.3.009c-.402-.066-1.27-.42-2.703-1.929zM8.986 3.477C7.972 2.043 5.944 1.8 4.718 3.092l1.087 1.033c.523-.55 1.444-.507 1.956.218zm9.471 16.26c-.279.294-.57.452-.854.48l.147 1.492c.747-.073 1.352-.472 1.795-.939zM10.021 9.02c.968-1.019 1.036-2.613.226-3.76l-1.225.866c.422.597.357 1.392-.088 1.86zm9.488 6.942c.821.473.982 1.635.369 2.28l1.087 1.033c1.305-1.374.925-3.673-.707-4.613zm-3.409-.898c.385-.406.986-.497 1.499-.202l.748-1.3c-1.099-.632-2.46-.45-3.335.47zm-4.638 3.478c-.983-.618-2.03-1.454-3.103-2.583l-1.087 1.033c1.154 1.215 2.297 2.132 3.392 2.82zm6.14 1.675a8.3 8.3 0 0 1-2.489-.159l-.307 1.469a9.8 9.8 0 0 0 2.944.182z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="relative mb-4">
+                    <input type="email" [(ngModel)]="clientData.email" name="email" placeholder="Enter your email"
+                        class="w-full p-3 pr-12 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36"
+                        class="absolute transform -translate-y-1/2 right-3 top-1/2">
+                        <path fill="black"
+                            d="M32 6H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2m-1.54 22H5.66l7-7.24l-1.44-1.39L4 26.84V9.52l12.43 12.37a2 2 0 0 0 2.82 0L32 9.21v17.5l-7.36-7.36l-1.41 1.41ZM5.31 8h25.07L17.84 20.47Z"
+                            class="clr-i-outline clr-i-outline-path-1" />
+                        <path fill="none" d="M0 0h36v36H0z" />
+                    </svg>
+                </div>
+
+                <div class="relative mb-4">
+                    <input type="password" [(ngModel)]="clientData.password" name="password"
+                        placeholder="Enter your password"
+                        class="w-full p-3 pr-12 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        class="absolute transform -translate-y-1/2 right-3 top-1/2">
+                        <g fill="none" stroke="black" stroke-width="1.5">
+                            <path
+                                d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                            <path stroke-linecap="round"
+                                d="M12 10v4m-1.732-3l3.464 2m0-2l-3.464 2m-3.535-3v4M5 11l3.464 2m0-2L5 13m12.268-3v4m-1.732-3L19 13m0-2l-3.465 2" />
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+
+
+            <div class="flex justify-end mt-6 space-x-3">
+                <button type="button" (click)="closeModalEdit()"
+                    class="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors bg-gray-200 rounded-md hover:bg-gray-300 titles">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="mr-1.5">
+                        <path fill="#000"
+                            d="m15.225 19.475l1.75-1.75l1.75 1.75l.75-.75L17.75 17l1.75-1.75l-.75-.75L17 16.25l-1.75-1.75l-.75.75L16.25 17l-1.75 1.75zM3 20v-6l8-2l-8-2V4l14.3 6H17q-2.925 0-4.962 2.063T10 17.05zm14 2q-2.075 0-3.537-1.463T12 17t1.463-3.537T17 12t3.538 1.463T22 17t-1.463 3.538T17 22" />
+                    </svg>
+                    Cancel
+                </button>
+                <button type="button" (click)="updateClientInfo()"
+                    class="flex items-center px-6 py-2 text-sm font-medium text-white transition-colors bg-black rounded-md titles">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256" class="ml-[-8px] mr-10">
+                        <path fill="white"
+                            d="M228 40v36a12 12 0 0 1-24 0V52h-24a12 12 0 0 1 0-24h36a12 12 0 0 1 12 12m-12 128a12 12 0 0 0-12 12v24h-24a12 12 0 0 0 0 24h36a12 12 0 0 0 12-12v-36a12 12 0 0 0-12-12M76 204H52v-24a12 12 0 0 0-24 0v36a12 12 0 0 0 12 12h36a12 12 0 0 0 0-24M40 88a12 12 0 0 0 12-12V52h24a12 12 0 0 0 0-24H40a12 12 0 0 0-12 12v36a12 12 0 0 0 12 12m136 92a12 12 0 0 1-9.6-4.79a48 48 0 0 0-76.82 0a12 12 0 0 1-19.18-14.42a72.1 72.1 0 0 1 23.92-20.5a44 44 0 1 1 67.34 0a72.1 72.1 0 0 1 23.92 20.5A12 12 0 0 1 176 180m-48-48a20 20 0 1 0-20-20a20 20 0 0 0 20 20" />
+                    </svg>
+                    Update Data
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Client Update Successfully -->
+<div *ngIf="showAlertUpdateInfo"
+    class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
+    style="width: 400px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="flex-shrink-0">
+        <path fill="black"
+            d="m21.1 12.5l1.4 1.41l-6.53 6.59L12.5 17l1.4-1.41l2.07 2.08zM11 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m0 7c.68 0 1.5.09 2.41.26l-1.67 1.67l-.74-.03c-2.97 0-6.1 1.46-6.1 2.1v1.1h6.2L13 20H3v-3c0-2.66 5.33-4 8-4" />
+    </svg>
+
+    <span class="ml-auto font-bold text-right text-black">Client Update Successfully</span>
+</div>
+
+<!-- Modal Deleted Account -->
+<div *ngIf="isModalOpenDeleteAccount"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+    <div class="w-full max-w-md p-6 overflow-hidden transition-all transform bg-white shadow-xl rounded-2xl">
+        <div class="flex justify-center mb-6">
+            <div class="p-4 bg-red-100 rounded-full">
+                <div class="flex items-center justify-center w-16 h-16 bg-red-600 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="transform scale-100">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                        </path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <h3 class="mb-4 text-2xl font-semibold text-gray-900 titles">
+                Confirm Deletion
+            </h3>
+            <div class="mt-2">
+                <p class="text-sm leading-relaxed text-gray-600 details">
+                    Are you sure you want to delete this account? This action cannot be undone.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-3 mt-8">
+            <button
+                class="inline-flex justify-center rounded-lg border border-transparent bg-red-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition-colors duration-200 titles"
+                (click)="deleteAccount()">
+                Delete
+            </button>
+            <button
+                class="inline-flex justify-center rounded-lg border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition-colors duration-200 titles"
+                (click)="closeDeleteAccountModal()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,254 @@
+<app-navbar-home></app-navbar-home>
+
+<section class="max-w-2xl p-6 mx-auto mt-2">
+    <h2 class="mb-6 text-3xl text-center titles">Bienvenido a la Experiencia Premium: Registro para Clientes y
+        Administradores</h2>
+    <p class="mb-4 text-lg text-center details">
+        Regístrate ahora y descubre una plataforma exclusiva diseñada tanto para clientes como para administradores.
+        Accede a
+        una experiencia de lujo inigualable: los clientes pueden reservar vehículos premium con un servicio de primera
+        clase,
+        mientras que los administradores disponen de herramientas avanzadas para gestionar eficientemente flotas,
+        inventario y
+        reservas.
+    </p>
+    <p class="text-lg text-center details">
+        ¡No esperes más! Regístrate hoy y lleva tu experiencia al siguiente nivel, ya sea disfrutando de los mejores
+        vehículos o
+        garantizando un servicio de alta calidad para cada cliente.
+    </p>
+
+    <div class="flex justify-center mt-12">
+        <button aria-label="Register"
+            class="flex flex-col items-center w-full h-20 py-2 text-black bg-[white] border border-black rounded titles sm:w-60"
+            (click)="isRegisterModalOpen = true">
+            <span>¡Registrate ahora!</span>
+
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="mt-1">
+                <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h.5m7.3 5.817l-2.172 1.138a.392.392 0 0 1-.568-.41l.415-2.411l-1.757-1.707a.389.389 0 0 1 .217-.665l2.428-.352l1.086-2.193a.392.392 0 0 1 .702 0l1.086 2.193l2.428.352a.39.39 0 0 1 .217.665l-1.757 1.707l.414 2.41a.39.39 0 0 1-.567.411z" />
+            </svg>
+        </button>
+    </div>
+
+</section>
+
+<div *ngIf="isRegisterModalOpen" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <!-- Modal content -->
+        <form [formGroup]="formRegister" (ngSubmit)="onSubmit()"
+            class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-[#F4F1F1] rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 duration-300 ease-out">
+
+            <!-- Modal header -->
+            <div class="flex items-center mb-4">
+                <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 mr-3 bg-white rounded-full">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 21v-2a4 4 0 0 1 4-4h2m10 1c0 4-2.5 6-3.5 6S15 20 15 16c1 0 2.5-.5 3.5-1.5c1 1 2.5 1.5 3.5 1.5M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium leading-6 text-gray-900 titles" id="modal-headline">Registro de Usuario
+                </h3>
+            </div>
+
+            <!-- Error message -->
+            <div *ngIf="errorMessage" class="p-3 mb-4 text-red-700 bg-red-100 border border-red-400 rounded-md">
+                <div class="flex">
+                    <svg class="flex-shrink-0 w-5 h-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <div class="ml-3">
+                        <p class="text-sm">{{ errorMessage }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form fields -->
+            <div class="space-y-3">
+                <!-- Name field -->
+                <div class="relative">
+                    <input type="text" formControlName="name" name="name" placeholder="Nombre completo"
+                        class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                        [class.border-red-500]="formRegister.get('name')?.invalid && formRegister.get('name')?.touched">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+                            <path fill="black"
+                                d="M152 80a8 8 0 0 1 8-8h88a8 8 0 0 1 0 16h-88a8 8 0 0 1-8-8m96 40h-88a8 8 0 0 0 0 16h88a8 8 0 0 0 0-16m0 48h-64a8 8 0 0 0 0 16h64a8 8 0 0 0 0-16m-96.25 22a8 8 0 0 1-5.76 9.74a7.6 7.6 0 0 1-2 .26a8 8 0 0 1-7.75-6c-6.16-23.94-30.34-42-56.25-42s-50.09 18.05-56.25 42a8 8 0 0 1-15.5-4c5.59-21.71 21.84-39.29 42.46-48a48 48 0 1 1 58.58 0c20.63 8.71 36.88 26.29 42.47 48M80 136a32 32 0 1 0-32-32a32 32 0 0 0 32 32" />
+                        </svg>
+                    </div>
+                    <div *ngIf="formRegister.get('name')?.invalid && formRegister.get('name')?.touched"
+                        class="mt-1 text-xs text-red-600 details">
+                        El nombre es requerido.
+                    </div>
+                </div>
+
+                <!-- Email field -->
+                <div class="relative">
+                    <input type="email" formControlName="email" name="email" placeholder="Correo electrónico"
+                        class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                        [class.border-red-500]="formRegister.get('email')?.invalid && formRegister.get('email')?.touched">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
+                            <path fill="black"
+                                d="M32 6H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2m-1.54 22H5.66l7-7.24l-1.44-1.39L4 26.84V9.52l12.43 12.37a2 2 0 0 0 2.82 0L32 9.21v17.5l-7.36-7.36l-1.41 1.41ZM5.31 8h25.07L17.84 20.47Z"
+                                class="clr-i-outline clr-i-outline-path-1" />
+                            <path fill="none" d="M0 0h36v36H0z" />
+                        </svg>
+                    </div>
+                    <div *ngIf="formRegister.get('email')?.invalid && formRegister.get('email')?.touched"
+                        class="mt-1 text-xs text-red-600 details">
+                        <span *ngIf="formRegister.get('email')?.errors?.['required']">El email es requerido.</span>
+                        <span *ngIf="formRegister.get('email')?.errors?.['email']">Formato de email inválido.</span>
+                    </div>
+                </div>
+
+                <!-- Password field -->
+                <div class="relative">
+                    <input type="password" formControlName="password" name="password" placeholder="Contraseña"
+                        class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                        [class.border-red-500]="formRegister.get('password')?.invalid && formRegister.get('password')?.touched">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g fill="none" stroke="black" stroke-width="1.5">
+                                <path
+                                    d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                                <path stroke-linecap="round"
+                                    d="M12 10v4m-1.732-3l3.464 2m0-2l-3.464 2m-3.535-3v4M5 11l3.464 2m0-2L5 13m12.268-3v4m-1.732-3L19 13m0-2l-3.465 2" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div *ngIf="formRegister.get('password')?.invalid && formRegister.get('password')?.touched"
+                        class="mt-1 text-xs text-red-600 details">
+                        La contraseña es requerida.
+                    </div>
+                </div>
+
+                <!-- Role selector -->
+                <div class="relative">
+                    <select formControlName="role" name="role"
+                        class="appearance-none w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                        [class.border-red-500]="formRegister.get('role')?.invalid && formRegister.get('role')?.touched">
+                        <option value="" disabled>Seleccionar rol</option>
+                        <option value="admin">Administrador</option>
+                        <option value="client">Cliente</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2">
+                                <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <path d="m9 11l3 3l3-3" />
+                            </g>
+                        </svg>
+                    </div>
+                    <div *ngIf="formRegister.get('role')?.invalid && formRegister.get('role')?.touched"
+                        class="mt-1 text-xs text-red-600 details">
+                        Debe seleccionar un rol.
+                    </div>
+                </div>
+
+                <!-- Client-specific fields -->
+                <div *ngIf="formRegister.get('role')?.value === 'client'"
+                    class="space-y-3 duration-300 client-fields animate-in slide-in-from-top">
+
+                    <!-- Identification field -->
+                    <div class="relative">
+                        <input type="text" formControlName="identification" name="identification"
+                            placeholder="Número de identificación"
+                            class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                            [class.border-red-500]="formRegister.get('identification')?.invalid && formRegister.get('identification')?.touched">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="black" fill-rule="evenodd"
+                                    d="M10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12s0-5.657 1.172-6.828S6.229 4 10 4m3.25 5a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75zm1 3a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75zm1 3a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1-.75-.75zM11 9a2 2 0 1 1-4 0a2 2 0 0 1 4 0zm-2 8c4 0 4-.895 4-2s-1.79-2-4-2s-4 .895-4 2s0 2 4 2z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div *ngIf="formRegister.get('identification')?.invalid && formRegister.get('identification')?.touched"
+                            class="mt-1 text-xs text-red-600 details">
+                            La identificación es requerida para clientes.
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Address field -->
+                        <div>
+                            <div class="relative">
+                                <input type="text" formControlName="address" name="address" placeholder="Dirección"
+                                    class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                                    [class.border-red-500]="formRegister.get('address')?.invalid && formRegister.get('address')?.touched">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 1024 1024">
+                                        <path fill="black"
+                                            d="M512 512a192 192 0 1 0 0-384a192 192 0 0 0 0 384m0 64a256 256 0 1 1 0-512a256 256 0 0 1 0 512" />
+                                        <path fill="black"
+                                            d="M512 512a32 32 0 0 1 32 32v256a32 32 0 1 1-64 0V544a32 32 0 0 1 32-32" />
+                                        <path fill="black"
+                                            d="M384 649.088v64.96C269.76 732.352 192 771.904 192 800c0 37.696 139.904 96 320 96s320-58.304 320-96c0-28.16-77.76-67.648-192-85.952v-64.96C789.12 671.04 896 730.368 896 800c0 88.32-171.904 160-384 160s-384-71.68-384-160c0-69.696 106.88-128.96 256-150.912" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div *ngIf="formRegister.get('address')?.invalid && formRegister.get('address')?.touched"
+                                class="mt-1 text-xs text-red-600 details">
+                                La dirección es requerida para clientes.
+                            </div>
+                        </div>
+
+                        <!-- Contact field -->
+                        <div>
+                            <div class="relative">
+                                <input type="text" formControlName="contact" name="contact" placeholder="Teléfono"
+                                    class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                                    [class.border-red-500]="formRegister.get('contact')?.invalid && formRegister.get('contact')?.touched">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="black"
+                                            d="m15.1 15.027l.545.517zm.456-.48l-.544-.516zm2.417-.335l-.374.65zm1.91 1.1l-.374.65zm.539 3.446l.543.517zm-1.42 1.496l-.545-.517zm-1.326.71l.074.745zm-9.86-4.489l.543-.516zm-4.064-9.55a.75.75 0 1 0-1.498.081zm5.439 1.88l.544.517zm.287-.302l.543.517zm.156-2.81l.613-.433zM8.374 3.91l-.613.433zm-3.656-.818a.75.75 0 0 0 1.087 1.033zm6.345 9.964l.544-.517zm-.399 6.756a.75.75 0 1 0 .798-1.27zm4.449.246a.75.75 0 0 0-.307 1.469zm.532-4.514l.455-.48l-1.088-1.033l-.455.48zm1.954-.682l1.91 1.1l.749-1.3l-1.911-1.1zm2.279 3.38l-1.42 1.495l1.087 1.034l1.42-1.496zM8.359 15.959c-3.876-4.081-4.526-7.523-4.607-9.033l-1.498.08c.1 1.85.884 5.634 5.018 9.986zm1.376-6.637l.286-.302l-1.087-1.033l-.287.302zm.512-4.062L8.986 3.477l-1.225.866l1.26 1.783zM9.19 8.805a38 38 0 0 0-.545-.515l-.002.002l-.003.003l-.05.058a1.6 1.6 0 0 0-.23.427c-.098.275-.15.639-.084 1.093c.13.892.715 2.091 2.242 3.7l1.088-1.034c-1.428-1.503-1.78-2.428-1.846-2.884c-.032-.22 0-.335.013-.372l.008-.019l-.028.037l-.018.02zm1.328 4.767c1.523 1.604 2.673 2.234 3.55 2.377c.451.073.816.014 1.092-.095a1.5 1.5 0 0 0 .422-.25l.035-.034l.014-.014l.007-.006l.003-.003l.001-.002s.002-.001-.542-.518c-.544-.516-.543-.517-.543-.518l.002-.001l.002-.003l.006-.005l.047-.042q.014-.008-.005.001c-.02.008-.11.04-.3.009c-.402-.066-1.27-.42-2.703-1.929zM8.986 3.477C7.972 2.043 5.944 1.8 4.718 3.092l1.087 1.033c.523-.55 1.444-.507 1.956.218zm9.471 16.26c-.279.294-.57.452-.854.48l.147 1.492c.747-.073 1.352-.472 1.795-.939zM10.021 9.02c.968-1.019 1.036-2.613.226-3.76l-1.225.866c.422.597.357 1.392-.088 1.86zm9.488 6.942c.821.473.982 1.635.369 2.28l1.087 1.033c1.305-1.374.925-3.673-.707-4.613zm-3.409-.898c.385-.406.986-.497 1.499-.202l.748-1.3c-1.099-.632-2.46-.45-3.335.47zm-4.638 3.478c-.983-.618-2.03-1.454-3.103-2.583l-1.087 1.033c1.154 1.215 2.297 2.132 3.392 2.82zm6.14 1.675a8.3 8.3 0 0 1-2.489-.159l-.307 1.469a9.8 9.8 0 0 0 2.944.182z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div *ngIf="formRegister.get('contact')?.invalid && formRegister.get('contact')?.touched"
+                                class="mt-1 text-xs text-red-600 details">
+                                El teléfono es requerido para clientes.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex justify-end mt-6 space-x-3">
+                <button type="button" (click)="closeModal()"
+                    class="flex items-center px-4 py-2 text-sm transition-colors bg-gray-200 rounded-md titles hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" class="mr-1">
+                        <path fill="#000"
+                            d="m15.225 19.475l1.75-1.75l1.75 1.75l.75-.75L17.75 17l1.75-1.75l-.75-.75L17 16.25l-1.75-1.75l-.75.75L16.25 17l-1.75 1.75zM3 20v-6l8-2l-8-2V4l14.3 6H17q-2.925 0-4.962 2.063T10 17.05zm14 2q-2.075 0-3.537-1.463T12 17t1.463-3.537T17 12t3.538 1.463T22 17t-1.463 3.538T17 22" />
+                    </svg>
+                    Cerrar
+                </button>
+                <button type="submit" [disabled]="formRegister.invalid"
+                    class="inline-flex items-center px-4 py-2 text-sm text-white transition-colors bg-black rounded-md titles hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 256 256" class="mr-1">
+                        <path fill="white"
+                            d="M228 40v36a12 12 0 0 1-24 0V52h-24a12 12 0 0 1 0-24h36a12 12 0 0 1 12 12m-12 128a12 12 0 0 0-12 12v24h-24a12 12 0 0 0 0 24h36a12 12 0 0 0 12-12v-36a12 12 0 0 0-12-12M76 204H52v-24a12 12 0 0 0-24 0v36a12 12 0 0 0 12 12h36a12 12 0 0 0 0-24M40 88a12 12 0 0 0 12-12V52h24a12 12 0 0 0 0-24H40a12 12 0 0 0-12 12v36a12 12 0 0 0 12 12m136 92a12 12 0 0 1-9.6-4.79a48 48 0 0 0-76.82 0a12 12 0 0 1-19.18-14.42a72.1 72.1 0 0 1 23.92-20.5a44 44 0 1 1 67.34 0a72.1 72.1 0 0 1 23.92 20.5A12 12 0 0 1 176 180m-48-48a20 20 0 1 0-20-20a20 20 0 0 0 20 20" />
+                    </svg>
+                    Registrar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<app-footer-general></app-footer-general>

@@ -1,0 +1,49 @@
+.titles {
+  font-family: "Zilla Slab", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.text {
+  font-family: "Zilla Slab", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@keyframes carousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-carousel {
+  animation: carousel linear infinite;
+}
+
+.animate-carousel:hover {
+  animation-play-state: paused;
+}
+
+
+.image-container {
+  width: 160px; /* Tamaño fijo para el contenedor */
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.image {
+  width: 70%; /* Ajusta la imagen al tamaño del contenedor */
+  height: 70%;
+  object-fit: contain; /* Asegura que las imágenes mantengan sus proporciones */
+  transition: transform 0.3s ease;
+}
+
+.image:hover {
+  transform: scale(1.1); /* Efecto de zoom al pasar el cursor */
+}
