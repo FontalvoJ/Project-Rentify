@@ -1,0 +1,163 @@
+<app-navbar-client></app-navbar-client>
+
+<app-update-info></app-update-info>
+
+<!-- Table Client Reservations -->
+<div class="w-full max-w-6xl p-4 mx-auto">
+    <!-- Vista de tabla para pantallas medianas y grandes -->
+    <div class="hidden overflow-hidden bg-white rounded-lg shadow-md md:block">
+        <div class="overflow-x-auto">
+            <table class="w-full min-w-full table-auto">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-3 tracking-wider text-left text-ls titles">Car</th>
+                        <th class="px-4 py-3 tracking-wider text-left text titles">Start Date</th>
+                        <th class="px-4 py-3 tracking-wider text-left text titles">End Date</th>
+                        <th class="px-4 py-3 tracking-wider text-left text titles">Total Days</th>
+                        <th class="px-4 py-3 tracking-wider text-left text titles">Total Price</th>
+                        <th class="px-4 py-3 tracking-wider text-left text titles">Reservation Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr *ngFor="let reservation of activeReservations" class="hover:bg-gray-50">
+                        <td class="px-4 py-4 text-sm details whitespace-nowrap">
+                            {{ reservation.brand }} - {{ reservation.model }}
+                        </td>
+                        <td class="px-4 py-4 text-sm details whitespace-nowrap">
+                            {{ reservation.startDate | date:'yyyy-MM-dd' }}
+                        </td>
+                        <td class="px-4 py-4 text-sm details whitespace-nowrap">
+                            {{ reservation.endDate | date:'yyyy-MM-dd' }}
+                        </td>
+                        <td class="px-4 py-4 text-sm details whitespace-nowrap">
+                            {{ reservation.totalDays }}
+                        </td>
+                        <td class="px-4 py-4 text-sm details whitespace-nowrap">
+                            <span *ngIf="reservation.discountApplied">
+                                {{ reservation.finalCost | currency }}
+                                <span class="text-green-600">(-{{ reservation.discountPercentage }}%)</span>
+                            </span>
+                            <span *ngIf="!reservation.discountApplied">
+                                {{ reservation.finalCost | currency }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-4 text-sm font-medium text-center whitespace-nowrap">
+                            <span
+                                class="inline-block mx-auto px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                                  {{ reservation.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                                                     reservation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                                     reservation.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
+                                                     reservation.status === 'active' ? 'bg-purple-100 text-purple-800' :''}}">
+                                {{ reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1) }}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Vista de tarjetas para pantallas pequeñas -->
+    <div class="block space-y-4 md:hidden">
+        <div *ngFor="let reservation of activeReservations"
+            class="p-4 bg-white border border-gray-200 rounded-lg shadow-md">
+            <!-- Encabezado de la tarjeta -->
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex-1">
+                    <h3 class="text-sm font-medium text-gray-900 titles">
+                        {{ reservation.brand }} - {{ reservation.model }}
+                    </h3>
+                </div>
+                <span class="ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium flex-shrink-0
+                                      {{ reservation.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                                         reservation.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                         reservation.status === 'cancelled' ? 'bg-red-100 text-red-800' : 
+                                         reservation.status === 'active' ? 'bg-purple-100 text-purple-800' :''}}">
+                    {{ reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1) }}
+                </span>
+            </div>
+
+            <!-- Detalles de la reservación -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 titles">Start Date:</span>
+                    <span class="text-sm details">{{ reservation.startDate | date:'yyyy-MM-dd' }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 titles">End Date:</span>
+                    <span class="text-sm details">{{ reservation.endDate | date:'yyyy-MM-dd' }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 titles">Total Days:</span>
+                    <span class="text-sm details">{{ reservation.totalDays }}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500 titles">Total Price:</span>
+                    <div class="text-sm details">
+                        <span *ngIf="reservation.discountApplied">
+                            {{ reservation.finalCost | currency }}
+                            <span class="text-xs text-green-600">(-{{ reservation.discountPercentage }}%)</span>
+                        </span>
+                        <span *ngIf="!reservation.discountApplied">
+                            {{ reservation.finalCost | currency }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="flex items-center justify-between px-4 py-3 mt-4 bg-white border-t border-gray-200 rounded-b-lg">
+        <div class="flex justify-between flex-1 sm:hidden">
+            <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+                class="relative inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md titles text-ls hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+            </button>
+            <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages()"
+                class="relative inline-flex items-center px-4 py-2 ml-3 bg-white border border-gray-300 rounded-md titles text-ls hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                Next
+            </button>
+        </div>
+
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+                <p class="text-sm details">
+                    Showing
+                    <span class="titles">{{ (currentPage - 1) * itemsPerPage + 1 }}</span>
+                    to
+                    <span class="titles">{{ Math.min(currentPage * itemsPerPage, activeReservations.length) }}</span>
+                    of
+                    <span class="titles">{{ activeReservations.length }}</span>
+                    reservations
+                </p>
+            </div>
+
+            <div>
+                <nav class="relative z-0 inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span class="sr-only">Previous</span>
+                        &lt;
+                    </button>
+                    <button *ngFor="let page of getPages()" (click)="changePage(page)"
+                        [class.bg-gray-200]="page === currentPage"
+                        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50">
+                        {{ page }}
+                    </button>
+                    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages()"
+                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span class="sr-only">Next</span>
+                        &gt;
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert No active reservations -->
+<div *ngIf="activeReservations.length === 0" class="w-full max-w-6xl p-4 mx-auto text-center">
+    <p class="mb-2 text-lg text-gray-800 titles">No active reservations</p>
+    <p class="text-sm text-gray-600 details">Currently, you do not have any vehicle reservations.</p>
+</div>

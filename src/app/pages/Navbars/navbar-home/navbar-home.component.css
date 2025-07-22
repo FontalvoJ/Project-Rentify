@@ -1,0 +1,80 @@
+.navbar-logo {
+  font-family: "Zilla Slab", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.navbar-font {
+  font-family: "Zilla Slab", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.menu-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-font li {
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #navbar {
+    flex-direction: column;
+
+    justify-content: center;
+
+    height: 100%;
+  }
+
+  .menu-background {
+    display: flex;
+  }
+
+  .navbar-font {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+  }
+}
+
+/* Estilo para el menú en pantallas grandes */
+@media (min-width: 769px) {
+  #navbar {
+    flex-direction: row;
+  }
+
+  .navbar-font {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+  }
+}
+
+/* Estilo para el botón de cierre */
+#navbar button {
+  background: none;
+
+  border: none;
+
+  cursor: pointer;
+}
+
+#navbar button svg {
+  fill: none;
+
+  stroke: black;
+}

@@ -1,0 +1,496 @@
+<div *ngIf="isLoading" class="flex items-center justify-center text-xl text-center titles">
+    <p>Loading cars...</p>
+</div>
+
+
+<!--  Car Information  
+<section class="container p-4 mx-auto">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
+        <div *ngFor="let car of cars" class="flex flex-col border border-[#D9D9D9] rounded-lg p-4">
+            <div class="px-4 pt-4 mb-2">
+                <span class="titles inline-flex items-center justify-center w-full px-2.5 py-1.5 text-sm font-medium 
+            {{ car.availability ? 'text-green-700 bg-green-50 ring-green-600/20' : 'text-red-700 bg-red-50 ring-red-600/20' }}
+            rounded-md ring-1 ring-inset truncate">
+                    {{ car.availability ? 'Available' : 'Not Available' }}
+                </span>
+            </div>
+
+            <div class="relative w-full h-0 pb-[56.25%] mb-0 pt-2">
+                <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model"
+                    class="absolute inset-0 object-contain w-full h-full rounded-lg"
+                    [ngStyle]="{'image-rendering': 'crisp-edges'}">
+            </div>
+
+
+            <div class="flex-grow p-4 space-y-4">
+
+                <div class="space-y-3">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <h2 class="text-lg break-words titles">{{ car.brand }}</h2>
+                        <h3 class="text-lg break-words titles">{{ car.model }}</h3>
+                    </div>
+                    <p class="text-lg font-bold break-words titles">$ {{ car.pricePerDay }} / día</p>
+                </div>
+
+
+                <div class="pt-2 space-y-3 border-t border-neutral-300">
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center min-w-0 gap-2">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 16 16">
+                                <path fill="black"
+                                    d="M7.5 5.5a.5.5 0 1 0 0-1a.5.5 0 0 0 0 1m2.5 0a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0M11.5 7a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0M11 9.5a.5.5 0 1 0 0-1a.5.5 0 0 0 0 1m-.5 1.5a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0M8 2a6 6 0 0 0-6 6a2 2 0 0 0 2 2c.708 0 1.085-.378 1.34-.633l.014-.013C5.598 9.109 5.72 9 6 9a1 1 0 0 1 1 1v1a3 3 0 0 0 3 3c1.334 0 2.354-.746 3.017-1.854C13.672 11.05 14 9.579 14 8a6 6 0 0 0-6-6M3 8a5 5 0 0 1 10 0c0 1.458-.305 2.737-.841 3.632C11.63 12.515 10.9 13 10 13a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2c-.708 0-1.085.378-1.34.633l-.014.013C4.402 8.891 4.28 9 4 9a1 1 0 0 1-1-1" />
+                            </svg>
+                            <span class="truncate details">{{ car.color }}</span>
+                        </span>
+                        <span class="flex items-center min-w-0 gap-2">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
+                                <g fill="none">
+                                    <rect width="18" height="15" x="3" y="6" stroke="#000" stroke-width="1.5" rx="2" />
+                                    <path fill="#000"
+                                        d="M3 10c0-1.886 0-2.828.586-3.414S5.114 6 7 6h10c1.886 0 2.828 0 3.414.586S21 8.114 21 10z" />
+                                    <path stroke="#000" stroke-linecap="round" stroke-width="1.5" d="M7 3v3m10-3v3" />
+                                </g>
+                            </svg>
+                            <span class="truncate details">{{ car.year }}</span>
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center min-w-0 gap-2">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.6"
+                                    d="M21 19.75c0-2.09-1.67-5.068-4-5.727m-2 5.727c0-2.651-2.686-6-6-6s-6 3.349-6 6m9-12.5a3 3 0 1 1-6 0a3 3 0 0 1 6 0m3 3a3 3 0 1 0 0-6" />
+                            </svg>
+                            <span class="truncate details">{{ car.accompanists }}</span>
+                        </span>
+                        <span class="flex items-center min-w-0 gap-2">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 256 256">
+                                <g fill="#000">
+                                    <path d="M216 128a88 88 0 1 1-88-88a88 88 0 0 1 88 88" opacity="0.2" />
+                                    <path
+                                        d="M120 128V48a8 8 0 0 1 16 0v80a8 8 0 0 1-16 0m60.37-78.7a8 8 0 0 0-8.74 13.4C194.74 77.77 208 101.57 208 128a80 80 0 0 1-160 0c0-26.43 13.26-50.23 36.37-65.3a8 8 0 0 0-8.74-13.4C47.9 67.38 32 96.06 32 128a96 96 0 0 0 192 0c0-31.94-15.9-60.62-43.63-78.7" />
+                                </g>
+                            </svg>
+                            <span class="truncate details">{{ car.power }} HP</span>
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <span class="flex items-center min-w-0 gap-2">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="black" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.5"
+                                    d="M7 4.5a3 3 0 0 0-2.567 4.554a3.001 3.001 0 0 0 0 5.893M7 4.5a2.5 2.5 0 0 1 5 0v15a2.5 2.5 0 0 1-5 0a3 3 0 0 1-2.567-4.553M7 4.5c0 .818.393 1.544 1 2m-3.567 8.447A3 3 0 0 1 6 13.67m11 5.83a3 3 0 0 0 2.567-4.553a3.001 3.001 0 0 0 0-5.893M17 19.5a2.5 2.5 0 0 1-5 0v-15a2.5 2.5 0 0 1 5 0a3 3 0 0 1 2.567 4.554M17 19.5c0-.818-.393-1.544-1-2m3.567-8.446A3 3 0 0 1 18 10.329"
+                                    color="black" />
+                            </svg>
+                            <span class="truncate details">{{ car.system }}</span>
+                        </span>
+                        <span class="flex items-center min-w-0 gap-2">
+                            <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24">
+                                <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.5"
+                                    d="m5.252 9.975l11.66-5.552c1.7-.81 3.474.965 2.665 2.666l-5.552 11.659c-.759 1.593-3.059 1.495-3.679-.158L9.32 15.851a2 2 0 0 0-1.17-1.17l-2.74-1.027c-1.652-.62-1.75-2.92-.157-3.679" />
+                            </svg>
+                            <span class="truncate details">{{ car.location }}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-4">
+
+                <button (click)="openModalUpdateCar(car)"
+                    class="flex items-center justify-center p-2 text-white bg-black rounded-full focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <path d="M7 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1" />
+                            <path d="M20.385 6.585a2.1 2.1 0 0 0-2.97-2.97L9 12v3h3zM16 5l3 3" />
+                        </g>
+                    </svg>
+                </button>
+
+                <button (click)="openModalDeleteCar(car)"
+                    class="flex items-center justify-center p-2 text-white bg-black rounded-full focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="white"
+                            d="M18 19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4V4h4.5l1-1h4l1 1H19v3h-1zM6 7v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7zm12-1V5h-4l-1-1h-3L9 5H5v1zM8 9h1v10H8zm6 0h1v10h-1z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>-->
+
+<section class="container p-4 mx-auto">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div *ngFor="let car of cars" class="flex flex-col border rounded-lg shadow-sm border-neutral-200">
+            <!-- Cabecera con imagen y estado de disponibilidad -->
+            <div class="relative">
+                <!-- Imagen del coche -->
+                <div class="w-full h-48">
+                    <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model"
+                        class="object-contain w-full h-full rounded-t-lg">
+                </div>
+
+                <!-- Etiqueta de disponibilidad (posición absoluta sobre la imagen) -->
+                <div class="absolute top-3 right-3">
+                    <span
+                        class="titles inline-flex items-center px-2.5 py-1 text-sm font-medium rounded-md ring-1 ring-inset
+                        {{ car.availability ? 'text-green-700 bg-green-50 ring-green-600/20' : 'text-red-700 bg-red-50 ring-red-600/20' }}">
+                        {{ car.availability ? 'Available' : 'Not Available' }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Información del coche -->
+            <div class="flex flex-col flex-grow p-4">
+                <!-- Título y precio -->
+                <div class="mb-3">
+                    <div class="flex items-center justify-between mb-1 titles">
+                        <h2 class="text-lg font-semibold">{{ car.brand }} {{ car.model }}</h2>
+                        <p class="text-lg font-bold text-right">$ {{ car.pricePerDay }}<span
+                                class="text-sm font-normal">/Day</span></p>
+                    </div>
+                    <p class="text-sm text-gray-600 details">{{ car.year }} • {{ car.color }}</p>
+                </div>
+
+                <!-- Especificaciones técnicas en formato de grid -->
+                <div class="grid grid-cols-2 gap-2 text-sm details">
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.6"
+                                d="M21 19.75c0-2.09-1.67-5.068-4-5.727m-2 5.727c0-2.651-2.686-6-6-6s-6 3.349-6 6m9-12.5a3 3 0 1 1-6 0a3 3 0 0 1 6 0m3 3a3 3 0 1 0 0-6" />
+                        </svg>
+                        <span>{{ car.accompanists }} people</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                            <g fill="currentColor">
+                                <path d="M216 128a88 88 0 1 1-88-88a88 88 0 0 1 88 88" opacity="0.2" />
+                                <path
+                                    d="M120 128V48a8 8 0 0 1 16 0v80a8 8 0 0 1-16 0m60.37-78.7a8 8 0 0 0-8.74 13.4C194.74 77.77 208 101.57 208 128a80 80 0 0 1-160 0c0-26.43 13.26-50.23 36.37-65.3a8 8 0 0 0-8.74-13.4C47.9 67.38 32 96.06 32 128a96 96 0 0 0 192 0c0-31.94-15.9-60.62-43.63-78.7" />
+                            </g>
+                        </svg>
+                        <span>{{ car.power }} HP</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M7 4.5a3 3 0 0 0-2.567 4.554a3.001 3.001 0 0 0 0 5.893M7 4.5a2.5 2.5 0 0 1 5 0v15a2.5 2.5 0 0 1-5 0a3 3 0 0 1-2.567-4.553M7 4.5c0 .818.393 1.544 1 2m-3.567 8.447A3 3 0 0 1 6 13.67m11 5.83a3 3 0 0 0 2.567-4.553a3.001 3.001 0 0 0 0-5.893M17 19.5a2.5 2.5 0 0 1-5 0v-15a2.5 2.5 0 0 1 5 0a3 3 0 0 1 2.567 4.554M17 19.5c0-.818-.393-1.544-1-2m3.567-8.446A3 3 0 0 1 18 10.329" />
+                        </svg>
+                        <span>{{ car.system }}</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="m5.252 9.975l11.66-5.552c1.7-.81 3.474.965 2.665 2.666l-5.552 11.659c-.759 1.593-3.059 1.495-3.679-.158L9.32 15.851a2 2 0 0 0-1.17-1.17l-2.74-1.027c-1.652-.62-1.75-2.92-.157-3.679" />
+                        </svg>
+                        <span>{{ car.location }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex justify-end gap-2 p-3 rounded-b-lg bg-gray-50">
+                <button (click)="openModalUpdateCar(car)"
+                    class="p-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="w-5 h-5">
+                        <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                            <path d="M7 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1" />
+                            <path d="M20.385 6.585a2.1 2.1 0 0 0-2.97-2.97L9 12v3h3zM16 5l3 3" />
+                        </g>
+                    </svg>
+                </button>
+
+                <button (click)="openModalDeleteCar(car)"
+                    class="p-2 text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="w-5 h-5">
+                        <path fill="white"
+                            d="M18 19a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V7H4V4h4.5l1-1h4l1 1H19v3h-1zM6 7v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V7zm12-1V5h-4l-1-1h-3L9 5H5v1zM8 9h1v10H8zm6 0h1v10h-1z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--  Alert No cars added  -->
+<div *ngIf="cars.length === 0" class="w-full max-w-6xl p-4 mx-auto text-center">
+    <p class="mb-2 text-lg text-gray-800 titles">No cars added</p>
+    <p class="text-sm text-gray-600 details">Currently, there are no cars available. Please add vehicles to display them
+        here.</p>
+</div>
+
+
+<!-- Modal Deleted Car -->
+<div *ngIf="isModalOpenDeleteCar"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+    <div class="w-full max-w-md p-6 overflow-hidden transition-all transform bg-white shadow-xl rounded-2xl">
+
+        <div class="flex justify-center mb-6">
+            <div class="p-4 bg-red-100 rounded-full">
+                <div class="flex items-center justify-center w-16 h-16 bg-red-600 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="transform scale-100">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                        </path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="text-center">
+            <h3 class="mb-4 text-2xl font-semibold text-gray-900 titles">
+                Confirm Deletion
+            </h3>
+            <div class="mt-2">
+                <p class="text-sm leading-relaxed text-gray-600 details">
+                    Are you sure you want to delete this car? This action cannot be undone.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="flex justify-center gap-3 mt-8">
+            <button
+                class="inline-flex justify-center rounded-lg border border-transparent bg-red-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition-colors duration-200 titles"
+                (click)="confirmDelete()">
+                Delete
+            </button>
+            <button
+                class="inline-flex justify-center rounded-lg border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 transition-colors duration-200 titles"
+                (click)="cancelDelete()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Alert Car Deleted  -->
+<div *ngIf="showSuccessCarDelete"
+    class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
+    style="width: 400px;">
+    <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="#000"
+            d="M8 7q-1.25 0-2.125-.875T5 4t.875-2.125T8 1q.95 0 1.725.563T10.85 3H18q.425 0 .713.288T19 4q0 .4-.363.563T18 5v1q0 .425-.288.713T17 7t-.712-.288T16 6V5h-5.15q-.35.875-1.125 1.438T8 7m0-2q.425 0 .713-.288T9 4t-.288-.712T8 3t-.712.288T7 4t.288.713T8 5m1 12.5q.425 0 .713-.288T10 16.5t-.288-.712T9 15.5t-.712.288T8 16.5t.288.713T9 17.5m6 0q.425 0 .713-.288T16 16.5t-.288-.712T15 15.5t-.712.288T14 16.5t.288.713t.712.287M6 22q-.425 0-.712-.288T5 21v-6.075q0-.175.025-.337t.075-.313l1.35-3.925q.2-.6.725-.975T8.35 9h7.3q.65 0 1.175.375t.725.975l1.35 3.925q.05.15.075.313t.025.337V21q0 .425-.287.713T18 22t-.712-.288T17 21v-1H7v1q0 .425-.288.713T6 22m1.65-9h8.7l-.7-2h-7.3z" />
+    </svg>
+    <span class="ml-auto font-bold text-right text-black">Car Deleted Successfully</span>
+</div>
+
+
+
+<!-- Modal Update Car-->
+<div *ngIf="isModalOpenUpdateCar" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div
+            class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-[#F4F1F1] rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 duration-300 ease-out">
+            <div class="flex items-center mb-6">
+                <div class="flex-shrink-0 mr-4">
+                    <div class="flex items-center justify-center w-12 h-12 bg-white rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24">
+                            <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5">
+                                <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0m10 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+                                <path d="M5 17H3v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0H9m-6-6h15m-6 0V6" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl text-gray-900 titles">Update Car</h3>
+            </div>
+
+            <h2 class="flex items-center mb-6 titles">
+                Car ID:
+                <p class="ml-2 details">{{ selectedCar?._id }}</p>
+            </h2>
+
+
+
+            <div class="flex mb-4 space-x-2">
+                <button (click)="updateOption = 'availability'"
+                    class="flex items-center justify-center w-full px-6 py-2 text-white bg-black rounded-md sm:w-auto titles">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="mr-2">
+                        <path fill="#ffffff"
+                            d="M8.5 3.5a5 5 0 0 0-.229 9.995a7.5 7.5 0 0 0-.253 1.487a6.5 6.5 0 1 1 6.964-6.964a7.5 7.5 0 0 0-1.487.253A5 5 0 0 0 8.5 3.5m5.778 9.734a.75.75 0 1 0-1.056 1.066l1.215 1.203l-1.217 1.217a.75.75 0 1 0 1.06 1.06l1.22-1.219l1.215 1.219a.75.75 0 0 0 1.062-1.06l-1.215-1.217l1.212-1.204a.75.75 0 0 0-1.057-1.064L15.5 14.444zM15.5 9a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13m-5 6.5a5 5 0 1 1 10 0a5 5 0 0 1-10 0m.78-8.78a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 0 1-1.06 0l-1.5-1.502a.75.75 0 0 1 1.061-1.06l.97.971l2.469-2.47a.75.75 0 0 1 1.06 0" />
+                    </svg>
+                    Update Availability
+                </button>
+
+                <button (click)="updateOption = 'info'"
+                    class="flex items-center justify-center w-full px-6 py-2 bg-gray-200 rounded-md titles sm:w-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" class="mr-2">
+                        <path fill="#000"
+                            d="m24.6 24.4l2.6 2.6l-2.6 2.6L26 31l4-4l-4-4zm-2.2 0L19.8 27l2.6 2.6L21 31l-4-4l4-4z" />
+                        <circle cx="11" cy="8" r="1" fill="#000" />
+                        <circle cx="11" cy="16" r="1" fill="#000" />
+                        <circle cx="11" cy="24" r="1" fill="#000" />
+                        <path fill="#000"
+                            d="M24 3H8c-1.1 0-2 .9-2 2v22c0 1.1.9 2 2 2h7v-2H8v-6h18V5c0-1.1-.9-2-2-2m0 16H8v-6h16zm0-8H8V5h16z" />
+                    </svg>
+                    Update Car Info
+                </button>
+            </div>
+
+
+            <!-- Modal para Update Availability -->
+            <div *ngIf="updateOption === 'availability'" class="mt-6">
+                <div class="flex items-center">
+                    <h2 class="mr-2 font-semibold titles">Current Availability:</h2>
+                    <p class="details">{{ selectedCar?.availability ? 'Available' : 'Not Available' }}</p>
+                </div>
+
+
+                <label for="availability" class="block mb-2 text-gray-700 details">Change Availability</label>
+                <select [(ngModel)]="selectedCar.availability" id="availability"
+                    class="w-full p-3 mb-6 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                    <option [ngValue]="true">Available</option>
+                    <option [ngValue]="false">Not Available</option>
+                </select>
+
+                <button (click)="updateAvailability()"
+                    class="flex items-center justify-center w-full px-6 py-3 text-white bg-black rounded-md titles">
+                    <!-- Icono SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="mr-2">
+                        <path fill="#ffffff"
+                            d="M18 10a1 1 0 0 0-1-1H5.41l2.3-2.29a1 1 0 0 0-1.42-1.42l-4 4a1 1 0 0 0-.21 1.09A1 1 0 0 0 3 11h14a1 1 0 0 0 1-1m3.92 3.62A1 1 0 0 0 21 13H7a1 1 0 0 0 0 2h11.59l-2.3 2.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l4-4a1 1 0 0 0 .21-1.09" />
+                    </svg>
+                    Yes, Update Availability
+                </button>
+            </div>
+
+
+            <!-- Modal para Update Car Info -->
+            <div *ngIf="updateOption === 'info'" class="mt-4">
+                <p class="details">Update the car's details:</p>
+                <form (ngSubmit)="updateCarInfo()">
+                    <div class="flex space-x-2">
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.brand" id="brand" [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Brand" />
+                        </div>
+
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.model" id="model" [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Model" />
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.color" id="color" [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Color" />
+                        </div>
+
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.pricePerDay" id="price"
+                                [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Price Per Day" />
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.location" id="location"
+                                [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Location" />
+                        </div>
+
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.power" id="power" [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Power" />
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-2">
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.system" id="system" [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Location" />
+                        </div>
+
+                        <div class="relative flex-1 mb-2">
+                            <input [(ngModel)]="selectedCar.accompanists" id="accompanists"
+                                [ngModelOptions]="{standalone: true}"
+                                class="w-full p-3 mb-2 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details"
+                                placeholder="Accompanists" />
+                        </div>
+                    </div>
+
+                    <button (click)="updateCarInfo()"
+                        class="flex items-center justify-center w-full px-6 py-3 text-white bg-black rounded-md titles">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="mr-2">
+                            <path fill="#ffffff"
+                                d="M18 10a1 1 0 0 0-1-1H5.41l2.3-2.29a1 1 0 0 0-1.42-1.42l-4 4a1 1 0 0 0-.21 1.09A1 1 0 0 0 3 11h14a1 1 0 0 0 1-1m3.92 3.62A1 1 0 0 0 21 13H7a1 1 0 0 0 0 2h11.59l-2.3 2.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l4-4a1 1 0 0 0 .21-1.09" />
+                        </svg>
+                        Yes, Update Car Info
+                    </button>
+                </form>
+            </div>
+
+
+            <div class="flex justify-end mt-6 space-x-4">
+                <button (click)="cancelUpdate()"
+                    class="flex items-center px-3 py-1.5 text-sm font-medium transition-colors bg-gray-200 rounded-md hover:bg-gray-300 titles">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="mr-1.5">
+                        <path fill="#000"
+                            d="m15.225 19.475l1.75-1.75l1.75 1.75l.75-.75L17.75 17l1.75-1.75l-.75-.75L17 16.25l-1.75-1.75l-.75.75L16.25 17l-1.75 1.75zM3 20v-6l8-2l-8-2V4l14.3 6H17q-2.925 0-4.962 2.063T10 17.05zm14 2q-2.075 0-3.537-1.463T12 17t1.463-3.537T17 12t3.538 1.463T22 17t-1.463 3.538T17 22" />
+                    </svg>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Alert Update Availability Successfully  -->
+<div *ngIf="showAlertUpdateAvailability"
+    class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
+    style="width: 400px;">
+    <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+        <path fill="#000"
+            d="M11 21.95q-1.9-.2-3.537-1.037t-2.85-2.175T2.7 15.675T2 12q0-2.275.913-4.2T5.4 4.5H3v-2h6v6H7V5.775q-1.375 1.1-2.187 2.713T4 12q0 3.075 2.013 5.313T11 19.925zm-.425-5.35L6.35 12.35l1.4-1.4l2.825 2.825L16.25 8.1l1.4 1.425zM15 21.5v-6h2v2.725q1.375-1.125 2.188-2.725T20 12q0-3.075-2.013-5.312T13 4.075V2.05q3.8.375 6.4 3.2T22 12q0 2.275-.913 4.2T18.6 19.5H21v2z" />
+    </svg>
+    <span class="ml-auto font-bold text-right text-black">Availability Updated Successfully</span>
+</div>
+
+<div *ngIf="showAlertCarData"
+    class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
+    style="width: 400px;">
+    <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+        <path fill="#000"
+            d="M11 21.95q-1.9-.2-3.537-1.037t-2.85-2.175T2.7 15.675T2 12q0-2.275.913-4.2T5.4 4.5H3v-2h6v6H7V5.775q-1.375 1.1-2.187 2.713T4 12q0 3.075 2.013 5.313T11 19.925zm-.425-5.35L6.35 12.35l1.4-1.4l2.825 2.825L16.25 8.1l1.4 1.425zM15 21.5v-6h2v2.725q1.375-1.125 2.188-2.725T20 12q0-3.075-2.013-5.312T13 4.075V2.05q3.8.375 6.4 3.2T22 12q0 2.275-.913 4.2T18.6 19.5H21v2z" />
+    </svg>
+    <span class="ml-auto font-bold text-right text-black">Data Car Updated Successfully</span>
+</div>

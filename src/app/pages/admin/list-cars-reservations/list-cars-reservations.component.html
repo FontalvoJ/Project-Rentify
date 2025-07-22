@@ -1,0 +1,192 @@
+<app-navbar-admin></app-navbar-admin>
+
+
+<section class="p-4 mt-5">
+    <div class="flex items-center justify-between 
+        sm:ml-[240px] sm:mr-[200px] 
+        ml-4 mr-4">
+
+        <div class="flex items-center gap-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" class="text-black">
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path
+                        d="M12.002 9.007c-1.105 0-2 .672-2 1.5c0 .829.895 1.5 2 1.5s2 .672 2 1.5c0 .829-.896 1.5-2 1.5m0-6c.87 0 1.612.417 1.886 1m-1.886-1v-1m0 7c-.87 0-1.612-.417-1.886-1m1.886 1v1" />
+                    <path
+                        d="M13 2.507h-1c-4.478 0-6.718 0-8.109 1.391S2.5 7.528 2.5 12.008c0 4.477 0 6.717 1.391 8.108s3.63 1.391 8.109 1.391c4.478 0 6.718 0 8.109-1.391s1.391-3.63 1.391-8.109v-1" />
+                    <path d="M21.488 2.493L17.313 6.67m-.825-3.656l.119 3.091c0 .729.435 1.183 1.227 1.24l3.124.147" />
+                </g>
+            </svg>
+
+            <h2 class="text-xl titles">Customer Bookings</h2>
+        </div>
+
+        <button (click)="openModal()" type="button"
+            class="flex items-center px-4 py-2 text-white bg-black rounded details min-w-[150px] ml-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" class="mr-2">
+                <path fill="#fff"
+                    d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2zm-1 11a10 10 0 1 1 0-20a10 10 0 0 1 0 20m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16" />
+            </svg>
+            Add New Car
+        </button>
+    </div>
+</section>
+
+
+<!-- Modal Create Car -->
+<div class="fixed inset-0 z-50 overflow-y-auto" *ngIf="isModalCar">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div
+            class="inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-[#F4F1F1] rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6 duration-300 ease-out">
+            <div class="flex items-center mb-6">
+                <div class="flex-shrink-0 mr-4">
+                    <div class="flex items-center justify-center w-12 h-12 bg-white rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24">
+                            <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="1.5">
+                                <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0m10 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+                                <path d="M5 17H3v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0H9m-6-6h15m-6 0V6" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-xl text-gray-900 titles">Create New Car</h3>
+            </div>
+            <div class="mt-4">
+
+                <form [formGroup]="formRegisterVehicle" (ngSubmit)="onSubmit()">
+                    
+                    <div class="flex mb-4 space-x-4">
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="brand" name="brand" placeholder="Brand"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="model" name="model" placeholder="Model"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                    </div>
+
+                    
+                    <div class="flex mb-4 space-x-4">
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="year" name="year" placeholder="Year"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="color" name="color" placeholder="Color"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                    </div>
+
+                   
+                    <div class="flex mb-4 space-x-4">
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="pricePerDay" name="pricePerDay"
+                                placeholder="Price per Day"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="location" name="location" placeholder="Location"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                    </div>
+
+                   
+                    <div class="flex mb-4 space-x-4">
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="power" name="power" placeholder="Power"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="system" name="system"
+                                placeholder="Sistema (Gasolina, Diesel, Electrónico, Híbrido)"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                    </div>
+
+                    
+                    <div class="flex items-center mb-4 space-x-4">
+                        <div class="relative flex-1">
+                            <input type="text" formControlName="accompanists" name="accompanists"
+                                placeholder="Acompañantes (2, 4, 5, 7)"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" formControlName="availability" name="availability"
+                                class="mr-2 h-4 w-4 text-blue-600 bg-[#D9D9D9] rounded focus:ring-blue-500">
+                            <label for="availability" class="details">Available</label>
+                        </div>
+                    </div>
+
+                   
+                    <div class="flex mb-4 space-x-4">
+                        <div class="relative flex-1">
+                            <label for="imageUrl" class="details">Image URL</label>
+                            <input type="url" formControlName="imageUrl" name="imageUrl" id="imageUrl"
+                                placeholder="https://example.com/image.jpg"
+                                class="w-full p-3 bg-[#D9D9D9] rounded-md focus:outline-none placeholder-black details">
+                            <div *ngIf="formRegisterVehicle.get('imageUrl')?.invalid && formRegisterVehicle.get('imageUrl')?.touched"
+                                class="mt-1 text-sm text-red-500">
+                                Please enter a valid image URL
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <img *ngIf="formRegisterVehicle.get('imageUrl')?.valid && formRegisterVehicle.get('imageUrl')?.value"
+                                [src]="formRegisterVehicle.get('imageUrl')?.value" alt="Image preview"
+                                class="object-cover w-32 h-32 rounded-md shadow">
+                        </div>
+                    </div>
+
+
+
+                    <div *ngIf="showErrorCreateCar" class="mb-4 text-center text-red-500 titles">
+                        All fields must be completed.
+                    </div>
+
+                    <div class="flex justify-end mt-6 space-x-4">
+                        <button type="button" (click)="closeModal()"
+                            class="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors bg-gray-200 rounded-md hover:bg-gray-300 titles">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                class="mr-1.5">
+                                <path fill="#000"
+                                    d="m15.225 19.475l1.75-1.75l1.75 1.75l.75-.75L17.75 17l1.75-1.75l-.75-.75L17 16.25l-1.75-1.75l-.75.75L16.25 17l-1.75 1.75zM3 20v-6l8-2l-8-2V4l14.3 6H17q-2.925 0-4.962 2.063T10 17.05zm14 2q-2.075 0-3.537-1.463T12 17t1.463-3.537T17 12t3.538 1.463T22 17t-1.463 3.538T17 22" />
+                            </svg>
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="flex items-center px-4 py-1.5 text-sm font-medium text-white transition-colors bg-black rounded-md  titles">
+                            <svg class="mr-1.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24">
+                                <path fill="#fff"
+                                    d="M8 16c0-2.4 1.1-4.5 2.7-6H3l1.5-4.5h11l.8 2.5c.6 0 1.2.1 1.7.3L16.9 5c-.2-.6-.8-1-1.4-1h-11c-.7 0-1.2.4-1.4 1L1 11v8c0 .5.5 1 1 1h1c.5 0 1-.5 1-1v-1h4.3c-.2-.6-.3-1.3-.3-2m-3.5-1c-.8 0-1.5-.7-1.5-1.5S3.7 12 4.5 12s1.5.7 1.5 1.5S5.3 15 4.5 15M16 20v-2h-3v-1h1c1.1 0 2-.9 2-2v-1c0-1.1-.9-2-2-2h-3v2h3v1h-1c-1.1 0-2 .9-2 2v3m12-3h-2v2h-2v-2h-2v-2h2v-2h2v2h2z" />
+                            </svg>
+                            Create
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Alert Car Created Successfully -->
+<div *ngIf="showSuccessCarAlert"
+    class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
+    style="width: 400px;">
+    <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="#000"
+            d="M8 7q-1.25 0-2.125-.875T5 4t.875-2.125T8 1q.95 0 1.725.563T10.85 3H18q.425 0 .713.288T19 4q0 .4-.363.563T18 5v1q0 .425-.288.713T17 7t-.712-.288T16 6V5h-5.15q-.35.875-1.125 1.438T8 7m0-2q.425 0 .713-.288T9 4t-.288-.712T8 3t-.712.288T7 4t.288.713T8 5m1 12.5q.425 0 .713-.288T10 16.5t-.288-.712T9 15.5t-.712.288T8 16.5t.288.713T9 17.5m6 0q.425 0 .713-.288T16 16.5t-.288-.712T15 15.5t-.712.288T14 16.5t.288.713t.712.287M6 22q-.425 0-.712-.288T5 21v-6.075q0-.175.025-.337t.075-.313l1.35-3.925q.2-.6.725-.975T8.35 9h7.3q.65 0 1.175.375t.725.975l1.35 3.925q.05.15.075.313t.025.337V21q0 .425-.287.713T18 22t-.712-.288T17 21v-1H7v1q0 .425-.288.713T6 22m1.65-9h8.7l-.7-2h-7.3z" />
+    </svg>
+    <span class="ml-auto font-bold text-right text-black">Car Created Successfully</span>
+</div>
+
+
+<app-details-cards></app-details-cards>
