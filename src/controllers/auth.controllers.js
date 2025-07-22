@@ -33,9 +33,12 @@ export const signUpAdmin = async (req, res) => {
 export const signInUsers = async (req, res) => {
   try {
     const result = await AuthService.login(req.body);
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    const status = error.status || 400;
+    res
+      .status(status)
+      .json({ error: error.message || "Error de autenticación." });
   }
 };
 
