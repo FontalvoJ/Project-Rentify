@@ -1,0 +1,37 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js --exec babel-node",
+    "build": "babel src --out-dir build",
+    "start": "node build/index.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "FontalvoJ",
+  "license": "ISC",
+  "description": "RentifyAPI 🚗🔑 es una plataforma segura y eficiente para gestionar el alquiler de vehículos en tiempo real 📅. Diseñada tanto para administradores como para clientes, permite a los administradores autenticar usuarios, actualizar datos de clientes y vehículos, listar clientes, añadir autos para reservación y gestionar las reservaciones mediante su activación o eliminación 📊. Por otro lado, los clientes pueden registrarse y acceder de forma segura, realizar reservaciones, listar sus reservas activas, actualizar su información personal y eliminar su cuenta cuando lo deseen 🔄. Con una integración fluida y funcionalidades intuitivas, RentifyAPI garantiza una experiencia de alquiler cómoda y confiable para usuarios en cualquier parte del mundo 🌍.",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/core": "^7.24.7",
+    "@babel/node": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.3",
+    "supertest": "^7.1.3"
+  }
+}
