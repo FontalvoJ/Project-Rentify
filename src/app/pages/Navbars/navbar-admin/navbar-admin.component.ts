@@ -7,24 +7,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar-admin.component.css']
 })
 export class NavbarAdminComponent {
-   userName: string | null = null;
+  name: string | null = null;
   isMenuOpen = false;
 
-  constructor(private renderer: Renderer2, private authService: AuthService,private router: Router) { }
+  constructor(private renderer: Renderer2, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.userName = this.authService.getUserName();
+    this.name = this.authService.getName()
   }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/home']); 
+    this.router.navigate(['/home']);
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
 
-    
+
     if (this.isMenuOpen) {
       this.renderer.addClass(document.body, 'menu-open');
     } else {

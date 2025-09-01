@@ -27,8 +27,8 @@
                 <span>Settings</span>
             </button>
 
-            
-            <div *ngIf="dropdownOpen" class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-lg">
+
+            <div *ngIf="uiState.dropdownOpen" class="absolute right-0 w-48 py-2 mt-2 bg-white rounded-lg shadow-lg">
                 <ul>
                     <li class="px-4 py-2 cursor-pointer details hover:bg-gray-200" (click)="openModalEdit()">Edit
                         Profile</li>
@@ -42,7 +42,7 @@
 
 
 <!-- Modal Client Update  -->
-<div class="fixed inset-0 z-50 overflow-y-auto" *ngIf="isModalOpenEditProfile">
+<div class="fixed inset-0 z-50 overflow-y-auto" *ngIf="uiState.isModalOpenEditProfile">
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -162,7 +162,8 @@
                 </button>
                 <button type="button" (click)="updateClientInfo()"
                     class="flex items-center px-6 py-2 text-sm font-medium text-white transition-colors bg-black rounded-md titles">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256" class="ml-[-8px] mr-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256"
+                        class="ml-[-8px] mr-10">
                         <path fill="white"
                             d="M228 40v36a12 12 0 0 1-24 0V52h-24a12 12 0 0 1 0-24h36a12 12 0 0 1 12 12m-12 128a12 12 0 0 0-12 12v24h-24a12 12 0 0 0 0 24h36a12 12 0 0 0 12-12v-36a12 12 0 0 0-12-12M76 204H52v-24a12 12 0 0 0-24 0v36a12 12 0 0 0 12 12h36a12 12 0 0 0 0-24M40 88a12 12 0 0 0 12-12V52h24a12 12 0 0 0 0-24H40a12 12 0 0 0-12 12v36a12 12 0 0 0 12 12m136 92a12 12 0 0 1-9.6-4.79a48 48 0 0 0-76.82 0a12 12 0 0 1-19.18-14.42a72.1 72.1 0 0 1 23.92-20.5a44 44 0 1 1 67.34 0a72.1 72.1 0 0 1 23.92 20.5A12 12 0 0 1 176 180m-48-48a20 20 0 1 0-20-20a20 20 0 0 0 20 20" />
                     </svg>
@@ -174,7 +175,7 @@
 </div>
 
 <!-- Alert Client Update Successfully -->
-<div *ngIf="showAlertUpdateInfo"
+<div *ngIf="uiState.showAlertUpdateInfo"
     class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
     style="width: 400px;">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="flex-shrink-0">
@@ -186,7 +187,7 @@
 </div>
 
 <!-- Modal Deleted Account -->
-<div *ngIf="isModalOpenDeleteAccount"
+<div *ngIf="uiState.isModalOpenDeleteAccount"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
     <div class="w-full max-w-md p-6 overflow-hidden transition-all transform bg-white shadow-xl rounded-2xl">
         <div class="flex justify-center mb-6">

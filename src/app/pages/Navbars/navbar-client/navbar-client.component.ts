@@ -9,13 +9,13 @@ import { Router } from '@angular/router';
 })
 export class NavbarClientComponent {
 
-  userName: string | null = null;
+  name: string | null = null;
   isMenuOpen = false;
 
   constructor(private renderer: Renderer2, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.userName = this.authService.getUserName();
+    this.name = this.authService.getName()
   }
 
   logout(): void {

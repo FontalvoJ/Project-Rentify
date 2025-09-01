@@ -28,7 +28,7 @@ export class AuthService {
       tap((response) => {
 
         localStorage.setItem('token', response.token);
-        localStorage.setItem('userName', response.name);
+        localStorage.setItem('name', response.name);
         localStorage.setItem('role', response.role);
       }),
       catchError(error => {
@@ -48,7 +48,7 @@ export class AuthService {
     ).pipe(
       tap((res) => {
         localStorage.setItem('token', res.token);
-        localStorage.setItem('userName', res.name);
+        localStorage.setItem('name', res.name);
         localStorage.setItem('role', res.role);
       }),
       catchError(error => {
@@ -68,7 +68,7 @@ export class AuthService {
     ).pipe(
       tap((res) => {
         localStorage.setItem('token', res.token);
-        localStorage.setItem('userName', res.name);
+        localStorage.setItem('name', res.name);
         localStorage.setItem('role', res.role);
       }),
       catchError(error => {
@@ -89,8 +89,8 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getUserName(): string | null {
-    return localStorage.getItem('userName');
+  getName(): string | null {
+    return localStorage.getItem('name');
   }
 
   getUserRole(): string | null {
@@ -100,7 +100,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
-    localStorage.removeItem('userName');
+    localStorage.removeItem('name');
     localStorage.removeItem('role');
     this.router.navigateByUrl('/home', { skipLocationChange: true });
   }

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ClientService {
-  private CLIENT_API_URL = 'https://api-node-rentify.onrender.com/api/client';
+  private readonly CLIENT_API_URL = 'http://localhost:3030/api/client';
 
   constructor(
     private http: HttpClient,
@@ -20,18 +20,15 @@ export class ClientService {
   }
 
   getClientInfo(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${this.CLIENT_API_URL}/clientGetData`, { headers });
+    return this.http.get<any>(`${this.CLIENT_API_URL}/clientGetData`, { headers: this.getAuthHeaders() });
   }
 
   updateClientInfo(clientData: any): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.put<any>(`${this.CLIENT_API_URL}/clientUpdate`, clientData, { headers });
+    return this.http.put<any>(`${this.CLIENT_API_URL}/clientUpdate`, clientData, { headers: this.getAuthHeaders() });
   }
 
   deleteClientAccount(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.delete<any>(`${this.CLIENT_API_URL}/clientDelete`, { headers });
+    return this.http.delete<any>(`${this.CLIENT_API_URL}/clientDelete`, { headers: this.getAuthHeaders() });
   }
 
 }
