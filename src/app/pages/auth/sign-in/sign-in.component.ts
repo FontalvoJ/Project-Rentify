@@ -46,7 +46,7 @@ export class SignInComponent {
     localStorage.setItem('token', response.token);
 
     if (response.name) {
-      localStorage.setItem('userName', response.name);
+      localStorage.setItem('name', response.name);
     }
 
     if (!response.role) {
