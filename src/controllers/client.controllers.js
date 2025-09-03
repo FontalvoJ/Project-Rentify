@@ -15,19 +15,19 @@ export const getClientInfo = async (req, res) => {
   try {
     const userId = req.userId;
 
-    // Buscar cliente
+   
     const client = await findClientByUserId(userId);
     if (!client) {
       return res.status(404).json({ message: "Cliente no encontrado" });
     }
 
-    // Buscar usuario asociado
+    
     const user = await findUserById(userId);
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // Combinar datos en la respuesta
+    
     return res.status(200).json({
       message: "Información del cliente obtenida correctamente",
       client: {
@@ -38,8 +38,6 @@ export const getClientInfo = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-        // ❌ Nunca devolver password en una API de este tipo
-        // password: user.password,  <-- ¡NO recomendado!
       },
     });
   } catch (error) {
