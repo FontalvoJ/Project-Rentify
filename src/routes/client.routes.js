@@ -1,28 +1,33 @@
 import { Router } from "express";
-import * as clientCtrl from "../controllers/client.controllers";
-import { authJwt, validateRoles } from "../middlewares/authJwt";
+import { authJwt, validateRoles } from "../middlewares/authJwt.js";
+
+import ClientController from "../controllers/client.controllers.js";
+import ClientServiceMongoose from "../services/client.service.js";
+import UserServiceMongoose from "../services/user.service.js";
 
 const router = Router();
 
-// Ruta para obtener la información del cliente autenticado
+// Inyección de dependencias
+const clientService = new ClientServiceMongoose();
+const userService = new UserServiceMongoose();
+const clientController = new ClientController(clientService, userService);
+
 router.get(
   "/clientGetData",
   [authJwt.verifyToken, validateRoles("client")],
-  clientCtrl.getClientInfo
+  clientController.getClientInfo
 );
 
-// Ruta para actualizar la cuenta de un cliente
 router.put(
   "/clientUpdate",
   [authJwt.verifyToken, validateRoles("client")],
-  clientCtrl.updateClientAccount
+  clientController.updateClientAccount
 );
 
-// Ruta para eliminar la cuenta de un cliente
 router.delete(
   "/clientDelete",
   [authJwt.verifyToken, validateRoles("client")],
-  clientCtrl.deleteClientAccount
+  clientController.deleteClientAccount
 );
 
 export default router;
