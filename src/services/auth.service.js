@@ -1,84 +1,63 @@
+import { IAuthService } from "../interfaces/IAuthService.js";
 import User from "../models/User.js";
 import Role from "../models/Role.js";
 import Client from "../models/Client.js";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 import config from "../config.js";
+import { AuthResponseDTO } from "../dtos/authResponse.js";
 
-export const AuthService = {
-  validateInput(data, role) {
-    const { name, email, password, identification, address, contact } = data;
-
-    if (!name || !email || !password) {
-      throw new Error("Nombre, email y contraseña son obligatorios.");
-    }
-
-    if (role === "client") {
-      if (!identification || !address || !contact) {
-        throw new Error(
-          "Identificación, dirección y contacto son obligatorios para clientes."
-        );
-      }
-    }
-  },
-
-  async registerUser(data, roleName) {
-    this.validateInput(data, roleName);
-
-    const { name, email, password, identification, address, contact } = data;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) throw new Error("El correo ya está registrado.");
-
-    const encryptedPassword = await User.encryptPassword(password);
+export class AuthServiceMongoose extends IAuthService {
+  async registerUser(userData, roleName) {
     const role = await Role.findOne({ name: roleName });
-    if (!role) throw new Error(`Rol '${roleName}' no encontrado.`);
+    if (!role) {
+      throw new Error(`El rol "${roleName}" no existe en la BD`);
+    }
 
-    const user = new User({
-      name,
-      email,
-      password: encryptedPassword,
+    const hashedPassword = await User.encryptPassword(userData.password);
+    const newUser = new User({
+      name: userData.name,
+      email: userData.email,
+      password: hashedPassword,
       roles: [role._id],
     });
 
-    await user.save();
+    const savedUser = await newUser.save();
+    await savedUser.populate("roles", "name");
 
     if (roleName === "client") {
-      const client = new Client({
-        userId: user._id,
-        identification,
-        address,
-        contact,
+      await Client.create({
+        identification: userData.identification,
+        address: userData.address,
+        contact: userData.contact,
+        userId: savedUser._id,
       });
-      await client.save();
     }
 
-    return user;
-  },
+    const token = jwt.sign({ id: savedUser._id }, config.SECRET, {
+      expiresIn: "1d",
+    });
+
+    return new AuthResponseDTO({
+      token,
+      role: savedUser.roles[0].name,
+      name: savedUser.name,
+    });
+  }
 
   async login({ email, password }) {
-    if (!email || !password) {
-      throw new Error("Email y contraseña son requeridos.");
+    const user = await User.findOne({ email }).populate("roles", "name");
+    if (!user || !(await user.comparePassword(password))) {
+      throw new Error("Credenciales inválidas");
     }
 
-    const user = await User.findOne({ email }).populate("roles");
-    if (!user) throw new Error("Usuario no encontrado.");
-
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) throw new Error("Contraseña incorrecta.");
-
-    const roles = user.roles.map((role) => role.name);
-    const roleName = roles[0];
-    if (!roleName) throw new Error("El usuario no tiene roles asignados.");
-
-    const token = jwt.sign({ id: user._id, roles }, config.SECRET, {
+    const token = jwt.sign({ id: user._id }, config.SECRET, {
       expiresIn: "24h",
     });
 
-    return {
+    return new AuthResponseDTO({
       token,
-      role: roleName,
+      role: user.roles[0].name,
       name: user.name,
-    };
-  },
-};
+    });
+  }
+}

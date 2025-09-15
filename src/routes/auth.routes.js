@@ -1,15 +1,27 @@
 import { Router } from "express";
-import * as authCtrl from "../controllers/auth.controllers";
+import AuthController from "../controllers/auth.controllers.js";
+import { AuthServiceMongoose } from "../services/auth.service.js";
+import { validateDto } from "../middlewares/validateDto.js";
+import { SignUpDTO, ClientSignUpDTO, SignInDTO } from "../dtos/auth.dto.js";
 
 const router = Router();
+const authController = new AuthController(new AuthServiceMongoose());
 
-// Route to sign up a new Client
-router.post("/signUpClient", authCtrl.signUpClient);
+// Signup Cliente
+router.post(
+  "/signUpClient",
+  validateDto(ClientSignUpDTO),
+  authController.signUp("client")
+);
 
-// Route to sign up a new Admin
-router.post("/signUpAdmin", authCtrl.signUpAdmin);
+// Signup Admin
+router.post(
+  "/signUpAdmin",
+  validateDto(SignUpDTO),
+  authController.signUp("admin")
+);
 
-// Route to sign up Users
-router.post("/signInUsers", authCtrl.signInUsers);
+// Signin
+router.post("/signInUsers", validateDto(SignInDTO), authController.signIn);
 
 export default router;
