@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarService {
-  private API_URL = 'https://api-node-rentify.onrender.com/api/cars/';
+  private API_URL = 'http://localhost:3030/api/cars/';
+  private carsCache: any[] | null = null;
 
   constructor(private http: HttpClient) { }
 
@@ -19,6 +21,14 @@ export class CarService {
       .pipe(
         catchError(this.handleError)
       );
+  }
+
+
+  /**
+   * Limpia la caché (si un auto se crea, actualiza o elimina).
+   */
+  clearCache(): void {
+    this.carsCache = null;
   }
 
   /**
@@ -69,79 +79,30 @@ export class CarService {
     const headers = this.getAuthHeaders();
     return this.http.post<any>(`${this.API_URL}createCar`, carData, { headers })
       .pipe(
+        tap(() => this.carsCache = null),
         catchError(this.handleError)
       );
   }
 
   /**
-  * Gets all cars registered by an administrator.
-  */
-  getAllCarsByAdmin(): Observable<any> {
+   * Gets cars for admin and client (using role-based logic).
+   * Implements a Proxy Pattern to reduce redundant API calls.
+   */
+  listCarsAdminClient(): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${this.API_URL}carsByAdmin`, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
 
-  /**
-* Gets the cars available for an authenticated user.
-*/
-  getCarsForAuthenticatedUser(): Observable<any> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<any>(`${this.API_URL}allCars/authenticated`, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  /**
-* Delete a car by its ID (for admins only).
-*/
-  deleteCar(carId: string): Observable<any> {
-    if (!this.isAdmin()) {
-      alert('Only admins can delete cars.');
-      return throwError(() => new Error('Unauthorized access'));
+    if (this.carsCache) {
+      return of(this.carsCache);
     }
 
-    const headers = this.getAuthHeaders();
-    const url = `${this.API_URL}deleteCar/${carId}`;
-
-    console.log('DELETE request URL:', url);
-
-    return this.http.delete<any>(url, { headers }).pipe(
+    return this.http.get<any>(`${this.API_URL}listCarsAdminClient`, { headers }).pipe(
+      tap((response) => {
+        this.carsCache = response.data || response;
+      }),
       catchError(this.handleError)
     );
   }
 
-  /**
-* Updates the details of a car by its ID (for admins only).
-*/
-  updateCar(carId: string, carData: {
-    brand?: string;
-    model?: string;
-    year?: number;
-    color?: string;
-    pricePerDay?: number;
-    location?: string;
-    availability?: boolean;
-    createdBy?: string;
-    power?: number;
-    system?: string;
-    accompanists?: number;
-  }): Observable<any> {
-    if (!this.isAdmin()) {
-      alert('Only admins can update cars.');
-      return throwError(() => new Error('Unauthorized access'));
-    }
 
-    const headers = this.getAuthHeaders();
-    const url = `${this.API_URL}updateCar/${carId}`;
-
-    return this.http.put<any>(url, carData, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
 
 }

@@ -21,9 +21,9 @@ import { DetailsCardsComponent } from './pages/admin/details-cards/details-cards
 import { CarsComponent } from './pages/home/cars/cars.component';
 
 import { UpdateInfoComponent } from './pages/client/update-info/update-info.component';
-import { CarsReservationComponent } from './pages/client/cars-reservation/cars-reservation.component';
-import { ClientReservationsComponent } from './pages/client/client-reservations/client-reservations.component';
-import { AllReservationsComponent } from './pages/admin/all-reservations/all-reservations.component';
+//import { CarsReservationComponent } from './pages/client/cars-reservation/cars-reservation.component';
+//import { ClientReservationsComponent } from './pages/client/client-reservations/client-reservations.component';
+//import { AllReservationsComponent } from './pages/admin/all-reservations/all-reservations.component';
 import { SignUpUsersComponent } from './pages/auth/sign-up-users/sign-up-users.component';
 
 @NgModule({
@@ -42,9 +42,9 @@ import { SignUpUsersComponent } from './pages/auth/sign-up-users/sign-up-users.c
     DetailsCardsComponent,
     CarsComponent,
     UpdateInfoComponent,
-    CarsReservationComponent,
-    ClientReservationsComponent,
-    AllReservationsComponent,
+    //CarsReservationComponent,
+    //ClientReservationsComponent,
+    //AllReservationsComponent,
     SignUpUsersComponent
   ],
   imports: [
@@ -53,7 +53,7 @@ import { SignUpUsersComponent } from './pages/auth/sign-up-users/sign-up-users.c
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    
+
   ],
   providers: [
     {
