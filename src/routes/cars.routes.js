@@ -16,4 +16,10 @@ router.post(
 
 router.get("/listCarsAdminClient", authJwt.verifyToken, carController.getCars);
 
+router.delete(
+  "/DeleteCar/:id",
+  [authJwt.verifyToken, validateRoles("admin")],
+  carController.deleteCar
+);
+
 export default router;

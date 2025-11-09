@@ -32,4 +32,19 @@ export default class CarService extends ICarService {
 
     return cars;
   }
+
+  async deleteCar(carId) {
+    if (!carId) {
+      throw new Error("Car ID es requerido");
+    }
+
+    const car = await Cars.findById(carId);
+    if (!car) {
+      throw new Error("Auto no encontrado");
+    }
+
+    await Cars.findByIdAndDelete(carId);
+
+    return { message: "Auto eliminado correctamente" };
+  }
 }

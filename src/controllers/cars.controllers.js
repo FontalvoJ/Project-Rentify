@@ -51,4 +51,23 @@ export default class CarController {
       res.status(500).json({ message: error.message });
     }
   };
+
+  /**
+   * Elimina un auto (solo para admins)
+   */
+  deleteCar = async (req, res) => {
+    try {
+      const carId = req.params.id;
+
+      const result = await this.carService.deleteCar(carId);
+
+      return res.status(200).json({
+        message: "Auto eliminado correctamente",
+        data: result,
+      });
+    } catch (error) {
+      console.error("Error eliminando el auto:", error);
+      res.status(400).json({ message: error.message });
+    }
+  };
 }
