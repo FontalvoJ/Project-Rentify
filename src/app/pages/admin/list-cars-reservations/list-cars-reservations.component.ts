@@ -10,13 +10,28 @@ import { CarService } from 'src/app/services/admin/admin.service';
 })
 
 export class ListCarsReservationsComponent implements OnInit {
-  isModalCar: boolean = false;
-  isSubmitting: boolean = false;
-  errorMessage: string = '';
-  showSuccessCarAlert: boolean = false;
-  showErrorCreateCar = false; 
+  isModalCar = false;
+  isSubmitting = false;
+  errorMessage = '';
+  showSuccessCarAlert = false;
+  showErrorCreateCar = false;
 
   formRegisterVehicle: FormGroup;
+
+  // Listas estáticas con _id y valor
+  systems = [
+    { _id: '687c1f45c5895bf772dfdf0c', type: 'Gasolina' },
+    { _id: '687c1f45c5895bf772dfdf0e', type: 'Electrónico' },
+    { _id: '687c1f45c5895bf772dfdf0f', type: 'Diesel' },
+    { _id: '687c1f45c5895bf772dfdf0d', type: 'Híbrido' },
+  ];
+
+  companionTypes = [
+    { _id: '687c1f45c5895bf772dfdefe', amount: 2 },
+    { _id: '687c1f45c5895bf772dfdeff', amount: 4 },
+    { _id: '687c1f45c5895bf772dfdf00', amount: 5 },
+    { _id: '687c1f45c5895bf772dfdf01', amount: 7 },
+  ];
 
   constructor(private fb: FormBuilder, private carService: CarService) {
     this.formRegisterVehicle = this.fb.group({
@@ -24,72 +39,59 @@ export class ListCarsReservationsComponent implements OnInit {
       model: ['', Validators.required],
       year: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       color: ['', Validators.required],
-      availability: [true],
       pricePerDay: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       location: ['', Validators.required],
       power: ['', Validators.required],
-      system: ['', [Validators.required, Validators.pattern(/^(Gasolina|Diesel|Electrónico|Híbrido)$/)]],
-      accompanists: ['', [Validators.required, Validators.pattern(/^(2|4|5|7)$/)]],
+      system: ['', Validators.required],       
+      companion: ['', Validators.required],    
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
     });
   }
 
   ngOnInit(): void { }
 
-  openModal() {
-    this.isModalCar = true;
-  }
-
+  openModal() { this.isModalCar = true; }
   closeModal() {
     this.isModalCar = false;
-    this.showErrorCreateCar = false; 
+    this.showErrorCreateCar = false;
   }
 
   onSubmit() {
-    if (this.formRegisterVehicle.valid) {
-      this.isSubmitting = true;
-
-      const formValue = {
-        ...this.formRegisterVehicle.value,
-        year: parseInt(this.formRegisterVehicle.value.year, 10),
-        pricePerDay: parseInt(this.formRegisterVehicle.value.pricePerDay, 10),
-        accompanists: parseInt(this.formRegisterVehicle.value.accompanists, 10),
-        imageUrl: this.formRegisterVehicle.value.imageUrl.trim()
-      };
-
-      const missingFields = Object.entries(formValue).filter(
-        ([key, value]) => value === undefined || value === null || value === ''
-      );
-
-      if (missingFields.length > 0) {
-        console.error('Missing required fields:', missingFields);
-        this.errorMessage = 'All fields are required. Please check your input.';
-        this.isSubmitting = false;
-        return;
-      }
-
-      this.carService.createCar(formValue).subscribe(
-        response => {
-          //console.log('Car created successfully!', response);
-          this.isSubmitting = false;
-          this.showSuccessCarAlert = true;
-          setTimeout(() => {
-            this.showSuccessCarAlert = false;
-          }, 3000);
-          this.closeModal();
-        },
-        error => {
-          //console.error('Error creating car:', error);
-          this.isSubmitting = false;
-          this.errorMessage = 'Failed to create car. Please try again later.';
-        }
-      );
-    } else {
-      //console.log('Form is invalid');
+    if (!this.formRegisterVehicle.valid) {
       this.showErrorCreateCar = true;
       this.errorMessage = 'The form is invalid. Please correct the errors.';
+      return;
     }
+
+    this.isSubmitting = true;
+
+    const formValue = this.formRegisterVehicle.value;
+
+    // Mapear al formato que espera el backend
+    const carData = {
+      brand: formValue.brand,
+      model: formValue.model,
+      year: parseInt(formValue.year, 10),
+      color: formValue.color,
+      pricePerDay: parseInt(formValue.pricePerDay, 10),
+      location: formValue.location,
+      power: parseInt(formValue.power, 10),
+      imageUrl: formValue.imageUrl.trim(),
+      systemId: formValue.system,          
+      companionTypeId: formValue.companion, 
+    };
+
+    this.carService.createCar(carData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.showSuccessCarAlert = true;
+        setTimeout(() => this.showSuccessCarAlert = false, 3000);
+        this.closeModal();
+      },
+      error: () => {
+        this.isSubmitting = false;
+        this.errorMessage = 'Failed to create car. Please try again later.';
+      }
+    });
   }
-
-
 }
