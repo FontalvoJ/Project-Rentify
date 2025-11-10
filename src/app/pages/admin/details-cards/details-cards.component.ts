@@ -43,13 +43,13 @@ export class DetailsCardsComponent implements OnInit {
     this.carService.listCarsAdminClient().subscribe({
       next: (response) => {
         const cars = response?.data || response?.cars || [];
-        console.log('🚗 Datos brutos desde backend:', response);
+        //console.log('🚗 Datos brutos desde backend:', response);
         //console.log('📦 Lista de autos procesada:', cars);
 
 
-        // ✅ Obtiene el rol desde AuthService
+       
         const role = this.authService.getUserRole();
-        console.log('👤 Rol detectado:', role);
+        //console.log('👤 Rol detectado:', role);
 
         if (role === 'admin') {
           this.carDisplayContext.setStrategy(new AdminDisplayStrategy());
@@ -67,7 +67,7 @@ export class DetailsCardsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('❌ Error fetching cars:', error);
+        console.error('Error fetching cars:', error);
 
         this.errorMessage = 'Failed to load cars. Please try again later.';
         this.isLoading = false;
@@ -89,7 +89,30 @@ export class DetailsCardsComponent implements OnInit {
   }
 
   confirmDelete(): void {
+    if (!this.selectedCar?._id) {
+      console.error('No se ha seleccionado ningún auto para eliminar.');
+      return;
+    }
 
+    this.carService.deleteCar(this.selectedCar._id).subscribe({
+      next: (response) => {
+        //console.log('Auto eliminado exitosamente:', response);
+        this.showSuccessCarDelete = true;
+        this.isModalOpenDeleteCar = false;
+        this.selectedCar = null;
+        this.fetchCars();
+
+       
+        setTimeout(() => {
+          this.showSuccessCarDelete = false;
+        }, 3000);
+      },
+      error: (error) => {
+        console.error('Error eliminando el auto:', error);
+        this.errorMessage = 'No se pudo eliminar el auto. Intenta nuevamente.';
+    
+      }
+    });
   }
 
   // ---------------------------------------

@@ -57,8 +57,8 @@ export class CarService {
   }
 
   /**
-  * Creates a new car (for admins only).
-  */
+ * Crea un nuevo auto (solo para administradores).
+ */
   createCar(carData: {
     brand: string;
     model: string;
@@ -67,22 +67,23 @@ export class CarService {
     pricePerDay: number;
     location: string;
     power: number;
-    system: string;
-    accompanists: number;
     imageUrl: string;
+    systemId: string;
+    companionTypeId: string;
   }): Observable<any> {
     if (!this.isAdmin()) {
-      alert('Only admins can create cars.');
-      return throwError(() => new Error('Unauthorized access'));
+      alert('Solo los administradores pueden crear autos.');
+      return throwError(() => new Error('Acceso no autorizado'));
     }
 
     const headers = this.getAuthHeaders();
-    return this.http.post<any>(`${this.API_URL}createCar`, carData, { headers })
+    return this.http.post(`${this.API_URL}createCar`, carData, { headers })
       .pipe(
         tap(() => this.carsCache = null),
         catchError(this.handleError)
       );
   }
+
 
   /**
    * Gets cars for admin and client (using role-based logic).
@@ -103,6 +104,27 @@ export class CarService {
     );
   }
 
+  /**
+   * Elimina un auto por ID (solo para administradores)
+   */
+  deleteCar(carId: string): Observable<any> {
+    if (!this.isAdmin()) {
+      alert('Solo los administradores pueden eliminar autos.');
+      return throwError(() => new Error('Acceso no autorizado'));
+    }
 
+    if (!carId) {
+      return throwError(() => new Error('ID del auto es requerido'));
+    }
+
+    const headers = this.getAuthHeaders();
+
+    return this.http.delete(`${this.API_URL}DeleteCar/${carId}`, { headers }).pipe(
+      tap(() => {
+        this.carsCache = null;
+      }),
+      catchError(this.handleError)
+    );
+  }
 
 }
