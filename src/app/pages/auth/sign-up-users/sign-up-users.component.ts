@@ -16,6 +16,8 @@ export class SignUpUsersComponent {
   formRegister: FormGroup;
   errorMessage = '';
   isLoading = false;
+  showSuccessCreateUser = false;
+  private alertTimeout: any;
 
   constructor(
     private fb: FormBuilder,
@@ -24,13 +26,31 @@ export class SignUpUsersComponent {
     private router: Router
   ) {
     this.formRegister = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+
+      email: ['', [
+        Validators.required,
+        Validators.email,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+      ]],
+
+      password: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/^[0-9]+$/)
+      ]],
+
       role: ['', Validators.required],
-      identification: [''],
+
+      identification: ['', [
+        Validators.pattern(/^[0-9]+$/)
+      ]],
+
       address: [''],
-      contact: [''],
+
+      contact: ['', [
+        Validators.pattern(/^(\+?\d{1,3}[- ]?)?\d{7,15}$/)
+      ]]
     });
 
     this.formRegister.get('role')?.valueChanges.pipe(
@@ -57,14 +77,23 @@ export class SignUpUsersComponent {
 
 
   openRegisterModal(): void {
-    this.formRegister.reset();
     this.isRegisterModalOpen = true;
     this.errorMessage = '';
+
   }
 
   closeModal(): void {
     this.isRegisterModalOpen = false;
+
+
+    setTimeout(() => {
+      this.formRegister.reset();
+      this.errorMessage = '';
+      this.formRegister.get('role')?.setValue('admin');
+    });
   }
+
+
   onSubmit(): void {
     if (this.formRegister.invalid) {
       this.formRegister.markAllAsTouched();
@@ -86,11 +115,15 @@ export class SignUpUsersComponent {
       request$.pipe(
       ).subscribe({
         next: () => {
+          this.showSuccessCreateUser = true;
+
+
+          clearTimeout(this.alertTimeout);
+          this.alertTimeout = setTimeout(() => {
+            this.showSuccessCreateUser = false;
+          }, 3000);
+
           this.closeModal();
-          this.router.navigate(['/home']);
-        },
-        error: (err) => {
-          this.errorMessage = err.error?.error || 'Error en el registro.';
         },
       });
     } catch (error: any) {

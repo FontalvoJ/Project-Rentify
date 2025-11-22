@@ -75,83 +75,91 @@
             <!-- Form fields -->
             <div class="space-y-3">
                 <!-- Name field -->
-                <div class="relative">
-                    <input type="text" formControlName="name" name="name" placeholder="Nombre completo"
-                        class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
-                        [class.border-red-500]="formRegister.get('name')?.invalid && formRegister.get('name')?.touched">
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
-                            <path fill="black"
-                                d="M152 80a8 8 0 0 1 8-8h88a8 8 0 0 1 0 16h-88a8 8 0 0 1-8-8m96 40h-88a8 8 0 0 0 0 16h88a8 8 0 0 0 0-16m0 48h-64a8 8 0 0 0 0 16h64a8 8 0 0 0 0-16m-96.25 22a8 8 0 0 1-5.76 9.74a7.6 7.6 0 0 1-2 .26a8 8 0 0 1-7.75-6c-6.16-23.94-30.34-42-56.25-42s-50.09 18.05-56.25 42a8 8 0 0 1-15.5-4c5.59-21.71 21.84-39.29 42.46-48a48 48 0 1 1 58.58 0c20.63 8.71 36.88 26.29 42.47 48M80 136a32 32 0 1 0-32-32a32 32 0 0 0 32 32" />
-                        </svg>
+                <div class="relative pb-5">
+                    <div class="relative">
+                        <input type="text" formControlName="name" name="name" placeholder="Nombre completo"
+                            class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                            [class.border-red-500]="formRegister.get('name')?.invalid && formRegister.get('name')?.touched">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 256 256">
+                                <path fill="black"
+                                    d="M152 80a8 8 0 0 1 8-8h88a8 8 0 0 1 0 16h-88a8 8 0 0 1-8-8m96 40h-88a8 8 0 0 0 0 16h88a8 8 0 0 0 0-16m0 48h-64a8 8 0 0 0 0 16h64a8 8 0 0 0 0-16m-96.25 22a8 8 0 0 1-5.76 9.74a7.6 7.6 0 0 1-2 .26a8 8 0 0 1-7.75-6c-6.16-23.94-30.34-42-56.25-42s-50.09 18.05-56.25 42a8 8 0 0 1-15.5-4c5.59-21.71 21.84-39.29 42.46-48a48 48 0 1 1 58.58 0c20.63 8.71 36.88 26.29 42.47 48M80 136a32 32 0 1 0-32-32a32 32 0 0 0 32 32" />
+                            </svg>
+                        </div>
                     </div>
                     <div *ngIf="formRegister.get('name')?.invalid && formRegister.get('name')?.touched"
-                        class="mt-1 text-xs text-red-600 details">
+                        class="absolute left-0 mt-1 text-xs text-red-600 details">
                         El nombre es requerido.
                     </div>
                 </div>
 
                 <!-- Email field -->
-                <div class="relative">
-                    <input type="email" formControlName="email" name="email" placeholder="Correo electrónico"
-                        class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
-                        [class.border-red-500]="formRegister.get('email')?.invalid && formRegister.get('email')?.touched">
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
-                            <path fill="black"
-                                d="M32 6H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2m-1.54 22H5.66l7-7.24l-1.44-1.39L4 26.84V9.52l12.43 12.37a2 2 0 0 0 2.82 0L32 9.21v17.5l-7.36-7.36l-1.41 1.41ZM5.31 8h25.07L17.84 20.47Z"
-                                class="clr-i-outline clr-i-outline-path-1" />
-                            <path fill="none" d="M0 0h36v36H0z" />
-                        </svg>
+                <div class="relative pb-5">
+                    <div class="relative">
+                        <input type="email" formControlName="email" name="email" placeholder="Correo electrónico"
+                            class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                            [class.border-red-500]="formRegister.get('email')?.invalid && formRegister.get('email')?.touched">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 36 36">
+                                <path fill="black"
+                                    d="M32 6H4a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h28a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2m-1.54 22H5.66l7-7.24l-1.44-1.39L4 26.84V9.52l12.43 12.37a2 2 0 0 0 2.82 0L32 9.21v17.5l-7.36-7.36l-1.41 1.41ZM5.31 8h25.07L17.84 20.47Z"
+                                    class="clr-i-outline clr-i-outline-path-1" />
+                                <path fill="none" d="M0 0h36v36H0z" />
+                            </svg>
+                        </div>
                     </div>
                     <div *ngIf="formRegister.get('email')?.invalid && formRegister.get('email')?.touched"
-                        class="mt-1 text-xs text-red-600 details">
+                        class="absolute left-0 mt-1 text-xs text-red-600 details">
                         <span *ngIf="formRegister.get('email')?.errors?.['required']">El email es requerido.</span>
                         <span *ngIf="formRegister.get('email')?.errors?.['email']">Formato de email inválido.</span>
                     </div>
                 </div>
 
                 <!-- Password field -->
-                <div class="relative">
-                    <input type="password" formControlName="password" name="password" placeholder="Contraseña"
-                        class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
-                        [class.border-red-500]="formRegister.get('password')?.invalid && formRegister.get('password')?.touched">
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <g fill="none" stroke="black" stroke-width="1.5">
-                                <path
-                                    d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
-                                <path stroke-linecap="round"
-                                    d="M12 10v4m-1.732-3l3.464 2m0-2l-3.464 2m-3.535-3v4M5 11l3.464 2m0-2L5 13m12.268-3v4m-1.732-3L19 13m0-2l-3.465 2" />
-                            </g>
-                        </svg>
+                <div class="relative pb-5">
+                    <div class="relative">
+                        <input type="password" formControlName="password" name="password" placeholder="Contraseña"
+                            class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                            [class.border-red-500]="formRegister.get('password')?.invalid && formRegister.get('password')?.touched">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <g fill="none" stroke="black" stroke-width="1.5">
+                                    <path
+                                        d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12Z" />
+                                    <path stroke-linecap="round"
+                                        d="M12 10v4m-1.732-3l3.464 2m0-2l-3.464 2m-3.535-3v4M5 11l3.464 2m0-2L5 13m12.268-3v4m-1.732-3L19 13m0-2l-3.465 2" />
+                                </g>
+                            </svg>
+                        </div>
                     </div>
                     <div *ngIf="formRegister.get('password')?.invalid && formRegister.get('password')?.touched"
-                        class="mt-1 text-xs text-red-600 details">
+                        class="absolute left-0 mt-1 text-xs text-red-600 details">
                         La contraseña es requerida.
                     </div>
                 </div>
 
                 <!-- Role selector -->
-                <div class="relative">
-                    <select formControlName="role" name="role"
-                        class="appearance-none w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
-                        [class.border-red-500]="formRegister.get('role')?.invalid && formRegister.get('role')?.touched">
-                        <option value="" disabled>Seleccionar rol</option>
-                        <option value="admin">Administrador</option>
-                        <option value="client">Cliente</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2">
-                                <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                <path d="m9 11l3 3l3-3" />
-                            </g>
-                        </svg>
+                <div class="relative pb-5">
+                    <div class="relative">
+                        <select formControlName="role" name="role"
+                            class="appearance-none w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                            [class.border-red-500]="formRegister.get('role')?.invalid && formRegister.get('role')?.touched">
+                            <option value="" disabled>Seleccionar rol</option>
+                            <option value="admin">Administrador</option>
+                            <option value="client">Cliente</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2">
+                                    <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                    <path d="m9 11l3 3l3-3" />
+                                </g>
+                            </svg>
+                        </div>
                     </div>
                     <div *ngIf="formRegister.get('role')?.invalid && formRegister.get('role')?.touched"
-                        class="mt-1 text-xs text-red-600 details">
+                        class="absolute left-0 mt-1 text-xs text-red-600 details">
                         Debe seleccionar un rol.
                     </div>
                 </div>
@@ -161,27 +169,29 @@
                     class="space-y-3 duration-300 client-fields animate-in slide-in-from-top">
 
                     <!-- Identification field -->
-                    <div class="relative">
-                        <input type="text" formControlName="identification" name="identification"
-                            placeholder="Número de identificación"
-                            class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
-                            [class.border-red-500]="formRegister.get('identification')?.invalid && formRegister.get('identification')?.touched">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                <path fill="black" fill-rule="evenodd"
-                                    d="M10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12s0-5.657 1.172-6.828S6.229 4 10 4m3.25 5a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75zm1 3a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75zm1 3a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1-.75-.75zM11 9a2 2 0 1 1-4 0a2 2 0 0 1 4 0zm-2 8c4 0 4-.895 4-2s-1.79-2-4-2s-4 .895-4 2s0 2 4 2z"
-                                    clip-rule="evenodd" />
-                            </svg>
+                    <div class="relative pb-5">
+                        <div class="relative">
+                            <input type="text" formControlName="identification" name="identification"
+                                placeholder="Número de identificación"
+                                class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
+                                [class.border-red-500]="formRegister.get('identification')?.invalid && formRegister.get('identification')?.touched">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="black" fill-rule="evenodd"
+                                        d="M10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12s0 5.657-1.172 6.828S17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172S2 15.771 2 12s0-5.657 1.172-6.828S6.229 4 10 4m3.25 5a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75zm1 3a.75.75 0 0 1 .75-.75h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75zm1 3a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1-.75-.75zM11 9a2 2 0 1 1-4 0a2 2 0 0 1 4 0zm-2 8c4 0 4-.895 4-2s-1.79-2-4-2s-4 .895-4 2s0 2 4 2z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
                         </div>
                         <div *ngIf="formRegister.get('identification')?.invalid && formRegister.get('identification')?.touched"
-                            class="mt-1 text-xs text-red-600 details">
+                            class="absolute left-0 mt-1 text-xs text-red-600 details">
                             La identificación es requerida para clientes.
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <!-- Address field -->
-                        <div>
+                        <div class="relative pb-5">
                             <div class="relative">
                                 <input type="text" formControlName="address" name="address" placeholder="Dirección"
                                     class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
@@ -199,13 +209,13 @@
                                 </div>
                             </div>
                             <div *ngIf="formRegister.get('address')?.invalid && formRegister.get('address')?.touched"
-                                class="mt-1 text-xs text-red-600 details">
+                                class="absolute left-0 mt-1 text-xs text-red-600 details">
                                 La dirección es requerida para clientes.
                             </div>
                         </div>
 
                         <!-- Contact field -->
-                        <div>
+                        <div class="relative pb-5">
                             <div class="relative">
                                 <input type="text" formControlName="contact" name="contact" placeholder="Teléfono"
                                     class="w-full p-2.5 pr-10 bg-[#D9D9D9] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-black details"
@@ -218,7 +228,7 @@
                                 </div>
                             </div>
                             <div *ngIf="formRegister.get('contact')?.invalid && formRegister.get('contact')?.touched"
-                                class="mt-1 text-xs text-red-600 details">
+                                class="absolute left-0 mt-1 text-xs text-red-600 details">
                                 El teléfono es requerido para clientes.
                             </div>
                         </div>
@@ -249,6 +259,24 @@
     </div>
 </div>
 
+<div *ngIf="showSuccessCreateUser" class="fixed z-50 bottom-6 right-6 animate-fade-in-out">
+    <div class="flex items-start max-w-md gap-4 p-4 bg-black border-l-4 border-white shadow-2xl rounded-xl">
+        <!-- Icon Container -->
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M15 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 1.9A2.1 2.1 0 0 0 12.9 8a2.1 2.1 0 0 0 2.1 2.1a2.1 2.1 0 1 0 0-4.2m0 7.1c2.67 0 8 1.33 8 4v3H7v-3c0-2.67 5.33-4 8-4m0 1.9c-3 0-6.1 1.46-6.1 2.1v1.1h12.2V17c0-.64-3.13-2.1-6.1-2.1M5 13.28l-2.5 1.49l.68-2.81L1 10.08l2.87-.25L5 7.19l1.11 2.64l2.89.25l-2.2 1.88l.65 2.81z" />
+                </svg>
+            </div>
+        </div>
 
+        <!-- Content -->
+        <div class="flex-1 pt-0.5">
+            <h4 class="mb-1 text-sm text-white titles">¡Usuario Creado!</h4>
+            <p class="text-sm text-gray-300 details">El usuario se ha registrado exitosamente</p>
+        </div>
+    </div>
+</div>
 
 <app-footer-general></app-footer-general>

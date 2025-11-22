@@ -26,7 +26,9 @@ export class UpdateInfoComponent implements OnInit, OnDestroy {
     dropdownOpen: false,
     showAlertUpdateInfo: false,
     isModalOpenDeleteAccount: false,
-    isLoading: false
+    isLoading: false,
+    showAlertDeleteAccount: false
+
   };
 
   constructor(private clientService: ClientService, private router: Router) { }
@@ -87,7 +89,15 @@ export class UpdateInfoComponent implements OnInit, OnDestroy {
     this.clientService.deleteClientAccount()
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        () => this.router.navigate(['/home']),
+        () => {
+          this.uiState.showAlertDeleteAccount = true;
+
+      
+          setTimeout(() => {
+            this.uiState.showAlertDeleteAccount = false;
+            this.router.navigate(['/home']);
+          }, 2000);
+        },
         (error) => console.error('Error deleting account:', error)
       );
   }

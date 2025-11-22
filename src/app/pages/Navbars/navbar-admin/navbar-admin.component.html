@@ -3,14 +3,14 @@
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
 
-                
+
                 <div class="flex-shrink-0">
                     <a class="text-4xl titles text-zinc-900" routerLink="/home" aria-label="Logo">
                         Rentify
                     </a>
                 </div>
 
-                
+
                 <button class="relative z-20 w-10 h-10 lg:hidden focus:outline-none" type="button" id="hamburger"
                     aria-label="Toggle menu" [attr.aria-expanded]="isMenuOpen" (click)="toggleMenu()">
                     <span class="sr-only">Open main menu</span>
@@ -24,22 +24,20 @@
                     </div>
                 </button>
 
-                
+
                 <div class="hidden lg:flex lg:items-center lg:justify-between lg:flex-1 lg:ml-8">
 
-                   
+
                     <div class="flex items-center space-x-8">
-                        <a class="px-3 py-2 text-lg font-medium details"
-                            routerLink="/all-reservations">
+                        <a class="px-3 py-2 text-lg font-medium details" routerLink="/all-reservations">
                             Reservaciones Activas
                         </a>
-                        <a class="px-3 py-2 text-lg font-medium details"
-                            routerLink="/list-cars-reservations">
+                        <a class="px-3 py-2 text-lg font-medium details" routerLink="/dashboard-admin">
                             Autos
                         </a>
                     </div>
 
-                    
+
                     <div class="flex items-center space-x-4">
                         <span class="text-lg details">
                             Bienvenid@, <span class="titles">{{ name }}</span>!
@@ -61,11 +59,11 @@
                     </div>
                 </div>
 
-           
+
                 <div [ngClass]="{'translate-x-0': isMenuOpen, 'translate-x-full': !isMenuOpen}"
                     class="fixed inset-y-0 right-0 z-50 w-full transition-transform duration-300 ease-in-out transform bg-white shadow-xl lg:hidden sm:w-80">
 
-                    
+
                     <div class="flex items-center justify-between p-4 border-b border-gray-200">
                         <span class="text-lg titles">Menu</span>
                         <button (click)="toggleMenu()"
@@ -78,27 +76,27 @@
                         </button>
                     </div>
 
-                    
+
                     <div class="px-4 py-6 space-y-6">
-                        
+
                         <div class="pb-4 border-b border-gray-200">
                             <p class="text-sm details">Bienvenid@,</p>
                             <p class="text-lg titles">{{ name }}!</p>
                         </div>
 
-                      
+
                         <nav class="space-y-2">
                             <a class="block px-3 py-2 text-gray-700 transition-colors duration-200 rounded-md details hover:text-gray-900 hover:bg-gray-50"
                                 routerLink="/all-reservations" (click)="toggleMenu()">
                                 Reservaciones Activas
                             </a>
                             <a class="block px-3 py-2 text-gray-700 transition-colors duration-200 rounded-md details hover:text-gray-900 hover:bg-gray-50"
-                                routerLink="/list-cars-reservations" (click)="toggleMenu()">
+                                routerLink="/dashboard-admin" (click)="toggleMenu()">
                                 Autos
                             </a>
                         </nav>
 
-                        
+
                         <div class="pt-4 border-t border-gray-200">
                             <button (click)="logout()"
                                 class="flex items-center justify-center w-full px-4 py-2 transition-colors duration-200 bg-white border border-gray-300 rounded-md titles hover:bg-gray-50">
@@ -117,7 +115,7 @@
                     </div>
                 </div>
 
-              
+
                 <div *ngIf="isMenuOpen" (click)="toggleMenu()"
                     class="fixed inset-0 z-40 transition-opacity duration-300 bg-gray-600 bg-opacity-75 lg:hidden">
                 </div>
@@ -125,4 +123,3 @@
         </div>
     </nav>
 </div>
-

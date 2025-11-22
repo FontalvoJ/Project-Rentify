@@ -179,15 +179,25 @@
 </div>
 
 <!-- Alert Client Update Successfully -->
-<div *ngIf="uiState.showAlertUpdateInfo"
-    class="fixed flex items-center gap-3 p-4 bg-white border border-black rounded-lg shadow-lg titles bottom-4 right-4 animate-fade-in-out"
-    style="width: 400px;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="flex-shrink-0">
-        <path fill="black"
-            d="m21.1 12.5l1.4 1.41l-6.53 6.59L12.5 17l1.4-1.41l2.07 2.08zM11 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m0 7c.68 0 1.5.09 2.41.26l-1.67 1.67l-.74-.03c-2.97 0-6.1 1.46-6.1 2.1v1.1h6.2L13 20H3v-3c0-2.66 5.33-4 8-4" />
-    </svg>
+<div *ngIf="uiState.showAlertUpdateInfo" class="fixed z-50 bottom-6 right-6 animate-fade-in-out">
+    <div class="flex items-start max-w-md gap-4 p-4 bg-black border-l-4 border-white shadow-2xl rounded-xl">
+        <!-- Icon Container -->
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    class="flex-shrink-0">
+                    <path fill="black"
+                        d="m21.1 12.5l1.4 1.41l-6.53 6.59L12.5 17l1.4-1.41l2.07 2.08zM11 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m0 7c.68 0 1.5.09 2.41.26l-1.67 1.67l-.74-.03c-2.97 0-6.1 1.46-6.1 2.1v1.1h6.2L13 20H3v-3c0-2.66 5.33-4 8-4" />
+                </svg>
+            </div>
+        </div>
 
-    <span class="ml-auto font-bold text-right text-black">Cliente Actualizado Exitosamente</span>
+        <!-- Content -->
+        <div class="flex-1 pt-0.5">
+            <h4 class="mb-1 text-sm text-white titles">¡Cliente Actualizado!</h4>
+            <p class="text-sm text-gray-300 details">La información se ha actualizado exitosamente</p>
+        </div>
+    </div>
 </div>
 
 <!-- Modal Deleted Account -->
@@ -240,6 +250,30 @@
                 <i class="mr-2 fas fa-times"></i>
                 Cancelar
             </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- Alert Client Delete Successfully -->
+<div *ngIf="uiState.showAlertDeleteAccount" class="fixed z-50 bottom-6 right-6 animate-fade-in-out">
+    <div class="flex items-start max-w-md gap-4 p-4 bg-red-600 border-l-4 border-white shadow-2xl rounded-xl">
+
+        <!-- Icono -->
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="red" d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm1 14h-2v-2h2Zm0-4h-2V6h2Z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Contenido -->
+        <div class="flex-1 pt-0.5">
+            <h4 class="mb-1 text-sm text-white titles">Cuenta Eliminada</h4>
+            <p class="text-sm text-gray-200 details">
+                Tu cuenta ha sido eliminada correctamente
+            </p>
         </div>
 
     </div>

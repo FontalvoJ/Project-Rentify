@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CarService } from 'src/app/services/admin/admin.service';
+
 
 
 @Component({
@@ -8,17 +9,20 @@ import { CarService } from 'src/app/services/admin/admin.service';
   templateUrl: './list-cars-reservations.component.html',
   styleUrls: ['./list-cars-reservations.component.css']
 })
-
 export class ListCarsReservationsComponent implements OnInit {
+
+  @Output() carCreated = new EventEmitter<void>();
+  
   isModalCar = false;
   isSubmitting = false;
+
   errorMessage = '';
   showSuccessCarAlert = false;
   showErrorCreateCar = false;
+  formSubmitted = false;
 
   formRegisterVehicle: FormGroup;
 
-  // Listas estáticas con _id y valor
   systems = [
     { _id: '687c1f45c5895bf772dfdf0c', type: 'Gasolina' },
     { _id: '687c1f45c5895bf772dfdf0e', type: 'Electrónico' },
@@ -34,6 +38,7 @@ export class ListCarsReservationsComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder, private carService: CarService) {
+
     this.formRegisterVehicle = this.fb.group({
       brand: ['', Validators.required],
       model: ['', Validators.required],
@@ -42,24 +47,54 @@ export class ListCarsReservationsComponent implements OnInit {
       pricePerDay: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
       location: ['', Validators.required],
       power: ['', Validators.required],
-      system: ['', Validators.required],       
-      companion: ['', Validators.required],    
+      system: ['', Validators.required],
+      companion: ['', Validators.required],
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
+      availability: [false]
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
-  openModal() { this.isModalCar = true; }
-  closeModal() {
-    this.isModalCar = false;
+  // -------------------------------------------------
+  // MODAL
+  // -------------------------------------------------
+  openModal() {
+    this.isModalCar = true;
+    this.formSubmitted = false;
     this.showErrorCreateCar = false;
   }
 
+  closeModal() {
+    this.isModalCar = false;
+    this.showErrorCreateCar = false;
+    this.formSubmitted = false;
+
+    this.formRegisterVehicle.reset();
+    this.formRegisterVehicle.patchValue({ availability: false });
+  }
+
+  // -------------------------------------------------
+  // VALIDACIÓN
+  // -------------------------------------------------
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.formRegisterVehicle.get(fieldName);
+    return !!(field && field.invalid && (field.touched || this.formSubmitted));
+  }
+
+  // -------------------------------------------------
+  // ENVIAR FORMULARIO
+  // -------------------------------------------------
   onSubmit() {
+    this.formSubmitted = true;
+
+    Object.keys(this.formRegisterVehicle.controls).forEach(key => {
+      this.formRegisterVehicle.get(key)?.markAsTouched();
+    });
+
     if (!this.formRegisterVehicle.valid) {
       this.showErrorCreateCar = true;
-      this.errorMessage = 'The form is invalid. Please correct the errors.';
       return;
     }
 
@@ -67,30 +102,35 @@ export class ListCarsReservationsComponent implements OnInit {
 
     const formValue = this.formRegisterVehicle.value;
 
-    // Mapear al formato que espera el backend
     const carData = {
       brand: formValue.brand,
       model: formValue.model,
-      year: parseInt(formValue.year, 10),
+      year: +formValue.year,
       color: formValue.color,
-      pricePerDay: parseInt(formValue.pricePerDay, 10),
+      pricePerDay: +formValue.pricePerDay,
       location: formValue.location,
-      power: parseInt(formValue.power, 10),
+      power: +formValue.power,
       imageUrl: formValue.imageUrl.trim(),
-      systemId: formValue.system,          
-      companionTypeId: formValue.companion, 
+      systemId: formValue.system,
+      companionTypeId: formValue.companion,
+      availability: formValue.availability
     };
 
     this.carService.createCar(carData).subscribe({
       next: () => {
+
         this.isSubmitting = false;
+
         this.showSuccessCarAlert = true;
         setTimeout(() => this.showSuccessCarAlert = false, 3000);
+
         this.closeModal();
+         this.carCreated.emit();
       },
       error: () => {
         this.isSubmitting = false;
-        this.errorMessage = 'Failed to create car. Please try again later.';
+        this.showErrorCreateCar = true;
+        this.errorMessage = 'Error al crear el vehículo. Intenta nuevamente.';
       }
     });
   }

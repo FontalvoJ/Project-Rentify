@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CarService } from 'src/app/services/admin/admin.service';
 import { CarDisplayContext } from 'src/app/services/strategies/car/car-display.context';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -47,7 +47,7 @@ export class DetailsCardsComponent implements OnInit {
         //console.log('📦 Lista de autos procesada:', cars);
 
 
-       
+
         const role = this.authService.getUserRole();
         //console.log('👤 Rol detectado:', role);
 
@@ -62,7 +62,7 @@ export class DetailsCardsComponent implements OnInit {
           pricePerDay: car.pricePerDay?.$numberDecimal || car.pricePerDay,
           systemType: car.systemId?.type || 'N/A',
           companionAmount: car.companionTypeId?.amount || 0
-          
+
         }));
         this.isLoading = false;
       },
@@ -102,7 +102,7 @@ export class DetailsCardsComponent implements OnInit {
         this.selectedCar = null;
         this.fetchCars();
 
-       
+
         setTimeout(() => {
           this.showSuccessCarDelete = false;
         }, 3000);
@@ -110,7 +110,7 @@ export class DetailsCardsComponent implements OnInit {
       error: (error) => {
         console.error('Error eliminando el auto:', error);
         this.errorMessage = 'No se pudo eliminar el auto. Intenta nuevamente.';
-    
+
       }
     });
   }
