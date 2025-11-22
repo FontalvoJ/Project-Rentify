@@ -42,7 +42,6 @@ beforeAll(async () => {
   expect(resClient.statusCode).toBe(201);
   clientToken = resClient.body.token;
 
-  // Crear documentos referenciales para autos
   system = await System.create({ type: "Gasolina" });
   companion = await CompanionType.create({ amount: 4 });
 });
