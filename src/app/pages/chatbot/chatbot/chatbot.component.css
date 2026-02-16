@@ -1,0 +1,163 @@
+.titles {
+  font-family: "Zilla Slab", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.details {
+  font-family: "Zilla Slab", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* ===========================
+   RENTIFY CHATBOT - ESTILOS
+   Animaciones y estilos personalizados
+=========================== */
+
+/* Animación de fade in para mensajes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Scroll personalizado para el área de mensajes */
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background: #eab308;
+  border-radius: 10px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: #ca8a04;
+}
+
+/* Firefox scrollbar */
+.chat-messages {
+  scrollbar-width: thin;
+  scrollbar-color: #eab308 #f3f4f6;
+}
+
+/* Animación de bounce para indicador de escritura */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+/* Animación del botón flotante */
+button:hover {
+  transition: all 0.3s ease;
+}
+
+/* Suavizar transiciones */
+* {
+  transition-property:
+    color, background-color, border-color, text-decoration-color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Evitar selección de texto en botones */
+button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+/* Mejorar legibilidad en mensajes largos */
+.whitespace-pre-line {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+/* Sombra suave para el chat */
+.shadow-2xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  /* En móviles, el chat ocupa toda la pantalla */
+  .fixed.bottom-24.right-6 {
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  /* El botón flotante se mantiene visible */
+  button.bottom-6.right-6 {
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+}
+
+/* Ocultar scrollbar en sugerencias horizontales */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+/* Animación para el botón de enviar */
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button:not([disabled]):active {
+  transform: scale(0.95);
+}
+
+/* Mejora de accesibilidad - focus visible */
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid #eab308;
+  outline-offset: 2px;
+}
+
+/* Estilo para links dentro de mensajes (si los hay) */
+.chat-messages a {
+  color: #eab308;
+  text-decoration: underline;
+}
+
+.chat-messages a:hover {
+  color: #ca8a04;
+}

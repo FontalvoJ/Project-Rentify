@@ -25,6 +25,7 @@ import { UpdateInfoComponent } from './pages/client/update-info/update-info.comp
 //import { ClientReservationsComponent } from './pages/client/client-reservations/client-reservations.component';
 //import { AllReservationsComponent } from './pages/admin/all-reservations/all-reservations.component';
 import { SignUpUsersComponent } from './pages/auth/sign-up-users/sign-up-users.component';
+import { ChatbotComponent } from './pages/chatbot/chatbot/chatbot.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { SignUpUsersComponent } from './pages/auth/sign-up-users/sign-up-users.c
     //CarsReservationComponent,
     //ClientReservationsComponent,
     //AllReservationsComponent,
-    SignUpUsersComponent
+    SignUpUsersComponent,
+    ChatbotComponent
   ],
   imports: [
     BrowserModule,

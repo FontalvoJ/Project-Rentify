@@ -46,8 +46,6 @@ export class DetailsCardsComponent implements OnInit {
         //console.log('🚗 Datos brutos desde backend:', response);
         //console.log('📦 Lista de autos procesada:', cars);
 
-
-
         const role = this.authService.getUserRole();
         //console.log('👤 Rol detectado:', role);
 
