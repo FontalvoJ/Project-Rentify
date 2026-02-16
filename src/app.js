@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import carRoutes from "./routes/cars.routes";
 //import reservationRoutes from "./routes/reservations.routes";
 import clientRoutes from "./routes/client.routes";
+import chatbotRoutes from "./routes/chatbot.routes.js";
 
 const app = express();
 
@@ -44,5 +45,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/cars", carRoutes);
 //app.use("/api/reservations", reservationRoutes);
 app.use("/api/client", clientRoutes);
+app.use("/api/chatbot", chatbotRoutes);
+
 
 export default app;

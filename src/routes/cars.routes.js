@@ -11,15 +11,21 @@ const carController = new CarController(carService);
 router.post(
   "/createCar",
   [authJwt.verifyToken, validateRoles("admin")],
-  carController.createCar
+  carController.createCar,
 );
 
 router.get("/listCarsAdminClient", authJwt.verifyToken, carController.getCars);
 
+router.put(
+  "/updateCar/:id",
+  [authJwt.verifyToken, validateRoles("admin")],
+  carController.updateCar,
+);
+
 router.delete(
   "/DeleteCar/:id",
   [authJwt.verifyToken, validateRoles("admin")],
-  carController.deleteCar
+  carController.deleteCar,
 );
 
 export default router;

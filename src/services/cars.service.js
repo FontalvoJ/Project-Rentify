@@ -7,12 +7,10 @@ export default class CarService extends ICarService {
       throw new Error("Datos faltantes o usuario no autenticado");
     }
 
-    const newCar = await Cars.create({
+    return await Cars.create({
       ...carData,
       createdBy: userId,
     });
-
-    return newCar;
   }
 
   async getCarsByRole(roles, userId) {
@@ -20,17 +18,17 @@ export default class CarService extends ICarService {
 
     if (roles.includes("admin")) {
       query = { createdBy: userId };
-    } else if (roles.includes("client")) {
+    }
+
+    if (roles.includes("client")) {
       query = { isAvailable: true };
     }
 
-    const cars = await Cars.find(query)
+    return await Cars.find(query)
       .populate("createdBy", "name email")
       .populate("systemId", "type")
       .populate("companionTypeId", "amount")
       .lean();
-
-    return cars;
   }
 
   async deleteCar(carId) {
@@ -39,12 +37,40 @@ export default class CarService extends ICarService {
     }
 
     const car = await Cars.findById(carId);
+
     if (!car) {
       throw new Error("Auto no encontrado");
     }
 
     await Cars.findByIdAndDelete(carId);
 
-    return { message: "Auto eliminado correctamente" };
+    return car; // 👈 retornamos el auto eliminado
+  }
+
+  async updateCar(carId, updateDto, user) {
+    if (!carId) {
+      throw new Error("Car ID es requerido");
+    }
+
+    const car = await Cars.findById(carId);
+
+    if (!car) {
+      throw new Error("Auto no encontrado");
+    }
+
+    if (car.createdBy.toString() !== user._id.toString()) {
+      throw new Error("No tienes permisos para actualizar este auto");
+    }
+
+    const updatedCar = await Cars.findByIdAndUpdate(carId, updateDto, {
+      new: true,
+      omitUndefined: true,
+    });
+
+    if (!updatedCar) {
+      throw new Error("Error actualizando el auto");
+    }
+
+    return updatedCar;
   }
 }
