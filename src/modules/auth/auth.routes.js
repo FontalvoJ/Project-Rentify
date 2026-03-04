@@ -1,8 +1,10 @@
 import { Router } from "express";
-import AuthController from "../controllers/auth.controllers.js";
-import { AuthServiceMongoose } from "../services/auth.service.js";
-import { validateDto } from "../middlewares/validateDto.js";
-import { SignUpDTO, ClientSignUpDTO, SignInDTO } from "../dtos/auth.dto.js";
+import AuthController from "../auth/auth.controllers.js";
+import { AuthServiceMongoose } from "../auth/auth.service.js";
+
+
+import { validateDto } from "../../middlewares/validateDto.js";
+import { SignUpDTO, ClientSignUpDTO, SignInDTO } from "../auth/auth.dto.js";
 
 const router = Router();
 const authController = new AuthController(new AuthServiceMongoose());

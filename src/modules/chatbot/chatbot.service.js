@@ -1,4 +1,4 @@
-import { handleMessage } from "./chatbot.state";
+import { handleMessage } from "../chatbot/chatbot.state";
 
 export class ChatbotService {
   processMessage(userId, message) {

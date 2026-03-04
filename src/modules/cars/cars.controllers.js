@@ -1,4 +1,4 @@
-import { CreateCarDto, UpdateCarDto } from "../dtos/car.dto.js";
+import { CreateCarDto, UpdateCarDto } from "../cars/car.dto.js";
 
 export default class CarController {
   constructor(carService) {

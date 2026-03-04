@@ -1,5 +1,5 @@
-import Cars from "../models/Cars.js";
-import ICarService from "../interfaces/ICarService.js";
+import Cars from "../../models/Cars.js";
+import ICarService from "../cars/ICarService.js";
 
 export default class CarService extends ICarService {
   async createCar(carData, userId) {

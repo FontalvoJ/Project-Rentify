@@ -2,11 +2,11 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import pkg from "../package.json";
-import authRoutes from "./routes/auth.routes";
-import carRoutes from "./routes/cars.routes";
+import authRoutes from "./modules/auth/auth.routes.js";
+import carRoutes from "./modules/cars/cars.routes";
 //import reservationRoutes from "./routes/reservations.routes";
-import clientRoutes from "./routes/client.routes";
-import chatbotRoutes from "./routes/chatbot.routes.js";
+import clientRoutes from "./modules/client/client.routes";
+import chatbotRoutes from "./modules/chatbot/chatbot.routes.js";
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-  })
+  }),
 );
 
 app.get("/", (req, res) => {
@@ -46,6 +46,5 @@ app.use("/api/cars", carRoutes);
 //app.use("/api/reservations", reservationRoutes);
 app.use("/api/client", clientRoutes);
 app.use("/api/chatbot", chatbotRoutes);
-
 
 export default app;

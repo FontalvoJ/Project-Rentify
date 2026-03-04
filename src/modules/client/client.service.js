@@ -1,5 +1,5 @@
-import Client from "../models/Client.js";
-import IClientService from "../interfaces/IClientService.js";
+import Client from "../../models/Client.js";
+import IClientService from "./IClientService.js";
 
 export default class ClientServiceMongoose extends IClientService {
   async findClientByUserId(userId) {

@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { authJwt, validateRoles } from "../middlewares/authJwt.js";
+import { authJwt, validateRoles } from "../../middlewares/authJwt.js";
 
-import ClientController from "../controllers/client.controllers.js";
-import ClientServiceMongoose from "../services/client.service.js";
-import UserServiceMongoose from "../services/user.service.js";
+import ClientController from "../client/client.controllers.js";
+import ClientServiceMongoose from "../client/client.service.js";
+import UserServiceMongoose from "../client/user.service.js";
 
 const router = Router();
 
@@ -15,19 +15,19 @@ const clientController = new ClientController(clientService, userService);
 router.get(
   "/clientGetData",
   [authJwt.verifyToken, validateRoles("client")],
-  clientController.getClientInfo
+  clientController.getClientInfo,
 );
 
 router.put(
   "/clientUpdate",
   [authJwt.verifyToken, validateRoles("client")],
-  clientController.updateClientAccount
+  clientController.updateClientAccount,
 );
 
 router.delete(
   "/clientDelete",
   [authJwt.verifyToken, validateRoles("client")],
-  clientController.deleteClientAccount
+  clientController.deleteClientAccount,
 );
 
 export default router;

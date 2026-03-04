@@ -1,10 +1,10 @@
-import { IAuthService } from "../interfaces/IAuthService.js";
-import User from "../models/User.js";
-import Role from "../models/Role.js";
-import Client from "../models/Client.js";
+import { IAuthService } from "../auth/IAuthService.js";
+import User from "../../models/User.js";
+import Role from "../../models/Role.js";
+import Client from "../../models/Client.js";
 import jwt from "jsonwebtoken";
-import config from "../config.js";
-import { AuthResponseDTO } from "../dtos/authResponse.js";
+import config from "../../config.js";
+import { AuthResponseDTO } from "../auth/authResponse.js";
 
 export class AuthServiceMongoose extends IAuthService {
   async registerUser(userData, roleName) {

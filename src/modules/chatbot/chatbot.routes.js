@@ -1,6 +1,6 @@
 import { Router } from "express";
-import ChatbotController from "../controllers/chatbot.controller.js";
-import { ChatbotService } from "../services/chatbot/chatbot.service.js";
+import ChatbotController from "../chatbot/chatbot.controller.js";
+import { ChatbotService } from "../chatbot/chatbot.service.js";
 
 const router = Router();
 

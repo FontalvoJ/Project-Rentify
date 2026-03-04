@@ -1,4 +1,4 @@
-import { toClientUpdateDto } from "../dtos/client.dto.js";
+import { toClientUpdateDto } from "../client/client.dto.js";
 
 export default class ClientController {
   constructor(clientService, userService) {
@@ -63,7 +63,7 @@ export default class ClientController {
 
       const updatedClient = await this.clientService.updateClient(
         client,
-        clientUpdates
+        clientUpdates,
       );
       const updatedUser = await this.userService.updateUser(user, {
         name,
@@ -98,7 +98,6 @@ export default class ClientController {
       await this.userService.deleteUserById(userId);
 
       return res.status(200).json({
-
         message: "Cuenta eliminada correctamente",
       });
     } catch (error) {

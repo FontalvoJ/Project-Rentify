@@ -1,7 +1,7 @@
 import { Router } from "express";
-import CarController from "../controllers/cars.controllers.js";
-import CarService from "../services/cars.service.js";
-import { authJwt, validateRoles } from "../middlewares/authJwt.js";
+import CarController from "../cars/cars.controllers.js";
+import CarService from "../cars/cars.service.js";
+import { authJwt, validateRoles } from "../../middlewares/authJwt.js";
 
 const router = Router();
 

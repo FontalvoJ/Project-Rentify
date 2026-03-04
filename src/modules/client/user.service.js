@@ -1,6 +1,5 @@
-
-import User from "../models/User.js";
-import IUserService from "../interfaces/IUserService.js";
+import User from "../../models/User.js";
+import IUserService from "./IUserService.js";
 
 export default class UserServiceMongoose extends IUserService {
   async findUserById(userId) {
