@@ -1,28 +1,46 @@
-import { Component, OnInit} from '@angular/core';
-import { CarService } from 'src/app/services/admin/admin.service';
-import { CarDisplayContext } from 'src/app/services/strategies/car/car-display.context';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { AdminDisplayStrategy, ClientDisplayStrategy } from 'src/app/services/strategies/car/car-display.strategy';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { CarService } from '../../../services/cars/cars.service';
+import { AuthService } from '../../../services/auth/auth.service';
+
+import { CarDisplayContext } from '../../../services/strategies/cars/car-display.context.ts.service';
+
+import {
+  AdminDisplayStrategy, ClientDisplayStrategy,
+  PublicDisplayStrategy
+} from '../../../services/strategies/cars/car-display.strategy.ts.service';
+
+import { CarData } from '../../../models/cars/car-data';
 
 @Component({
   selector: 'app-details-cards',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './details-cards.component.html',
-  styleUrls: ['./details-cards.component.css']
+  styleUrl: './details-cards.component.css'
 })
 export class DetailsCardsComponent implements OnInit {
-  cars: any[] = [];
+
+  cars: CarData[] = [];
   role: string | null = null;
 
-  // Estados visuales y modales
+  // Estados de UI
   isLoading = true;
   errorMessage = '';
-  selectedCar: any = null;
+
+  // Estados de modales
+  selectedCar: CarData | null = null;
   isModalOpenDeleteCar = false;
-  showSuccessCarDelete = false;
   isModalOpenUpdateCar = false;
-  updateOption: string | null = null;
+
+  // Alertas
+  showSuccessCarDelete = false;
   showAlertUpdateAvailability = false;
   showAlertCarData = false;
+
+  updateOption: string | null = null;
 
   constructor(
     private carService: CarService,
@@ -31,104 +49,189 @@ export class DetailsCardsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.role = this.authService.getUserRole();
-    this.fetchCars();
+    this.initializeComponent();
   }
 
+  /**
+   * Inicializa el componente
+   */
+  private initializeComponent(): void {
 
+    this.role = this.authService.getUserRole();
+
+    this.configureDisplayStrategy();
+
+    this.fetchCars();
+
+  }
+
+  /**
+   * Configura la estrategia de visualización según el rol
+   */
+  private configureDisplayStrategy(): void {
+
+    if (this.role === 'admin') {
+      this.carDisplayContext.setStrategy(new AdminDisplayStrategy());
+    }
+
+    else if (this.role === 'client') {
+      this.carDisplayContext.setStrategy(new ClientDisplayStrategy());
+    }
+
+    else {
+      this.carDisplayContext.setStrategy(new PublicDisplayStrategy());
+    }
+
+  }
+
+  // -------------------------------------
+  // CARGAR VEHÍCULOS
+  // -------------------------------------
+
+  /**
+   * Obtiene los vehículos desde el servicio
+   */
   fetchCars(): void {
+
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.carService.listCarsAdminClient().subscribe({
-      next: (response) => {
-        const cars = response?.data || response?.cars || [];
-        //console.log('🚗 Datos brutos desde backend:', response);
-        //console.log('📦 Lista de autos procesada:', cars);
+    const request$ = this.role
+      ? this.carService.listCarsAdminClient()
+      : this.carService.getAllCarsForEveryone();
 
-        const role = this.authService.getUserRole();
-        //console.log('👤 Rol detectado:', role);
+    request$.subscribe({
 
-        if (role === 'admin') {
-          this.carDisplayContext.setStrategy(new AdminDisplayStrategy());
-        } else {
-          this.carDisplayContext.setStrategy(new ClientDisplayStrategy());
-        }
+      next: (cars: CarData[]) => {
 
-        this.cars = this.carDisplayContext.executeStrategy(cars).map(car => ({
-          ...car,
-          pricePerDay: car.pricePerDay?.$numberDecimal || car.pricePerDay,
-          systemType: car.systemId?.type || 'N/A',
-          companionAmount: car.companionTypeId?.amount || 0
+        const processedCars = this.carDisplayContext.executeStrategy(cars);
 
-        }));
+        this.cars = this.mapCars(processedCars);
+
         this.isLoading = false;
+
       },
-      error: (error) => {
-        console.error('Error fetching cars:', error);
 
-        this.errorMessage = 'Failed to load cars. Please try again later.';
+      error: () => {
+
+        this.errorMessage = 'No se pudieron cargar los vehículos.';
         this.isLoading = false;
+
       }
+
     });
+
   }
 
+  /**
+   * Normaliza datos provenientes del backend
+   */
+  private mapCars(cars: any[]): CarData[] {
 
-  // ---------------------------------------
-  // 🔹 Eliminación de autos
-  // ---------------------------------------
-  openModalDeleteCar(car: any): void {
+    return cars.map(car => ({
+      ...car,
+
+      pricePerDay: car.pricePerDay?.$numberDecimal || car.pricePerDay,
+
+      systemType: car.systemId?.type || 'N/A',
+
+      companionAmount: car.companionTypeId?.amount || 0
+
+    }));
+
+  }
+
+  // -------------------------------------
+  // ELIMINAR VEHÍCULO
+  // -------------------------------------
+
+  openModalDeleteCar(car: CarData): void {
+
     this.selectedCar = car;
+
     this.isModalOpenDeleteCar = true;
+
   }
 
   cancelDelete(): void {
+
     this.isModalOpenDeleteCar = false;
+
+    this.selectedCar = null;
+
   }
 
   confirmDelete(): void {
+
     if (!this.selectedCar?._id) {
-      console.error('No se ha seleccionado ningún auto para eliminar.');
+      console.error('No se ha seleccionado ningún vehículo.');
       return;
     }
 
     this.carService.deleteCar(this.selectedCar._id).subscribe({
-      next: (response) => {
-        //console.log('Auto eliminado exitosamente:', response);
-        this.showSuccessCarDelete = true;
-        this.isModalOpenDeleteCar = false;
-        this.selectedCar = null;
-        this.fetchCars();
 
+      next: () => {
+
+        this.showSuccessCarDelete = true;
+
+        this.isModalOpenDeleteCar = false;
+
+        this.selectedCar = null;
+
+        this.fetchCars();
 
         setTimeout(() => {
           this.showSuccessCarDelete = false;
         }, 3000);
+
       },
-      error: (error) => {
-        console.error('Error eliminando el auto:', error);
-        this.errorMessage = 'No se pudo eliminar el auto. Intenta nuevamente.';
+
+      error: () => {
+
+        this.errorMessage = 'No se pudo eliminar el vehículo.';
 
       }
+
     });
+
   }
 
-  // ---------------------------------------
-  // 🔹 Actualización de autos
-  // ---------------------------------------
-  openModalUpdateCar(car: any): void {
+  // -------------------------------------
+  // ACTUALIZACIÓN (preparado para futuro)
+  // -------------------------------------
+
+  openModalUpdateCar(car: CarData): void {
+
+    this.selectedCar = car;
+
+    this.isModalOpenUpdateCar = true;
+
   }
 
   cancelUpdate(): void {
+
     this.isModalOpenUpdateCar = false;
-    this.updateOption = '';
+
+    this.updateOption = null;
+
+    this.selectedCar = null;
+
   }
 
   updateAvailability(): void {
+
+    if (!this.selectedCar) return;
+
+    this.showAlertUpdateAvailability = true;
 
   }
 
   updateCarInfo(): void {
 
+    if (!this.selectedCar) return;
+
+    this.showAlertCarData = true;
+
   }
+
 }

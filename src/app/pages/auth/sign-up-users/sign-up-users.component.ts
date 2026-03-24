@@ -1,98 +1,75 @@
 import { Component, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserFactoryService, AdminUser, ClientUser } from '../../../services/auth/user-factory.service';
-import { AuthService } from '../../../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, finalize } from 'rxjs';
+import { RegistrationService } from '../../../services/user/registration.service';
+import { NavbarHomeComponent } from "../../../layouts/navbar-home/navbar-home.component";
 
 @Component({
   selector: 'app-sign-up-users',
+  imports: [ReactiveFormsModule, CommonModule, NavbarHomeComponent],
   templateUrl: './sign-up-users.component.html',
   styleUrls: ['./sign-up-users.component.css'],
 })
-export class SignUpUsersComponent {
-  private destroy$ = new Subject<void>();
-  isRegisterModalOpen = false;
+export class SignUpUsersComponent implements OnDestroy {
+
+
+  // Propiedades del componente
+
   formRegister: FormGroup;
-  errorMessage = '';
+  isRegisterModalOpen = false;
   isLoading = false;
+  errorMessage = '';
   showSuccessCreateUser = false;
+
+  private destroy$ = new Subject<void>();
   private alertTimeout: any;
 
   constructor(
     private fb: FormBuilder,
-    private userFactory: UserFactoryService,
-    private authService: AuthService,
-    private router: Router
+    private registrationService: RegistrationService
   ) {
-    this.formRegister = this.fb.group({
+    this.formRegister = this.initForm();
+    this.setupRoleBasedValidators();
+  }
+
+
+  // Inicialización del formulario
+
+  private initForm(): FormGroup {
+    return this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-
-      email: ['', [
-        Validators.required,
-        Validators.email,
-        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-      ]],
-
-      password: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.pattern(/^[0-9]+$/)
-      ]],
-
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       role: ['', Validators.required],
-
-      identification: ['', [
-        Validators.pattern(/^[0-9]+$/)
-      ]],
-
+      identification: [''],
       address: [''],
-
-      contact: ['', [
-        Validators.pattern(/^(\+?\d{1,3}[- ]?)?\d{7,15}$/)
-      ]]
-    });
-
-    this.formRegister.get('role')?.valueChanges.pipe(
-
-    ).subscribe((role: string) => {
-      const clientFields = ['identification', 'address', 'contact'];
-
-      if (role === 'client') {
-        clientFields.forEach(field =>
-          this.formRegister.get(field)?.setValidators(Validators.required)
-        );
-      } else {
-        clientFields.forEach(field =>
-          this.formRegister.get(field)?.clearValidators()
-        );
-      }
-
-      clientFields.forEach(field =>
-        this.formRegister.get(field)?.updateValueAndValidity()
-      );
+      contact: ['']
     });
   }
 
+  private setupRoleBasedValidators(): void {
+    const clientFields = ['identification', 'address', 'contact'];
 
+    this.formRegister.get('role')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((role: string) => {
+        clientFields.forEach(field => {
+          const control = this.formRegister.get(field);
+          if (!control) return;
 
-  openRegisterModal(): void {
-    this.isRegisterModalOpen = true;
-    this.errorMessage = '';
-
+          if (role === 'client') {
+            control.setValidators([Validators.required]);
+          } else {
+            control.clearValidators();
+          }
+          control.updateValueAndValidity();
+        });
+      });
   }
 
-  closeModal(): void {
-    this.isRegisterModalOpen = false;
 
-
-    setTimeout(() => {
-      this.formRegister.reset();
-      this.errorMessage = '';
-      this.formRegister.get('role')?.setValue('admin');
-    });
-  }
-
+  // Manejo de envío del formulario
 
   onSubmit(): void {
     if (this.formRegister.invalid) {
@@ -101,34 +78,56 @@ export class SignUpUsersComponent {
       return;
     }
 
-    const role = this.formRegister.get('role')?.value;
-
-
-    try {
-      const user = this.userFactory.createUser(role, this.formRegister.value);
-
-      const request$ =
-        role === 'admin'
-          ? this.authService.signUpAdmin(user as AdminUser)
-          : this.authService.signUpClient(user as ClientUser);
-
-      request$.pipe(
-      ).subscribe({
-        next: () => {
-          this.showSuccessCreateUser = true;
-
-
-          clearTimeout(this.alertTimeout);
-          this.alertTimeout = setTimeout(() => {
-            this.showSuccessCreateUser = false;
-          }, 3000);
-
-          this.closeModal();
-        },
+    this.isLoading = true;
+    this.registrationService.registerUser(this.formRegister.value)
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => this.isLoading = false)
+      )
+      .subscribe({
+        next: () => this.handleSuccess(),
+        error: (err) => this.handleError(err)
       });
-    } catch (error: any) {
-      this.errorMessage = error.message || 'Error al procesar el formulario.';
-      this.isLoading = false;
-    }
+  }
+
+
+  // Métodos privados de UI
+
+  private handleSuccess(): void {
+    this.showSuccessCreateUser = true;
+    clearTimeout(this.alertTimeout);
+
+
+    this.alertTimeout = setTimeout(() => {
+      this.showSuccessCreateUser = false;
+      this.closeModal();
+    }, 2000);
+  }
+
+  private handleError(error: any): void {
+    this.errorMessage = error?.message || 'Error al procesar el formulario.';
+  }
+
+  private resetForm(): void {
+    this.formRegister.reset({ role: 'admin' });
+    this.errorMessage = '';
+    this.showSuccessCreateUser = false;
+  }
+
+
+  // Manejo del modal
+
+  closeModal(): void {
+    this.isRegisterModalOpen = false;
+    this.resetForm();
+  }
+
+
+  // Lifecycle hooks
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    clearTimeout(this.alertTimeout);
   }
 }
