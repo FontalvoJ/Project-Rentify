@@ -8,6 +8,8 @@ const router = Router();
 const carService = new CarService();
 const carController = new CarController(carService);
 
+router.get("/allCars", carController.getAllCarsPublic);
+
 router.post(
   "/createCar",
   [authJwt.verifyToken, validateRoles("admin")],

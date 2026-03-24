@@ -4,6 +4,24 @@ export default class CarController {
   constructor(carService) {
     this.carService = carService;
   }
+  /**
+   * Ver todos los autos disponibles para visitas públicas (sin autenticación)
+   */
+  getAllCarsPublic = async (req, res) => {
+    try {
+      const cars = await this.carService.getAllCarsPublic();
+
+      res.status(200).json({
+        message: "Autos obtenidos correctamente",
+        data: cars,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Error al obtener los autos",
+        error: error.message,
+      });
+    }
+  };
 
   /**
    * Crear un auto (solo administradores)

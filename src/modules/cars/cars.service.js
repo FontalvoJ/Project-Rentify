@@ -2,6 +2,14 @@ import Cars from "../../models/Cars.js";
 import ICarService from "../cars/ICarService.js";
 
 export default class CarService extends ICarService {
+  async getAllCarsPublic() {
+    const cars = await Cars.find({ isAvailable: true })
+      .populate("systemId")
+      .populate("companionTypeId");
+
+    return cars;
+  }
+
   async createCar(carData, userId) {
     if (!carData || !userId) {
       throw new Error("Datos faltantes o usuario no autenticado");

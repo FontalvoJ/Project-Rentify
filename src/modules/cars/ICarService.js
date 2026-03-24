@@ -7,6 +7,10 @@ export default class ICarService {
     throw new Error("Method not implemented");
   }
 
+  async getAllCarsPublic() {
+    throw new Error("Método no implementado");
+  }
+
   async deleteCar(carId) {
     throw new Error("Method not implemented");
   }
