@@ -11,10 +11,15 @@ export const connectDB = async () => {
 
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(process.cwd(), ".env"),
+});
 
 const MONGO_URI = process.env.MONGO_URI;
+//console.log("ENV COMPLETO:", process.env);
+//console.log("MONGO_URI:", process.env.MONGO_URI);
 
 export const connectDB = async () => {
   try {

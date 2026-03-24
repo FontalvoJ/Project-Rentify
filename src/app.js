@@ -16,7 +16,7 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:4200",
   "https://api-backend-rentify.onrender.com/",
-  "https://project-rentify.netlify.app/home",
+  "https://project-rentify.netlify.app",
 ];
 app.use(
   cors({
