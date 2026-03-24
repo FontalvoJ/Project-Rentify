@@ -1,111 +1,142 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ClientService } from 'src/app/services/client/client.service';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit, signal } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ClientService } from '../../../services/user/client.service';
+import { UpdateClientData } from '../../../models/client/update-client-data';
+import { ClientResponse } from '../../../models/client/client-response';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth/auth.service';
+
 
 @Component({
   selector: 'app-update-info',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './update-info.component.html',
-  styleUrls: ['./update-info.component.css']
+  styleUrl: './update-info.component.css'
 })
-export class UpdateInfoComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+export class UpdateInfoComponent implements OnInit {
 
-  clientData = {
-    name: '',
-    identification: '',
-    address: '',
-    contact: '',
-    email: '',
-    password: ''
-  };
+  form!: FormGroup;
+  loading = false;
 
-  uiState = {
-    isModalOpenEditProfile: false,
-    dropdownOpen: false,
-    showAlertUpdateInfo: false,
-    isModalOpenDeleteAccount: false,
-    isLoading: false
-  };
+  dropdownOpen = signal(false);
+  editModalOpen = signal(false);
+  deleteModalOpen = signal(false);
+  showAlertUpdateInfo = signal(false);
+  showAlertDeleteAccount = signal(false);
 
-  constructor(private clientService: ClientService, private router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private clientService: ClientService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.getClientData();
+    this.initForm();
+    this.loadClientData();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  //Formulario
+  initForm() {
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      identification: [''],
+      address: [''],
+      contact: ['']
+    });
   }
 
+  //Mapping
+  mapToForm(response: ClientResponse): UpdateClientData {
+    const data = response.data;
+
+    return {
+      name: data.user.name,
+      email: data.user.email,
+      identification: data.client.identification,
+      address: data.client.address,
+      contact: data.client.contact
+    };
+  }
+
+  // Cargar datos
+  loadClientData() {
+    this.clientService.getClientInfo().subscribe({
+      next: (response) => {
+        this.form.patchValue(this.mapToForm(response));
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  // Dropdown
   toggleDropdown() {
-    this.uiState.dropdownOpen = !this.uiState.dropdownOpen;
+    this.dropdownOpen.update(value => !value);
   }
 
-  getClientData() {
-    this.uiState.isLoading = true;
-    this.clientService.getClientInfo()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (response) => {
-          this.clientData = {
-            name: response.user.name,
-            email: response.user.email,
-            identification: response.client.identification,
-            address: response.client.address,
-            contact: response.client.contact,
-            password: ''
-          };
-          this.uiState.isLoading = false;
-        },
-        (error) => {
-          console.error('Error retrieving client data', error);
-          this.uiState.isLoading = false;
-        }
-      );
-  }
-
-  updateClientInfo() {
-    console.log('Datos que se envían al backend:', this.clientData);
-
-    this.clientService.updateClientInfo(this.clientData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (response) => {
-          console.log('Respuesta del backend:', response);
-          this.uiState.showAlertUpdateInfo = true;
-          this.closeModalEdit();
-          setTimeout(() => this.uiState.showAlertUpdateInfo = false, 3000);
-        },
-        (error) => console.error('Error updating client data', error)
-      );
-  }
-
-  deleteAccount() {
-    this.clientService.deleteClientAccount()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        () => this.router.navigate(['/home']),
-        (error) => console.error('Error deleting account:', error)
-      );
-  }
-
+  //Abrir modal editar
   openModalEdit() {
-    this.uiState.isModalOpenEditProfile = true;
-    this.toggleDropdown();
+    this.editModalOpen.set(true);
+    this.dropdownOpen.set(false);
   }
 
-  closeModalEdit() {
-    this.uiState.isModalOpenEditProfile = false;
-  }
-
+  // Abrir modal eliminar
   openDeleteAccountModal() {
-    this.uiState.isModalOpenDeleteAccount = true;
+    this.deleteModalOpen.set(true);
+    this.dropdownOpen.set(false);
   }
 
-  closeDeleteAccountModal() {
-    this.uiState.isModalOpenDeleteAccount = false;
+  //Cerrar modales
+  closeModals() {
+    this.editModalOpen.set(false);
+    this.deleteModalOpen.set(false);
+  }
+
+  //Guardar cambios
+  onSubmit() {
+    if (this.form.invalid || this.loading) return;
+
+    const payload: UpdateClientData = this.form.value;
+
+    this.loading = true;
+
+    this.clientService.updateClientInfo(payload).subscribe({
+      next: () => {
+        this.loading = false;
+
+        this.closeModals();
+        this.showAlertUpdateInfo.set(true);
+        setTimeout(() => {
+          this.showAlertUpdateInfo.set(false);
+        }, 3000);
+      },
+
+      error: (err) => {
+        console.error('Error al actualizar cliente:', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  // Eliminar cuenta
+  deleteAccount() {
+    this.clientService.deleteClientAccount().subscribe({
+      next: () => {
+        // 🔹 cerrar modal
+        this.deleteModalOpen.set(false);
+
+        // 🔹 mostrar alerta (opcional si no rediriges inmediato)
+        this.showAlertDeleteAccount.set(true);
+
+        // 🔹 limpiar sesión + redirigir
+        this.authService.logout();
+      },
+
+      error: (err) => {
+        console.error('Error al eliminar cuenta:', err);
+      }
+    });
   }
 }

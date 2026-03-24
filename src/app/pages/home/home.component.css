@@ -1,0 +1,45 @@
+@keyframes carousel {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-carousel {
+  animation: carousel 20s linear infinite;
+  display: flex;
+  align-items: center;
+  width: max-content;
+}
+
+.animate-carousel:hover {
+  animation-play-state: paused;
+}
+
+/* Contenedor del logo — ancho fijo para todos */
+.image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px; /* ancho fijo igual para todos */
+  flex-shrink: 0;
+}
+
+/* Imagen del logo */
+.image {
+  height: 55px;
+  width: auto;
+  max-width: 90px; /* evita que alguna imagen se desborde */
+  object-fit: contain;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+  filter: grayscale(100%);
+}
+
+.image:hover {
+  transform: scale(1.1);
+  filter: grayscale(0%);
+}

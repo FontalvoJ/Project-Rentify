@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NavbarHomeComponent } from "../../../layouts/navbar-home/navbar-home.component";
+
 
 @Component({
   selector: 'app-sign-in',
+  standalone: true,
+  imports: [FormsModule, NavbarHomeComponent],
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
 })
@@ -13,58 +18,40 @@ export class SignInComponent {
     password: ''
   };
 
+  loading = false;
+  errorMessage = '';
+
   constructor(
     private authService: AuthService,
     private router: Router
   ) { }
 
   signIn(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
     this.authService.signIn(this.credentials)
       .subscribe({
-        next: (response) => {
-          if (response) {
-            this.handleSuccessfulLogin(response);
+        next: (success) => {
+          this.loading = false;
+
+          if (success) {
+            this.navigateBasedOnRole();
           } else {
-            console.error('Response is null.');
-            this.router.navigate(['/home']);
+            this.errorMessage = 'Usuario o contraseña incorrectos.';
           }
         },
         error: (error) => {
-          this.handleLoginError(error);
-
+          this.loading = false;
+          this.errorMessage = error?.error?.message || 'Ocurrió un error, intente nuevamente.';
+          console.error('Error en login:', error);
         }
       });
   }
 
-  private handleSuccessfulLogin(response: { token: string, role: string, name?: string }): void {
-    if (!response?.token) {
-      console.error('Invalid token or user response.');
-      this.router.navigate(['/home']);
-      return;
-    }
+  private navigateBasedOnRole(): void {
+    const role = this.authService.getUserRole();
 
-    localStorage.setItem('token', response.token);
-
-    if (response.name) {
-      localStorage.setItem('name', response.name);
-    }
-
-    if (!response.role) {
-      console.error('User role is not defined.');
-      this.router.navigate(['/home']);
-      return;
-    }
-
-    localStorage.setItem('role', response.role);
-    this.navigateBasedOnRole(response.role);
-  }
-
-  private handleLoginError(error: any): void {
-    console.log(error);
-    alert('Error logging in: ' + (error.error?.message || 'Please try again later.'));
-  }
-
-  private navigateBasedOnRole(role: string): void {
     switch (role) {
       case 'admin':
         this.router.navigate(['/dashboard-admin']);

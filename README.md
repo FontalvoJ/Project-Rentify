@@ -1,45 +1,59 @@
-# Rentify 🚗💼
+# RentifyProject
 
-Rentify es una plataforma de alquiler de autos que permite tanto a clientes como a administradores gestionar reservas de vehículos de forma eficiente y sencilla. Los administradores pueden gestionar los autos disponibles para reservación y administrar las cuentas de los clientes, mientras que los clientes pueden realizar, modificar y eliminar sus reservas.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
 
-## Descripción 📜
+## Development server
 
-Rentify es una solución diseñada tanto para administradores como para clientes que necesitan gestionar vehículos para alquilar. Permite realizar registros, iniciar sesión, gestionar la información personal y administrar las reservas de autos.
+To start a local development server, run:
 
-### Funcionalidades principales:
+```bash
+ng serve
+```
 
-- **Registro e inicio de sesión** tanto para administradores como para clientes. 🔑
-- **Gestión de autos**: Añadir, editar y eliminar vehículos disponibles para reservación. 🚙
-- **Gestión de reservas**: Los clientes pueden realizar reservas y los administradores pueden ver y gestionar las reservaciones. 📅
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Características 🛠️
+## Code scaffolding
 
-### Funcionalidades para Administrador:
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-- Añadir un nuevo auto para reservación. ➕🚗
-- Editar la información de un auto para reservación. ✏️🚗
-- Eliminar un auto para reservación. ❌🚗
-- Listar las reservaciones realizadas por los clientes. 📑
+```bash
+ng generate component component-name
+```
 
-### Funcionalidades para Clientes:
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-- Editar la información personal del cliente. ✏️👤
-- Eliminar la cuenta del cliente. ❌👤
-- Ver los autos disponibles para reservación. 👀🚙
-- Realizar una reservación para un auto disponible. 📝🚗
+```bash
+ng generate --help
+```
 
-## Tecnologías utilizadas 🖥️
+## Building
 
-- **Frontend:** Angular, HTML, Tailwind CSS
-- **Backend:** Node.js, Express
-- **Base de datos:** MongoDB
-- **Autenticación:** JWT (JSON Web Tokens)
+To build the project run:
 
-## Despliegue 🌐
+```bash
+ng build
+```
 
-- **Despliegue API:** [https://api-node-rentify.onrender.com/](https://api-node-rentify.onrender.com/)
-- **Despliegue Frontend:** [https://demo-gpe-rentify.netlify.app/home](https://demo-gpe-rentify.netlify.app/home)
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## **Licencia 📄**
+## Running unit tests
 
-Este proyecto estara bajo licencia y derechos de autor propiedad de FontalvoJ;.
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
