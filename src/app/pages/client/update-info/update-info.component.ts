@@ -24,7 +24,7 @@ export class UpdateInfoComponent implements OnInit {
   editModalOpen = signal(false);
   deleteModalOpen = signal(false);
   showAlertUpdateInfo = signal(false);
-  showAlertDeleteAccount = signal(false);
+
 
   constructor(
     private fb: FormBuilder,
@@ -124,13 +124,8 @@ export class UpdateInfoComponent implements OnInit {
   deleteAccount() {
     this.clientService.deleteClientAccount().subscribe({
       next: () => {
-        // 🔹 cerrar modal
         this.deleteModalOpen.set(false);
 
-        // 🔹 mostrar alerta (opcional si no rediriges inmediato)
-        this.showAlertDeleteAccount.set(true);
-
-        // 🔹 limpiar sesión + redirigir
         this.authService.logout();
       },
 
