@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UpdateClientData } from '../../models/client/update-client-data';
 import { ClientResponse } from '../../models/client/client-response';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientService {
 
-  private readonly API = 'https://api-backend-rentify.onrender.com/api/client';
+
+  private readonly API = `${environment.api.baseUrl}/client`;
 
   constructor(private http: HttpClient) { }
 

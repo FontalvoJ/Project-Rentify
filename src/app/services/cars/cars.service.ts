@@ -7,13 +7,15 @@ import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { CarData } from '../../models/cars/car-data';
 import { CreateCarData } from '../../models/cars/create-car-data';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarService {
 
-  private API_URL = 'https://api-backend-rentify.onrender.com/api/cars/';
+  private API_URL = `${environment.api.baseUrl}/cars/`;
   private carsCache: CarData[] | null = null;
 
   constructor(
