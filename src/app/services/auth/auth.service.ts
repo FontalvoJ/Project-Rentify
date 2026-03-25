@@ -5,13 +5,15 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { AdminUser, ClientUser } from '../../models/user/user-data';
 import { SessionService } from './session.service';
+import { environment } from '../../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private AUTH_API_URL = 'https://api-backend-rentify.onrender.com/api/auth';
+  private readonly AUTH_API_URL = `${environment.api.baseUrl}/auth`;
 
   constructor(
     private http: HttpClient,
