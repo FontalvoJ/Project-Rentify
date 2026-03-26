@@ -1,5 +1,6 @@
 import Cars from "../../models/Cars.js";
 import ICarService from "../cars/ICarService.js";
+import mongoose from "mongoose";
 
 export default class CarService extends ICarService {
   async getAllCarsPublic() {
@@ -52,7 +53,7 @@ export default class CarService extends ICarService {
 
     await Cars.findByIdAndDelete(carId);
 
-    return car; // 👈 retornamos el auto eliminado
+    return car;
   }
 
   async updateCar(carId, updateDto, user) {
@@ -68,6 +69,25 @@ export default class CarService extends ICarService {
 
     if (car.createdBy.toString() !== user._id.toString()) {
       throw new Error("No tienes permisos para actualizar este auto");
+    }
+
+    if (updateDto.pricePerDay !== undefined) {
+      updateDto.pricePerDay = mongoose.Types.Decimal128.fromString(
+        updateDto.pricePerDay.toString(),
+      );
+    }
+
+    if (updateDto.power !== undefined) {
+      updateDto.power = Number(updateDto.power);
+    }
+
+    if (updateDto.year !== undefined) {
+      updateDto.year = Number(updateDto.year);
+    }
+
+    if (updateDto.isAvailable !== undefined) {
+      updateDto.isAvailable =
+        updateDto.isAvailable === true || updateDto.isAvailable === "true";
     }
 
     const updatedCar = await Cars.findByIdAndUpdate(carId, updateDto, {

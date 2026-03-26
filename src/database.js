@@ -1,4 +1,4 @@
-/* import mongoose from "mongoose";
+import mongoose from "mongoose";
 export const connectDB = async () => {
   try {
     await mongoose.connect("mongodb://0.0.0.0:27017/dbs_rentify");
@@ -7,8 +7,9 @@ export const connectDB = async () => {
     console.error("❌ Error connecting to the database:", err);
     process.exit(1);
   }
-};*/
+};
 
+/* 
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
@@ -34,4 +35,4 @@ export const connectDB = async () => {
   }
 };
 
-connectDB();
+connectDB();*/
