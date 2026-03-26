@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { CarData } from '../../models/cars/car-data';
 import { CreateCarData } from '../../models/cars/create-car-data';
+import { UpdateCar } from '../../models/cars/update-car';
 import { environment } from '../../../environments/environment';
 
 
@@ -119,6 +120,39 @@ export class CarService {
       );
   }
 
+
+  /**
+ * Actualiza un auto existente.
+ * Solo los administradores pueden realizar esta operación.
+ */
+  updateCar(carId: string, carData: UpdateCar): Observable<CarData> {
+
+    if (!this.isAdmin()) {
+      alert('Solo los administradores pueden actualizar autos.');
+      return throwError(() => new Error('Acceso no autorizado'));
+    }
+
+    if (!carId) {
+      return throwError(() => new Error('El ID del auto es obligatorio'));
+    }
+
+    const headers = this.getAuthHeaders();
+
+    return this.http.put<{ message: string; data: CarData }>(
+      `${this.API_URL}updateCar/${carId}`,
+      carData,
+      { headers }
+    ).pipe(
+      map(response => response.data),
+
+      tap(() => {
+        this.clearCache();
+      }),
+
+      catchError(this.handleError)
+    );
+  }
+
   /**
    * Elimina un auto por su ID.
    * Solo los administradores pueden realizar esta operación.
@@ -144,5 +178,6 @@ export class CarService {
         catchError(this.handleError)
       );
   }
+
 
 }
