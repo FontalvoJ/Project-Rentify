@@ -52,8 +52,7 @@
                     <div class="grid grid-cols-2 mt-3 gap-x-3 gap-y-2">
 
                         <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24">
+                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="1.6"
                                     d="M21 19.75c0-2.09-1.67-5.068-4-5.727m-2 5.727c0-2.651-2.686-6-6-6s-6 3.349-6 6m9-12.5a3 3 0 1 1-6 0a3 3 0 0 1 6 0m3 3a3 3 0 1 0 0-6" />
@@ -75,8 +74,7 @@
                         </div>
 
                         <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24">
+                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="1.5"
                                     d="M7 4.5a3 3 0 0 0-2.567 4.554a3.001 3.001 0 0 0 0 5.893M7 4.5a2.5 2.5 0 0 1 5 0v15a2.5 2.5 0 0 1-5 0a3 3 0 0 1-2.567-4.553M7 4.5c0 .818.393 1.544 1 2m-3.567 8.447A3 3 0 0 1 6 13.67m11 5.83a3 3 0 0 0 2.567-4.553a3.001 3.001 0 0 0 0-5.893M17 19.5a2.5 2.5 0 0 1-5 0v-15a2.5 2.5 0 0 1 5 0a3 3 0 0 1 2.567 4.554M17 19.5c0-.818-.393-1.544-1-2m3.567-8.446A3 3 0 0 1 18 10.329" />
@@ -85,8 +83,7 @@
                         </div>
 
                         <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24">
+                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="1.5"
                                     d="m5.252 9.975l11.66-5.552c1.7-.81 3.474.965 2.665 2.666l-5.552 11.659c-.759 1.593-3.059 1.495-3.679-.158L9.32 15.851a2 2 0 0 0-1.17-1.17l-2.74-1.027c-1.652-.62-1.75-2.92-.157-3.679" />
@@ -99,7 +96,7 @@
 
                 <!-- Acciones -->
                 <div class="flex justify-end gap-2 px-4 py-3 border-t border-gray-100 bg-gray-50">
-                    <button
+                    <button (click)="openModalUpdateCar(car)"
                         class="p-1.5 text-white bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-500">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
                             <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round"
@@ -122,8 +119,6 @@
         </div>
     </div>
 </section>
-
-
 
 
 <!-- Modal Deleted Car -->
@@ -186,7 +181,230 @@
         <!-- Content -->
         <div class="flex-1 pt-0.5">
             <h4 class="mb-1 text-sm text-white titles">¡Vehiculo Eliminado!</h4>
-            <p class="text-sm text-gray-300 details">El vehiculo se ha eliminado exitosamente</p>
+            <p class="text-sm text-gray-300 other-text">El vehiculo se ha eliminado exitosamente</p>
         </div>
     </div>
 </div>
+
+
+<!-- Modal Update Car-->
+<div *ngIf="isModalOpenUpdateCar" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+
+        <!-- Overlay -->
+        <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+
+        <!-- Modal -->
+        <div
+            class="relative z-10 w-full max-w-lg p-6 transition-all duration-300 shadow-xl bg-gray-50 rounded-2xl sm:p-8">
+
+            <!-- Header -->
+            <div class="flex items-center gap-3 mb-6">
+                <div class="flex items-center justify-center flex-shrink-0 bg-black rounded-lg w-9 h-9">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="1.5">
+                            <path d="M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0m10 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" />
+                            <path d="M5 17H3v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0H9m-6-6h15m-6 0V6" />
+                        </g>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold text-gray-900 titles">Actualizar Vehículo</h3>
+                    <p class="text-xs text-gray-400 other-text">Modifica la disponibilidad o información del vehículo
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex gap-2 mb-6">
+                <button (click)="updateOption = 'availability'"
+                    [class]="updateOption === 'availability'
+                        ? 'flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg titles transition-colors duration-200'
+                        : 'flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg titles hover:bg-gray-200 transition-colors duration-200'">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M8.5 3.5a5 5 0 0 0-.229 9.995a7.5 7.5 0 0 0-.253 1.487a6.5 6.5 0 1 1 6.964-6.964a7.5 7.5 0 0 0-1.487.253A5 5 0 0 0 8.5 3.5m5.778 9.734a.75.75 0 1 0-1.056 1.066l1.215 1.203l-1.217 1.217a.75.75 0 1 0 1.06 1.06l1.22-1.219l1.215 1.219a.75.75 0 0 0 1.062-1.06l-1.215-1.217l1.212-1.204a.75.75 0 0 0-1.057-1.064L15.5 14.444zM15.5 9a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13m-5 6.5a5 5 0 1 1 10 0a5 5 0 0 1-10 0m.78-8.78a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 0 1-1.06 0l-1.5-1.502a.75.75 0 0 1 1.061-1.06l.97.971l2.469-2.47a.75.75 0 0 1 1.06 0" />
+                    </svg>
+                    Disponibilidad
+                </button>
+                <button (click)="updateOption = 'info'"
+                    [class]="updateOption === 'info'
+                        ? 'flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg titles transition-colors duration-200'
+                        : 'flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg titles hover:bg-gray-200 transition-colors duration-200'">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 32 32">
+                        <path fill="currentColor"
+                            d="m24.6 24.4l2.6 2.6l-2.6 2.6L26 31l4-4l-4-4zm-2.2 0L19.8 27l2.6 2.6L21 31l-4-4l4-4zM24 3H8c-1.1 0-2 .9-2 2v22c0 1.1.9 2 2 2h7v-2H8v-6h18V5c0-1.1-.9-2-2-2m0 16H8v-6h16zm0-8H8V5h16z" />
+                    </svg>
+                    Información
+                </button>
+            </div>
+
+            <!-- Panel Disponibilidad -->
+            <div *ngIf="updateOption === 'availability'" class="space-y-4">
+
+                <div class="flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg">
+                    <span class="text-xs font-medium text-gray-500 other-text">Estado actual:</span>
+                    <span class="text-xs font-semibold titles"
+                        [class]="selectedCar?.isAvailable ? 'text-green-600' : 'text-red-500'">
+                        {{ selectedCar?.isAvailable ? 'Disponible' : 'No disponible' }}
+                    </span>
+                </div>
+
+                <div class="relative">
+                    <select [(ngModel)]="editableCar.isAvailable" id="isAvailable"
+                        class="w-full px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg appearance-none other-text focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                        <option [ngValue]="true">Disponible</option>
+                        <option [ngValue]="false">No disponible</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+
+                <button (click)="updateAvailability()"
+                    class="inline-flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-black rounded-lg titles hover:bg-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="M18 10a1 1 0 0 0-1-1H5.41l2.3-2.29a1 1 0 0 0-1.42-1.42l-4 4a1 1 0 0 0-.21 1.09A1 1 0 0 0 3 11h14a1 1 0 0 0 1-1m3.92 3.62A1 1 0 0 0 21 13H7a1 1 0 0 0 0 2h11.59l-2.3 2.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l4-4a1 1 0 0 0 .21-1.09" />
+                    </svg>
+                    Actualizar Disponibilidad
+                </button>
+            </div>
+
+            <!-- Panel Información -->
+            <div *ngIf="updateOption === 'info'">
+                <form (ngSubmit)="updateCarInfo()" class="space-y-3">
+
+                    <div class="flex gap-3">
+                        <input [(ngModel)]="editableCar.brand" [ngModelOptions]="{standalone: true}" placeholder="Marca"
+                            class="other-text flex-1 px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                        <input [(ngModel)]="editableCar.model" [ngModelOptions]="{standalone: true}"
+                            placeholder="Modelo"
+                            class="other-text flex-1 px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                    </div>
+
+                    <div class="flex gap-3">
+                        <input [(ngModel)]="editableCar.color" [ngModelOptions]="{standalone: true}" placeholder="Color"
+                            class="other-text flex-1 px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                        <input [(ngModel)]="editableCar.pricePerDay" [ngModelOptions]="{standalone: true}"
+                            placeholder="Precio por día"
+                            class="other-text flex-1 px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                    </div>
+
+                    <div class="flex gap-3">
+                        <input [(ngModel)]="editableCar.location" [ngModelOptions]="{standalone: true}"
+                            placeholder="Locación"
+                            class="other-text flex-1 px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                        <input [(ngModel)]="editableCar.power" [ngModelOptions]="{standalone: true}"
+                            placeholder="Potencia"
+                            class="other-text flex-1 px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg placeholder-gray-400 details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                    </div>
+
+                    <div class="flex gap-3">
+                        <div class="relative flex-1">
+                            <select [(ngModel)]="editableCar.systemId" [ngModelOptions]="{standalone: true}"
+                                class="other-text w-full px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg appearance-none details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                                <option value="" disabled selected>Sistema</option>
+                                <option *ngFor="let system of systems" [value]="system._id">{{ system.type }}</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400 other-text" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="relative flex-1">
+                            <select [(ngModel)]="editableCar.companionTypeId" [ngModelOptions]="{standalone: true}"
+                                class="other-text w-full px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg appearance-none details focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                                <option value="" disabled selected>Acompañantes</option>
+                                <option *ngFor="let c of companionTypes" [value]="c._id">{{ c.amount }} acompañantes
+                                </option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-400 other-text" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="inline-flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-black rounded-lg titles hover:bg-gray-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M18 10a1 1 0 0 0-1-1H5.41l2.3-2.29a1 1 0 0 0-1.42-1.42l-4 4a1 1 0 0 0-.21 1.09A1 1 0 0 0 3 11h14a1 1 0 0 0 1-1m3.92 3.62A1 1 0 0 0 21 13H7a1 1 0 0 0 0 2h11.59l-2.3 2.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l4-4a1 1 0 0 0 .21-1.09" />
+                        </svg>
+                        Actualizar Información
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- Cancelar -->
+            <div class="flex justify-end mt-4">
+                <button (click)="cancelUpdate()"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg titles hover:bg-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="currentColor"
+                            d="m15.225 19.475l1.75-1.75l1.75 1.75l.75-.75L17.75 17l1.75-1.75l-.75-.75L17 16.25l-1.75-1.75l-.75.75L16.25 17l-1.75 1.75zM3 20v-6l8-2l-8-2V4l14.3 6H17q-2.925 0-4.962 2.063T10 17.05zm14 2q-2.075 0-3.537-1.463T12 17t1.463-3.537T17 12t3.538 1.463T22 17t-1.463 3.538T17 22" />
+                    </svg>
+                    Cancelar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Alert Update Availability Successfully  -->
+<div *ngIf="showAlertUpdateAvailability" class="fixed z-50 bottom-6 right-6 animate-fade-in-out">
+    <div class="flex items-start max-w-md gap-4 p-4 bg-black border-l-4 border-white shadow-2xl rounded-xl">
+        <!-- Icon Container -->
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24">
+                    <path fill="#000"
+                        d="M8 7q-1.25 0-2.125-.875T5 4t.875-2.125T8 1q.95 0 1.725.563T10.85 3H18q.425 0 .713.288T19 4q0 .4-.363.563T18 5v1q0 .425-.288.713T17 7t-.712-.288T16 6V5h-5.15q-.35.875-1.125 1.438T8 7m0-2q.425 0 .713-.288T9 4t-.288-.712T8 3t-.712.288T7 4t.288.713T8 5m1 12.5q.425 0 .713-.288T10 16.5t-.288-.712T9 15.5t-.712.288T8 16.5t.288.713T9 17.5m6 0q.425 0 .713-.288T16 16.5t-.288-.712T15 15.5t-.712.288T14 16.5t.288.713t.712.287M6 22q-.425 0-.712-.288T5 21v-6.075q0-.175.025-.337t.075-.313l1.35-3.925q.2-.6.725-.975T8.35 9h7.3q.65 0 1.175.375t.725.975l1.35 3.925q.05.15.075.313t.025.337V21q0 .425-.287.713T18 22t-.712-.288T17 21v-1H7v1q0 .425-.288.713T6 22m1.65-9h8.7l-.7-2h-7.3z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 pt-0.5">
+            <h4 class="mb-1 text-sm text-white titles">¡Vehiculo Actualizado!</h4>
+            <p class="text-sm text-gray-300 other-text">Estado del vehiculo actualizado exitosamente</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- Alert Update Data Successfully  -->
+<div *ngIf="showAlertCarData" class="fixed z-50 bottom-6 right-6 animate-fade-in-out">
+    <div class="flex items-start max-w-md gap-4 p-4 bg-black border-l-4 border-white shadow-2xl rounded-xl">
+        <!-- Icon Container -->
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center w-10 h-10 bg-white rounded-full">
+                <svg class="flex-shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24">
+                    <path fill="#000"
+                        d="M8 7q-1.25 0-2.125-.875T5 4t.875-2.125T8 1q.95 0 1.725.563T10.85 3H18q.425 0 .713.288T19 4q0 .4-.363.563T18 5v1q0 .425-.288.713T17 7t-.712-.288T16 6V5h-5.15q-.35.875-1.125 1.438T8 7m0-2q.425 0 .713-.288T9 4t-.288-.712T8 3t-.712.288T7 4t.288.713T8 5m1 12.5q.425 0 .713-.288T10 16.5t-.288-.712T9 15.5t-.712.288T8 16.5t.288.713T9 17.5m6 0q.425 0 .713-.288T16 16.5t-.288-.712T15 15.5t-.712.288T14 16.5t.288.713t.712.287M6 22q-.425 0-.712-.288T5 21v-6.075q0-.175.025-.337t.075-.313l1.35-3.925q.2-.6.725-.975T8.35 9h7.3q.65 0 1.175.375t.725.975l1.35 3.925q.05.15.075.313t.025.337V21q0 .425-.287.713T18 22t-.712-.288T17 21v-1H7v1q0 .425-.288.713T6 22m1.65-9h8.7l-.7-2h-7.3z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 pt-0.5">
+            <h4 class="mb-1 text-sm text-white titles">¡Vehiculo Actualizado!</h4>
+            <p class="text-sm text-gray-300 other-text">El vehiculo se ha actualizado exitosamente</p>
+        </div>
+    </div>
+</div>
+

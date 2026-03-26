@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { CarService } from '../../../services/cars/cars.service';
 import { CreateCarData } from '../../../models/cars/create-car-data';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
+
 
 
 
@@ -28,20 +30,23 @@ export class ListCarsReservationsComponent implements OnInit {
   formRegisterVehicle!: FormGroup;
 
   // Sistemas disponibles
-  systems = [
+  systems = environment.vehicleConfig.systems;
+
+  /*systems = [
     { _id: '69ae3dde5c6b4ff7545a2516', type: 'Gasolina' },
     { _id: '69ae3dde5c6b4ff7545a2518', type: 'Electrónico' },
     { _id: '69ae3dde5c6b4ff7545a2519', type: 'Diesel' },
     { _id: '69ae3dde5c6b4ff7545a2517', type: 'Híbrido' },
-  ];
+  ];*/
 
   // Tipos de acompañantes
-  companionTypes = [
+  companionTypes = environment.vehicleConfig.companions;
+  /*companionTypes = [
     { _id: '69ae3dde5c6b4ff7545a2508', amount: 2 },
     { _id: '69ae3dde5c6b4ff7545a2509', amount: 4 },
     { _id: '69ae3dde5c6b4ff7545a250a', amount: 5 },
     { _id: '69ae3dde5c6b4ff7545a250b', amount: 7 },
-  ]
+  ]*/
 
   constructor(
     private fb: FormBuilder,
