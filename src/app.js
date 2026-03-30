@@ -4,7 +4,7 @@ import cors from "cors";
 import pkg from "../package.json";
 import authRoutes from "./modules/auth/auth.routes.js";
 import carRoutes from "./modules/cars/cars.routes";
-//import reservationRoutes from "./routes/reservations.routes";
+import reservationRoutes from "./modules/reservations/reservation.routes.js";
 import clientRoutes from "./modules/client/client.routes";
 import chatbotRoutes from "./modules/chatbot/chatbot.routes.js";
 
@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/cars", carRoutes);
-//app.use("/api/reservations", reservationRoutes);
+app.use("/api/reservations", reservationRoutes);
 app.use("/api/client", clientRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 
