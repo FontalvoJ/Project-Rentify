@@ -15,6 +15,7 @@ import {
 
 import { CarData } from '../../../models/cars/car-data';
 
+
 @Component({
   selector: 'app-details-cards',
   standalone: true,
@@ -28,6 +29,7 @@ export class DetailsCardsComponent implements OnInit {
   role: string | null = null;
   systems = environment.vehicleConfig.systems;
   companionTypes = environment.vehicleConfig.companions;
+  isAvailableList = environment.vehicleConfig.isAvailable;
 
   // Estados de UI
   isLoading = true;
@@ -46,6 +48,7 @@ export class DetailsCardsComponent implements OnInit {
   showAlertCarData = false;
 
   updateOption: string | null = null;
+
 
   constructor(
     private carService: CarService,
@@ -132,18 +135,33 @@ export class DetailsCardsComponent implements OnInit {
    * Normaliza datos provenientes del backend
    */
   private mapCars(cars: any[]): CarData[] {
+    return cars.map(car => {
 
-    return cars.map(car => ({
-      ...car,
+      let availability;
 
-      pricePerDay: car.pricePerDay?.$numberDecimal || car.pricePerDay,
+      if (car.isAvailable && typeof car.isAvailable === 'object') {
+        availability = car.isAvailable;
 
-      systemType: car.systemId?.type || 'N/A',
+      } else if (typeof car.isAvailable === 'string') {
+        availability = this.isAvailableList.find(s => s._id === car.isAvailable);
 
-      companionAmount: car.companionTypeId?.amount || 0
+      } else if (typeof car.isAvailable === 'boolean') {
+      
+        availability = car.isAvailable
+          ? this.isAvailableList.find(s => s.status === 'Disponible')
+          : this.isAvailableList.find(s => s.status === 'No Disponible');
+      }
 
-    }));
-
+      return {
+        ...car,
+        pricePerDay: car.pricePerDay?.$numberDecimal || car.pricePerDay,
+        systemType: car.systemId?.type || 'N/A',
+        companionAmount: car.companionTypeId?.amount || 0,
+        isAvailable: availability || { _id: '', status: 'Desconocido' },
+        availableFrom: car.availableFrom || null, 
+        
+      };
+    });
   }
 
   // -------------------------------------
@@ -202,14 +220,42 @@ export class DetailsCardsComponent implements OnInit {
   }
 
   // -------------------------------------
-  // ACTUALIZACIÓN (preparado para futuro)
+  // ACTUALIZACIÓN 
   // -------------------------------------
+
+
+  getStatusClass(car: CarData): string {
+
+    switch (car.isAvailable.status) {
+
+      case 'Disponible':
+        return 'text-green-700 bg-green-50 ring-green-600/20';
+
+      case 'Reservado':
+        return 'text-red-700 bg-red-50 ring-red-600/20';
+
+      case 'En Mantenimiento':
+        return 'text-yellow-700 bg-yellow-50 ring-yellow-600/20';
+
+      case 'No Disponible':
+        return 'text-gray-700 bg-gray-50 ring-gray-600/20';
+
+      default:
+        return 'text-gray-500 bg-gray-100 ring-gray-400/20';
+    }
+  }
 
   openModalUpdateCar(car: CarData): void {
 
+    
     this.selectedCar = car;
+    const currentStatus = this.isAvailableList.find(
+      s => s.status === car.isAvailable.status
+    );
 
-
+    //console.log('car.isAvailable al abrir modal:', car.isAvailable);
+    //console.log('editableCar.isAvailable seteado:', currentStatus?._id);
+    
     this.editableCar = {
       brand: car.brand,
       model: car.model,
@@ -219,7 +265,7 @@ export class DetailsCardsComponent implements OnInit {
       power: car.power,
       systemId: car.systemId?._id,
       companionTypeId: car.companionTypeId?._id,
-      isAvailable: car.isAvailable,
+      isAvailable: currentStatus?._id || ''
     };
 
     this.updateOption = null;
@@ -271,6 +317,7 @@ export class DetailsCardsComponent implements OnInit {
     if (!this.selectedCar?._id) return;
 
     const payload = this.mapToUpdateDto();
+    //console.log('Payload enviado:', payload);
 
     this.carService.updateCar(this.selectedCar._id, payload)
       .subscribe({

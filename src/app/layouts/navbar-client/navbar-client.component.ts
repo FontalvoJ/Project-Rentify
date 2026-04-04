@@ -1,10 +1,11 @@
 import { Component, Renderer2, OnInit } from '@angular/core';;
 import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar-client',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar-client.component.html',
   styleUrl: './navbar-client.component.css'
 })

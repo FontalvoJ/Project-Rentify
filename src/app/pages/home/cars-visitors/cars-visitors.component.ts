@@ -32,34 +32,33 @@ export class CarsVisitorsComponent implements OnInit {
   }
 
   loadCars(): void {
-
     this.isLoading = true;
     this.errorMessage = '';
 
     this.carService.getAllCarsForEveryone().subscribe({
-
       next: (cars: CarData[]) => {
-
-        // Aplicar estrategia
         const filteredCars = this.carDisplayContext.executeStrategy(cars);
-
-        this.cars = filteredCars;
-
+        this.cars = this.mapCars(filteredCars);
         this.isLoading = false;
-
       },
-
       error: (error) => {
-
-        console.error('Error cargando vehículos:', error);
-
+        console.error('❌ Error cargando vehículos:', error);
         this.errorMessage = 'No se pudieron cargar los vehículos. Intenta nuevamente.';
-
         this.isLoading = false;
-
       }
-
     });
+  }
 
+  private mapCars(cars: any[]): CarData[] {
+    return cars.map(car => ({
+      ...car,
+      pricePerDay: car.pricePerDay?.$numberDecimal || car.pricePerDay,
+      systemType: car.systemId?.type || 'N/A',
+      companionAmount: car.companionTypeId?.amount || 0,
+      isAvailable: typeof car.isAvailable === 'object' && car.isAvailable !== null
+        ? car.isAvailable
+        : { _id: '', status: 'Desconocido' },
+        availableFrom: car.availableFrom || null,
+    }));
   }
 }

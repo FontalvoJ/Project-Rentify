@@ -31,6 +31,7 @@ export class ListCarsReservationsComponent implements OnInit {
 
   // Sistemas disponibles
   systems = environment.vehicleConfig.systems;
+  isAvailableList = environment.vehicleConfig.isAvailable;
 
   /*systems = [
     { _id: '69ae3dde5c6b4ff7545a2516', type: 'Gasolina' },
@@ -72,7 +73,7 @@ export class ListCarsReservationsComponent implements OnInit {
       system: ['', Validators.required],
       companion: ['', Validators.required],
       imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]],
-      availability: [false]
+      availability: ['', Validators.required]
     });
   }
 
@@ -96,9 +97,7 @@ export class ListCarsReservationsComponent implements OnInit {
     this.isModalCar = false;
     this.showErrorCreateCar = false;
     this.formSubmitted = false;
-
     this.formRegisterVehicle.reset();
-    this.formRegisterVehicle.patchValue({ availability: false });
   }
 
   // -------------------------------------------------

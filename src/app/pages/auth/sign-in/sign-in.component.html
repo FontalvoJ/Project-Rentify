@@ -67,16 +67,45 @@
                             </div>
                         </div>
 
+                        <!-- Error Message -->
+                        <div *ngIf="errorMessage" class="flex items-start gap-2.5 px-4 py-3 text-sm rounded-lg border"
+                            [ngClass]="{
+                                'bg-red-50 border-red-200 text-red-700': !blocked,
+                                'bg-amber-50 border-amber-200 text-amber-700': blocked
+                            }">
+
+                            <!-- Ícono credenciales incorrectas -->
+                            <svg *ngIf="!blocked" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 shrink-0"
+                                viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                            </svg>
+
+                            <!-- Ícono bloqueado -->
+                            <svg *ngIf="blocked" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 shrink-0"
+                                viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M12 1C8.676 1 6 3.676 6 7v1H4v15h16V8h-2V7c0-3.324-2.676-6-6-6zm0 2c2.276 0 4 1.724 4 4v1H8V7c0-2.276 1.724-4 4-4zm0 9a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2z" />
+                            </svg>
+
+                            <span class="leading-snug titles">{{ errorMessage }}</span>
+                        </div>
+
                         <!-- Submit Button -->
-                        <button type="submit" [disabled]="signinForm.invalid"
+                        <button type="submit" [disabled]="signinForm.invalid || loading || blocked"
                             class="flex items-center justify-center w-full gap-2 py-3 text-sm font-semibold text-white transition-all bg-black rounded-lg shadow-md titles hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg">
+
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
                                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2">
                                     <path d="M20 12a8 8 0 0 0-8-8m0 16a7.99 7.99 0 0 0 6.245-3" />
                                     <path stroke-linejoin="round" d="M4 12h10m0 0l-3-3m3 3l-3 3" />
                                 </g>
                             </svg>
-                            <span>Iniciar Sesión</span>
+
+                            <span *ngIf="!blocked && !loading">Iniciar Sesión</span>
+                            <span *ngIf="loading">Cargando...</span>
+                            <span *ngIf="blocked">Intenta en {{ countdown }}s</span>
+
                         </button>
 
                     </form>

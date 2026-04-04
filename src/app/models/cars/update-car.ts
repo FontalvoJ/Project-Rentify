@@ -6,7 +6,7 @@ export interface UpdateCar {
     location?: string;
     power?: number;
 
-    isAvailable?: boolean;
+    isAvailable?: string;
 
     systemId?: string;
     companionTypeId?: string;

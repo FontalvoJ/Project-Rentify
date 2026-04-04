@@ -11,6 +11,7 @@ import { ListCarsReservationsComponent } from './pages/admin/list-cars-reservati
 
 import { DashboardClientComponent } from './pages/client/dashboard-client/dashboard-client.component';
 import { UpdateInfoComponent } from './pages/client/update-info/update-info.component';
+import { CarsReservationComponent } from './pages/client/cars-reservation/cars-reservation.component';
 
 import { authGuard } from './services/auth/auth.guard';
 
@@ -43,6 +44,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard-client', component: DashboardClientComponent },
       { path: 'update-info', component: UpdateInfoComponent },
+      { path: 'cars-to-reservation', component: CarsReservationComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

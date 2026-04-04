@@ -9,5 +9,5 @@ export interface CreateCarData {
     imageUrl: string;
     systemId: string;
     companionTypeId: string;
-    isAvailable: boolean;
+    isAvailable: string;
 }
