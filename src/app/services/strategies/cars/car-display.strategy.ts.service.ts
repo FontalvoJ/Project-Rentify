@@ -1,5 +1,4 @@
 import { CarData } from "../../../models/cars/car-data";
-import { environment } from '../../../../environments/environment';
 
 /**
  * Interfaz base para definir estrategias
