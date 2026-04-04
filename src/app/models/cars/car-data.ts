@@ -1,5 +1,6 @@
 export interface CarData {
-    _id?: string;
+    _id: string
+    //_id?: string;
 
     brand: string;
     model: string;
@@ -12,7 +13,10 @@ export interface CarData {
 
     imageUrl: string;
 
-    isAvailable?: boolean;
+    isAvailable: {
+        _id: string;
+        status: string;
+    };
 
     systemId?: {
         _id: string;
@@ -23,4 +27,6 @@ export interface CarData {
         _id: string;
         amount: number;
     };
+
+    availableFrom?: string | Date | null;
 }

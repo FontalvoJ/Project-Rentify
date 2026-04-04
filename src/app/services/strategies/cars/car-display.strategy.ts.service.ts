@@ -1,4 +1,5 @@
 import { CarData } from "../../../models/cars/car-data";
+import { environment } from '../../../../environments/environment';
 
 /**
  * Interfaz base para definir estrategias
@@ -29,7 +30,10 @@ export class AdminDisplayStrategy implements CarDisplayStrategy {
 export class ClientDisplayStrategy implements CarDisplayStrategy {
 
   display(cars: CarData[]): CarData[] {
-    return cars.filter(car => car.isAvailable === true);
+    return cars.filter(car =>
+      ['Disponible', 'Reservado', 'En Mantenimiento']
+        .includes(car.isAvailable.status)
+    );
   }
 
 }
@@ -40,9 +44,10 @@ export class ClientDisplayStrategy implements CarDisplayStrategy {
  * Muestra autos disponibles sin autenticación.
  */
 export class PublicDisplayStrategy implements CarDisplayStrategy {
-
   display(cars: CarData[]): CarData[] {
-    return cars.filter(car => car.isAvailable === true);
+    return cars.filter(car =>
+      ['Disponible', 'Reservado', 'En Mantenimiento']
+        .includes(car.isAvailable.status)
+    );
   }
-
 }

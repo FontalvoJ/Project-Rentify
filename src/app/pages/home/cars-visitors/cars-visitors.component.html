@@ -10,52 +10,73 @@
 
 <section class="py-6">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
             <div *ngFor="let car of cars"
-                class="flex flex-col overflow-hidden bg-white border border-gray-100 shadow-sm rounded-xl">
+                class="flex flex-col overflow-hidden transition-shadow duration-200 bg-white border border-gray-100 shadow-sm rounded-2xl hover:shadow-md">
 
-                <!-- Badge y imagen -->
-                <div class="relative w-full h-44 bg-gray-50">
-                    <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" class="object-contain w-full h-full">
+                <!-- Imagen + badge estado -->
+                <div class="relative w-full bg-gray-50" style="height: 180px;">
+                    <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model"
+                        class="object-contain w-full h-full p-3">
+
                     <div class="absolute top-2.5 right-2.5">
                         <span
-                            class="titles inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full ring-1 ring-inset
-                            {{ car.isAvailable ? 'text-green-700 bg-green-50 ring-green-600/20' : 'text-red-700 bg-red-50 ring-red-600/20' }}">
-                            {{ car.isAvailable ? 'Disponible' : 'No disponible' }}
+                            class="titles inline-flex items-center px-2.5 py-0.5 text-xs font-medium rounded-full ring-1 ring-inset"
+                            [ngClass]="{
+                                'text-green-700 bg-green-50 ring-green-600/20': car.isAvailable.status === 'Disponible',
+                                'text-red-700 bg-red-50 ring-red-600/20': car.isAvailable.status === 'Reservado',
+                                'text-yellow-700 bg-yellow-50 ring-yellow-600/20': car.isAvailable.status === 'En Mantenimiento',
+                                'text-gray-700 bg-gray-50 ring-gray-600/20': car.isAvailable.status === 'No Disponible'
+                            }">
+                            {{ car.isAvailable.status || '---' }}
                         </span>
                     </div>
+                </div>
+
+                <!-- Franja de disponibilidad fuera de la imagen -->
+                <div *ngIf="car.availableFrom"
+                    class="flex items-center justify-center gap-1.5 px-4 py-1.5 bg-blue-50 border-b border-blue-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-3 h-3 text-blue-500"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span class="text-xs font-medium text-blue-600 titles">
+                        Disponible desde el {{ car.availableFrom | date:'dd/MM/yyyy' }}
+                    </span>
                 </div>
 
                 <!-- Info -->
                 <div class="flex flex-col flex-grow p-4">
 
                     <!-- Título y precio -->
-                    <div class="flex items-start justify-between mb-2">
-                        <div>
-                            <h2 class="text-base titles">{{ car.brand }} {{ car.model }}
-                            </h2>
-                            <p class="text-xs details">{{ car.year }} · {{ car.color }}</p>
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex-1 min-w-0 pr-2">
+                            <h2 class="text-sm font-semibold truncate titles">{{ car.brand }} {{ car.model }}</h2>
+                            <p class="text-xs details mt-0.5">{{ car.year }}</p>
                         </div>
-                        <div class="flex-shrink-0 ml-2 text-right">
-                            <p class="text-base titles">${{ car.pricePerDay }}</p>
+                        <div class="flex-shrink-0 text-right">
+                            <p class="text-sm font-semibold titles">${{ car.pricePerDay }}</p>
                             <p class="text-xs other-text">/día</p>
                         </div>
                     </div>
 
                     <!-- Especificaciones -->
-                    <div class="grid grid-cols-2 pt-3 mt-3 border-t border-gray-100 gap-x-3 gap-y-2">
+                    <div class="grid grid-cols-2 pt-3 border-t border-gray-100 gap-x-3 gap-y-2">
 
-                        <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 16 16">
                                 <path fill="currentColor"
                                     d="M7.5 5.5a.5.5 0 1 0 0-1a.5.5 0 0 0 0 1m2.5 0a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0M11.5 7a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0M11 9.5a.5.5 0 1 0 0-1a.5.5 0 0 0 0 1m-.5 1.5a.5.5 0 1 1-1 0a.5.5 0 0 1 1 0M8 2a6 6 0 0 0-6 6a2 2 0 0 0 2 2c.708 0 1.085-.378 1.34-.633l.014-.013C5.598 9.109 5.72 9 6 9a1 1 0 0 1 1 1v1a3 3 0 0 0 3 3c1.334 0 2.354-.746 3.017-1.854C13.672 11.05 14 9.579 14 8a6 6 0 0 0-6-6M3 8a5 5 0 0 1 10 0c0 1.458-.305 2.737-.841 3.632C11.63 12.515 10.9 13 10 13a2 2 0 0 1-2-2v-1a2 2 0 0 0-2-2c-.708 0-1.085.378-1.34.633l-.014.013C4.402 8.891 4.28 9 4 9a1 1 0 0 1-1-1" />
                             </svg>
-                            <span class="text-xs details">{{ car.color }}</span>
+                            <span class="text-xs truncate details">{{ car.color }}</span>
                         </div>
 
-                        <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 26 26">
                                 <g fill="currentColor">
                                     <path fill-rule="evenodd"
                                         d="M13.5 26C20.404 26 26 20.404 26 13.5S20.404 1 13.5 1S1 6.596 1 13.5S6.596 26 13.5 26m0-2C19.299 24 24 19.299 24 13.5S19.299 3 13.5 3S3 7.701 3 13.5S7.701 24 13.5 24"
@@ -64,25 +85,24 @@
                                     <path
                                         d="M7.477 8.46a.6.6 0 1 1 .854.842a6.02 6.02 0 0 0-1.731 4.24c0 3.312 2.643 5.992 5.9 5.992s5.9-2.68 5.9-5.992a6.02 6.02 0 0 0-1.731-4.24a.6.6 0 1 1 .854-.842a7.22 7.22 0 0 1 2.077 5.082c0 3.97-3.177 7.192-7.1 7.192s-7.1-3.222-7.1-7.192c0-1.93.756-3.743 2.077-5.082" />
                                     <path d="M11.878 4.25a.6.6 0 0 1 1.2 0v7.085a.6.6 0 0 1-1.2 0z" />
-                                    <path fill-rule="evenodd"
-                                        d="M13 24.5c6.351 0 11.5-5.149 11.5-11.5S19.351 1.5 13 1.5S1.5 6.649 1.5 13S6.649 24.5 13 24.5m0 1c6.904 0 12.5-5.596 12.5-12.5S19.904.5 13 .5S.5 6.096.5 13S6.096 25.5 13 25.5"
-                                        clip-rule="evenodd" />
                                 </g>
                             </svg>
                             <span class="text-xs details">{{ car.power }} HP</span>
                         </div>
 
-                        <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="1.5"
                                     d="M7 4.5a3 3 0 0 0-2.567 4.554a3.001 3.001 0 0 0 0 5.893M7 4.5a2.5 2.5 0 0 1 5 0v15a2.5 2.5 0 0 1-5 0a3 3 0 0 1-2.567-4.553M7 4.5c0 .818.393 1.544 1 2m-3.567 8.447A3 3 0 0 1 6 13.67m11 5.83a3 3 0 0 0 2.567-4.553a3.001 3.001 0 0 0 0-5.893M17 19.5a2.5 2.5 0 0 1-5 0v-15a2.5 2.5 0 0 1 5 0a3 3 0 0 1 2.567 4.554M17 19.5c0-.818-.393-1.544-1-2m3.567-8.446A3 3 0 0 1 18 10.329" />
                             </svg>
-                            <span class="text-xs details">{{ car.systemId?.type }}</span>
+                            <span class="text-xs truncate details">{{ car.systemId?.type }}</span>
                         </div>
 
-                        <div class="flex items-center gap-1.5">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="1.5"
                                     d="m5.252 9.975l11.66-5.552c1.7-.81 3.474.965 2.665 2.666l-5.552 11.659c-.759 1.593-3.059 1.495-3.679-.158L9.32 15.851a2 2 0 0 0-1.17-1.17l-2.74-1.027c-1.652-.62-1.75-2.92-.157-3.679" />
@@ -90,8 +110,9 @@
                             <span class="text-xs truncate details">{{ car.location }}</span>
                         </div>
 
-                        <div class="flex items-center gap-1.5 col-span-2">
-                            <svg class="flex-shrink-0 w-4 h-4 " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <div class="flex items-center gap-1.5 col-span-2 min-w-0">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20">
                                 <g fill="currentColor">
                                     <path fill-rule="evenodd"
                                         d="M5 9a2 2 0 1 0 0-4a2 2 0 0 0 0 4m0 1a3 3 0 1 0 0-6a3 3 0 0 0 0 6"
@@ -107,8 +128,7 @@
                                         clip-rule="evenodd" />
                                 </g>
                             </svg>
-                            <span class="text-xs details">{{ car.companionTypeId?.amount }}
-                                personas</span>
+                            <span class="text-xs details">{{ car.companionTypeId?.amount }} personas</span>
                         </div>
 
                     </div>
@@ -117,13 +137,13 @@
                 <!-- Botón -->
                 <div class="px-4 py-3 border-t border-gray-100 bg-gray-50">
                     <button
-                        class="flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-black rounded-lg titles hover:bg-gray-800"
-                        routerLink="/sign-in">
+                        class="flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-black rounded-lg titles hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                        [disabled]="car.isAvailable.status !== 'Disponible'" routerLink="/sign-in">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
                             <path fill="currentColor"
                                 d="M12 3a9 9 0 0 0 0 18h1v2h-1C5.925 23 1 18.075 1 12S5.925 1 12 1c1.498 0 2.928.3 4.232.844l.923.385l-.77 1.846l-.923-.385A9 9 0 0 0 12 3m11.414 1.5L12 15.914L6.086 10L7.5 8.586l4.5 4.5l10-10zM20 15v3h3v2h-3v3h-2v-3h-3v-2h3v-3z" />
                         </svg>
-                        Reservar
+                        {{ car.isAvailable.status === 'Disponible' ? 'Reservar' : 'No disponible' }}
                     </button>
                 </div>
 
