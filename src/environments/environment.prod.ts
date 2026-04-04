@@ -7,16 +7,23 @@ export const environment = {
 
     vehicleConfig: {
         systems: [
-            { _id: '69ae3dde5c6b4ff7545a2516', type: 'Gasolina' },
-            { _id: '69ae3dde5c6b4ff7545a2518', type: 'Electrónico' },
-            { _id: '69ae3dde5c6b4ff7545a2519', type: 'Diesel' },
-            { _id: '69ae3dde5c6b4ff7545a2517', type: 'Híbrido' }
+            { _id: '69d0a75a4956ff5c0011a2da', type: 'Gasolina' },
+            { _id: '69d0a75a4956ff5c0011a2dc', type: 'Electrónico' },
+            { _id: '69d0a75a4956ff5c0011a2dd', type: 'Diesel' },
+            { _id: '69d0a75a4956ff5c0011a2db', type: 'Híbrido' }
         ],
         companions: [
-            { _id: '69ae3dde5c6b4ff7545a2508', amount: 2 },
-            { _id: '69ae3dde5c6b4ff7545a2509', amount: 4 },
-            { _id: '69ae3dde5c6b4ff7545a250a', amount: 5 },
-            { _id: '69ae3dde5c6b4ff7545a250b', amount: 7 }
+            { _id: '69d0a7594956ff5c0011a2c8', amount: 2 },
+            { _id: '69d0a7594956ff5c0011a2c9', amount: 4 },
+            { _id: '69d0a7594956ff5c0011a2ca', amount: 5 },
+            { _id: '69d0a7594956ff5c0011a2cb', amount: 7 }
+        ],
+
+        isAvailable: [
+            { _id: '69d0a75a4956ff5c0011a2d1', status: 'Disponible' },
+            { _id: '69d0a75a4956ff5c0011a2d3', status: 'Reservado' },
+            { _id: '69d0a75a4956ff5c0011a2d2', status: 'No Disponible' },
+            { _id: '69d0a75a4956ff5c0011a2d4', status: 'En Mantenimiento' }
         ]
     }
 
