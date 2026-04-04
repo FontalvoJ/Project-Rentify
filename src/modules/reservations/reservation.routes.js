@@ -10,18 +10,21 @@ const discountService = new DiscountService();
 const reservationService = new ReservationService(discountService);
 const reservationController = new ReservationController(reservationService);
 
+// 🔹 Crear reserva (cliente)
 router.post(
   "/createReservation",
   [authJwt.verifyToken, validateRoles("client")],
   reservationController.createReservation,
 );
 
+// 🔹 Listar reservas (admin y cliente)
 router.get(
   "/listReservations",
   [authJwt.verifyToken, validateRoles("admin", "client")],
   reservationController.getReservations,
 );
 
+// 🔹 Actualizar estado (solo admin)
 router.patch(
   "/updateStatus/:id",
   [authJwt.verifyToken, validateRoles("admin")],

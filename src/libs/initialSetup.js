@@ -18,7 +18,7 @@ export const initializeDefaults = async () => {
     const companionsCount = await Companions.estimatedDocumentCount();
     if (companionsCount === 0) {
       await Promise.all(
-        [2, 4, 5, 7].map((num) => new Companions({ amount: num }).save())
+        [2, 4, 5, 7].map((num) => new Companions({ amount: num }).save()),
       );
       console.log("Acompañantes creados");
     }
@@ -28,6 +28,8 @@ export const initializeDefaults = async () => {
       await Promise.all([
         new AutoAvail({ status: "Disponible" }).save(),
         new AutoAvail({ status: "No Disponible" }).save(),
+        new AutoAvail({ status: "Reservado" }).save(),
+        new AutoAvail({ status: "En Mantenimiento" }).save(),
       ]);
       console.log("Disponibilidad de autos creada");
     }

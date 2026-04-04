@@ -1,6 +1,7 @@
 import IReservationService from "./IReservationService.js";
 import Reservation from "../../models/Reservations.js";
 import Cars from "../../models/Cars.js";
+import Client from "../../models/Client.js";
 import ResState from "../../models/ResState.js";
 import mongoose from "mongoose";
 
@@ -10,14 +11,23 @@ export default class ReservationService extends IReservationService {
     this.discountService = discountService;
   }
 
-  async createReservation(dto, clientId) {
+  async createReservation(dto, userId) {
     const { carId, startDate, endDate } = dto;
+
+    const client = await Client.findOne({ userId });
+
+    if (!client) {
+      throw new Error("Cliente no encontrado");
+    }
 
     const start = new Date(startDate);
     const end = new Date(endDate);
     const now = new Date();
 
-    // 🚗 1. Validar auto
+    if (start < now) {
+      throw new Error("No puedes reservar en fechas pasadas");
+    }
+
     const car = await Cars.findById(carId);
     if (!car) throw new Error("Auto no encontrado");
 
@@ -56,7 +66,7 @@ export default class ReservationService extends IReservationService {
 
     return await Reservation.create({
       carId,
-      clientId,
+      clientId: client._id,
       startDate: start,
       endDate: end,
       totalDays,
@@ -71,67 +81,137 @@ export default class ReservationService extends IReservationService {
   }
 
   async getReservations(user) {
-    const isAdmin = user.role === "admin";
+    //console.log("USER COMPLETO:", user);
 
-    const filter = isAdmin ? {} : { clientId: user.id };
+    if (!user) {
+      throw new Error("Usuario no autenticado");
+    }
+
+    const role = user.roles?.[0]?.name;
+    const isAdmin = role === "admin";
+
+    let filter = {};
+
+    if (isAdmin) {
+      filter = {};
+    } else {
+      const client = await Client.findOne({ userId: user._id });
+
+      if (!client) {
+        throw new Error("Cliente no encontrado");
+      }
+
+      filter = { clientId: client._id };
+    }
+
+    //console.log("FILTER:", filter);
 
     const reservations = await Reservation.find(filter)
       .populate("carId")
-      .populate("clientId")
+      .populate({
+        path: "clientId",
+        populate: {
+          path: "userId",
+          model: "User",
+        },
+      })
       .populate("resStateId");
 
-    // 🎯 Transformación de respuesta
-    return reservations.map((res) => {
-      if (isAdmin) {
-        return {
-          id: res._id,
-          createdAt: res.createdAt,
-          car: `${res.carId.brand} ${res.carId.model}`,
-          clientId: res.clientId._id,
-          clientName: res.clientId.name,
-          startDate: res.startDate,
-          endDate: res.endDate,
-          totalDays: res.totalDays,
-          totalCost: res.finalCost,
-          status: res.resStateId.status,
-        };
-      }
+    //console.log("RESERVATIONS FOUND:", reservations.length);
 
-      // 👤 Cliente
+    return reservations.map((res) => this.mapReservation(res, isAdmin));
+  }
+
+  mapReservation(res, isAdmin) {
+    if (isAdmin) {
       return {
-        car: `${res.carId.brand} ${res.carId.model}`,
+        id: res._id,
+        createdAt: res.createdAt,
+
+        car: res.carId
+          ? `${res.carId.brand} ${res.carId.model}`
+          : "Auto eliminado",
+
+        client: {
+          id: res.clientId?._id,
+          name: res.clientId?.userId?.name,
+        },
+
         startDate: res.startDate,
         endDate: res.endDate,
         totalDays: res.totalDays,
         totalCost: res.finalCost,
-        originalCost: res.totalCost,
-        discountApplied: res.discountApplied,
-        discountPercentage: res.discountPercentage,
 
-        status: res.resStateId.status,
+        status: res.resStateId?.status || "Sin estado",
       };
-    });
+    }
+
+    return {
+      car: res.carId
+        ? `${res.carId.brand} ${res.carId.model}`
+        : "Auto eliminado",
+
+      startDate: res.startDate,
+      endDate: res.endDate,
+      totalDays: res.totalDays,
+      totalCost: res.finalCost,
+      originalCost: res.totalCost,
+      discountApplied: res.discountApplied,
+      discountPercentage: res.discountPercentage,
+
+      status: res.resStateId?.status || "Sin estado",
+    };
   }
 
-  async updateReservationStatus(id, status) {
+  async updateReservationStatus(user, id, status) {
+    if (user.role !== "admin") {
+      throw new Error("No autorizado");
+    }
+
     const reservation = await Reservation.findById(id);
+    if (!reservation) throw new Error("Reserva no encontrada");
 
-    if (!reservation) {
-      throw new Error("Reserva no encontrada");
+    const currentState = await ResState.findById(reservation.resStateId);
+    const newState = await ResState.findOne({ status });
+
+    if (!newState) throw new Error("Estado no válido");
+
+    const allowedTransitions = {
+      Pendiente: ["Activa", "Cancelada"],
+      Activa: ["Completada", "Cancelada"],
+      Completada: [],
+      Cancelada: [],
+    };
+
+    if (!allowedTransitions[currentState.status].includes(status)) {
+      throw new Error(
+        `No se puede pasar de '${currentState.status}' a '${status}'`,
+      );
     }
 
-    const state = await ResState.findOne({ status });
-
-    if (!state) {
-      throw new Error("Estado no válido");
-    }
-
-    if (reservation.resStateId.toString() === state._id.toString()) {
+    if (reservation.resStateId.toString() === newState._id.toString()) {
       throw new Error("La reserva ya tiene ese estado");
     }
 
-    reservation.resStateId = state._id;
+    // 🚗 Sincronizar isAvailable del auto
+    if (status === "Activa") {
+      await Cars.findByIdAndUpdate(reservation.carId, { isAvailable: false });
+    }
 
+    if (status === "Completada" || status === "Cancelada") {
+      // Verificar que no haya otra reserva Activa sobre el mismo auto
+      const otherActive = await Reservation.findOne({
+        carId: reservation.carId,
+        _id: { $ne: reservation._id },
+        resStateId: newState._id,
+      });
+
+      if (!otherActive) {
+        await Cars.findByIdAndUpdate(reservation.carId, { isAvailable: true });
+      }
+    }
+
+    reservation.resStateId = newState._id;
     await reservation.save();
 
     return reservation;

@@ -1,14 +1,57 @@
 import Cars from "../../models/Cars.js";
 import ICarService from "../cars/ICarService.js";
 import mongoose from "mongoose";
+import ResState from "../../models/ResState.js";
+import Reservation from "../../models/Reservations.js";
 
 export default class CarService extends ICarService {
-  async getAllCarsPublic() {
-    const cars = await Cars.find({ isAvailable: true })
-      .populate("systemId")
-      .populate("companionTypeId");
+ 
+  /**
+   * Aplica disponibilidad real según reservas activas
+   */
+  async #applyRealAvailability(cars) {
+    const now = new Date();
+    const activaState = await ResState.findOne({ status: "Activa" });
+    const disponible = await mongoose
+      .model("AutoAvail")
+      .findOne({ status: "Disponible" });
+    const reservado = await mongoose
+      .model("AutoAvail")
+      .findOne({ status: "Reservado" });
 
-    return cars;
+    if (!activaState) return cars;
+
+    const activeReservations = await Reservation.find({
+      resStateId: activaState._id,
+      startDate: { $lte: now },
+      endDate: { $gte: now },
+    }).select("carId endDate");
+
+    // Map de carId → endDate
+    const reservedCarsMap = new Map(
+      activeReservations.map((r) => [r.carId.toString(), r.endDate]),
+    );
+
+    return cars.map((car) => {
+      const carId = car._id.toString();
+      const endDate = reservedCarsMap.get(carId);
+
+      return {
+        ...car,
+        isAvailable: endDate ? reservado : car.isAvailable,
+        availableFrom: endDate || null,
+      };
+    });
+  }
+
+  async getAllCarsPublic() {
+    const cars = await Cars.find()
+      .populate("isAvailable")
+      .populate("systemId")
+      .populate("companionTypeId")
+      .lean();
+
+    return this.#applyRealAvailability(cars);
   }
 
   async createCar(carData, userId) {
@@ -30,14 +73,20 @@ export default class CarService extends ICarService {
     }
 
     if (roles.includes("client")) {
-      query = { isAvailable: true };
+      const disponible = await mongoose
+        .model("AutoAvail")
+        .findOne({ status: "Disponible" });
+      query = { isAvailable: disponible._id };
     }
 
-    return await Cars.find(query)
+    const cars = await Cars.find(query)
       .populate("createdBy", "name email")
+      .populate("isAvailable")
       .populate("systemId", "type")
       .populate("companionTypeId", "amount")
       .lean();
+
+    return this.#applyRealAvailability(cars);
   }
 
   async deleteCar(carId) {
@@ -86,8 +135,9 @@ export default class CarService extends ICarService {
     }
 
     if (updateDto.isAvailable !== undefined) {
-      updateDto.isAvailable =
-        updateDto.isAvailable === true || updateDto.isAvailable === "true";
+      updateDto.isAvailable = new mongoose.Types.ObjectId(
+        updateDto.isAvailable,
+      );
     }
 
     const updatedCar = await Cars.findByIdAndUpdate(carId, updateDto, {

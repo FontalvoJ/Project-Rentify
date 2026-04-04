@@ -38,6 +38,12 @@ export default class ReservationController {
     try {
       const user = req.user;
 
+      if (!user) {
+        return res.status(401).json({
+          message: "Usuario no autenticado",
+        });
+      }
+
       const reservations = await this.reservationService.getReservations(user);
 
       res.status(200).json({
@@ -52,18 +58,32 @@ export default class ReservationController {
 
   updateReservationStatus = async (req, res) => {
     try {
+      const user = req.user;
+
+      if (!user) {
+        return res.status(401).json({
+          message: "Usuario no autenticado",
+        });
+      }
+
       const { id } = req.params;
       const { status } = req.body;
 
+      if (!status) {
+        return res.status(400).json({
+          message: "El estado es requerido",
+        });
+      }
+
       const updatedReservation =
-        await this.reservationService.updateReservationStatus(id, status);
+        await this.reservationService.updateReservationStatus(user, id, status);
 
       res.status(200).json({
         message: "Estado de la reserva actualizado",
         data: updatedReservation,
       });
     } catch (error) {
-      res.status(400).json({
+      res.status(403).json({
         message: error.message,
       });
     }

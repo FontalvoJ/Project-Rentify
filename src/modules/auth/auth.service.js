@@ -54,6 +54,8 @@ export class AuthServiceMongoose extends IAuthService {
       expiresIn: "24h",
     });
 
+    console.log("Nuevo token generado:", token);
+
     return new AuthResponseDTO({
       token,
       role: user.roles[0].name,

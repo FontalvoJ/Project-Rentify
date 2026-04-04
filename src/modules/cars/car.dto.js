@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export class CreateCarDto {
   constructor({
     brand,
@@ -10,6 +12,7 @@ export class CreateCarDto {
     power,
     systemId,
     companionTypeId,
+    isAvailable,
   }) {
     this.brand = brand;
     this.model = model;
@@ -21,6 +24,7 @@ export class CreateCarDto {
     this.power = power;
     this.systemId = systemId;
     this.companionTypeId = companionTypeId;
+    this.isAvailable = isAvailable;
   }
 
   static validate(dto) {
@@ -34,7 +38,8 @@ export class CreateCarDto {
       !dto.imageUrl ||
       dto.power === undefined ||
       !dto.systemId ||
-      !dto.companionTypeId
+      !dto.companionTypeId ||
+      !dto.isAvailable
     ) {
       throw new Error("Faltan campos obligatorios para crear el automóvil");
     }
@@ -49,6 +54,10 @@ export class CreateCarDto {
 
     if (typeof dto.power !== "number") {
       throw new Error("La potencia debe ser un número");
+    }
+
+    if (typeof dto.isAvailable !== "string") {
+      throw new Error("El estado (isAvailable) debe ser un ObjectId (string)");
     }
   }
 }
@@ -85,8 +94,8 @@ export class UpdateCarDto {
       throw new Error("El precio por día debe ser un número");
     }
 
-    if (dto.isAvailable !== undefined && typeof dto.isAvailable !== "boolean") {
-      throw new Error("La disponibilidad debe ser un valor booleano");
+    if (dto.isAvailable !== undefined && typeof dto.isAvailable !== "string") {
+      throw new Error("El estado debe ser un ObjectId válido");
     }
 
     if (dto.power !== undefined && typeof dto.power !== "number") {

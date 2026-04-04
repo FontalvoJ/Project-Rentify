@@ -24,9 +24,11 @@ const carSchema = new Schema(
       trim: true,
     },
     isAvailable: {
-      type: Boolean,
-      default: true,
+      type: Schema.Types.ObjectId,
+      ref: "AutoAvail",
+      required: true,
     },
+  
     pricePerDay: {
       type: mongoose.Schema.Types.Decimal128,
       required: true,
@@ -80,7 +82,7 @@ const carSchema = new Schema(
     versionKey: false,
     collection: "Cars",
     toJSON: { getters: true },
-  }
+  },
 );
 
 const Cars = mongoose.model("Cars", carSchema);
