@@ -3,6 +3,7 @@ import Reservation from "../../models/Reservations.js";
 import Cars from "../../models/Cars.js";
 import Client from "../../models/Client.js";
 import ResState from "../../models/ResState.js";
+import CarAvailability from "../../models/AutoAvail.js";
 import mongoose from "mongoose";
 
 export default class ReservationService extends IReservationService {
@@ -123,37 +124,21 @@ export default class ReservationService extends IReservationService {
   }
 
   mapReservation(res, isAdmin) {
-    if (isAdmin) {
-      return {
-        id: res._id,
-        createdAt: res.createdAt,
-
-        car: res.carId
-          ? `${res.carId.brand} ${res.carId.model}`
-          : "Auto eliminado",
-
-        client: {
-          id: res.clientId?._id,
-          name: res.clientId?.userId?.name,
-        },
-
-        startDate: res.startDate,
-        endDate: res.endDate,
-        totalDays: res.totalDays,
-        totalCost: res.finalCost,
-
-        status: res.resStateId?.status || "Sin estado",
-      };
-    }
-
     return {
+      id: res._id,
+      createdAt: res.createdAt,
+
       car: res.carId
         ? `${res.carId.brand} ${res.carId.model}`
         : "Auto eliminado",
 
+      clientId: res.clientId?._id,
+      clientName: res.clientId?.userId?.name,
+
       startDate: res.startDate,
       endDate: res.endDate,
       totalDays: res.totalDays,
+
       totalCost: res.finalCost,
       originalCost: res.totalCost,
       discountApplied: res.discountApplied,
@@ -164,7 +149,9 @@ export default class ReservationService extends IReservationService {
   }
 
   async updateReservationStatus(user, id, status) {
-    if (user.role !== "admin") {
+    const isAdmin = user.roles?.some((r) => r.name === "admin");
+
+    if (!isAdmin) {
       throw new Error("No autorizado");
     }
 
@@ -193,21 +180,38 @@ export default class ReservationService extends IReservationService {
       throw new Error("La reserva ya tiene ese estado");
     }
 
-    // 🚗 Sincronizar isAvailable del auto
-    if (status === "Activa") {
-      await Cars.findByIdAndUpdate(reservation.carId, { isAvailable: false });
+    const carId = reservation.carId._id;
+
+    const [disponible, reservado] = await Promise.all([
+      CarAvailability.findOne({ status: "Disponible" }),
+      CarAvailability.findOne({ status: "Reservado" }),
+    ]);
+
+    if (!disponible || !reservado) {
+      throw new Error("Estados del auto no configurados");
     }
 
+    // 🚗 Si se activa → Reservado
+    if (status === "Activa") {
+      await Cars.findByIdAndUpdate(carId, {
+        isAvailable: reservado._id,
+      });
+    }
+
+    // 🚗 Si termina o se cancela → Disponible
     if (status === "Completada" || status === "Cancelada") {
-      // Verificar que no haya otra reserva Activa sobre el mismo auto
+      const activeState = await ResState.findOne({ status: "Activa" });
+
       const otherActive = await Reservation.findOne({
-        carId: reservation.carId,
+        carId: carId,
         _id: { $ne: reservation._id },
-        resStateId: newState._id,
+        resStateId: activeState._id,
       });
 
       if (!otherActive) {
-        await Cars.findByIdAndUpdate(reservation.carId, { isAvailable: true });
+        await Cars.findByIdAndUpdate(carId, {
+          isAvailable: disponible._id,
+        });
       }
     }
 
