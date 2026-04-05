@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 
 import { AuthService } from '../auth/auth.service';
 import { CreateReservationDTO } from '../../models/reservations/create-reservation.dto';
+import { Reservation } from '../../models/reservations/reservation.dto';
 import { environment } from '../../../environments/environment';
 
 
@@ -61,7 +62,7 @@ export class ReservationService {
   /**
    * Listar reservas (cliente o admin)
    */
-  getReservations(): Observable<any[]> {
+  getReservations(): Observable<Reservation[]> {
 
     const headers = this.getAuthHeaders();
 
