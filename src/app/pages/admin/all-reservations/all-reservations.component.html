@@ -1,0 +1,227 @@
+<app-navbar-admin></app-navbar-admin>
+
+<!-- Loading -->
+<div *ngIf="loading" class="flex items-center justify-center py-12">
+    <p class="text-sm text-gray-500 titles">Cargando reservas...</p>
+</div>
+
+<!-- Error -->
+<div *ngIf="errorMessage" class="flex items-center justify-center py-6">
+    <p class="text-sm text-red-500 other-text">{{ errorMessage }}</p>
+</div>
+
+<!-- Tabla -->
+<section class="py-6">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+
+        <div *ngIf="!loading && reservations.length"
+            class="overflow-hidden bg-white border border-gray-100 shadow-sm rounded-xl">
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="border-b border-gray-100 bg-gray-50">
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Fecha orden</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Vehículo</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                ID Cliente</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Cliente</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Inicio</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Fin</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Total</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Estado</th>
+                            <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-center text-gray-500 uppercase titles">
+                                Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr *ngFor="let reservation of paginatedReservations"
+                            class="transition-colors duration-150 hover:bg-gray-50">
+
+                            <td class="px-4 py-3 text-xs text-gray-600 other-text whitespace-nowrap">
+                                {{ reservation.createdAt | date: 'yyyy-MM-dd' }}
+                            </td>
+
+                            <td class="px-4 py-3 text-xs font-medium text-gray-900 other-text whitespace-nowrap">
+                                {{ reservation.car }}
+                            </td>
+
+                            <td class="px-4 py-3 font-mono text-xs text-gray-500 other-text whitespace-nowrap">
+                                {{ reservation.clientId?.substring(0, 3) }}...{{
+                                reservation.clientId?.substring((reservation.clientId?.length ?? 0) - 3) }}
+                            </td>
+
+                            <td class="px-4 py-3 text-xs text-gray-700 other-text whitespace-nowrap">
+                                {{ reservation.clientName }}
+                            </td>
+
+                            <td class="px-4 py-3 text-xs text-gray-600 other-text whitespace-nowrap">
+                                {{ reservation.startDate | date: 'yyyy-MM-dd' }}
+                            </td>
+
+                            <td class="px-4 py-3 text-xs text-gray-600 other-text whitespace-nowrap">
+                                {{ reservation.endDate | date: 'yyyy-MM-dd' }}
+                            </td>
+
+                            <td class="px-4 py-3 text-xs whitespace-nowrap other-text">
+                                <span class="font-semibold text-gray-900">{{ reservation.totalCost | currency }}</span>
+                                <span *ngIf="reservation.discountApplied" class="ml-1 font-medium text-green-600">(-{{
+                                    reservation.discountPercentage }}%)</span>
+                            </td>
+
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                                    [ngClass]="{
+                                    'bg-green-100 text-green-700': reservation.status === 'Completada',
+                                    'bg-yellow-100 text-yellow-700': reservation.status === 'Pendiente',
+                                    'bg-red-100 text-red-700': reservation.status === 'Cancelada',
+                                    'bg-purple-100 text-purple-700': reservation.status === 'Activa'
+                                }">
+                                    {{ reservation.status }}
+                                </span>
+                            </td>
+
+                            <td class="px-4 py-3 text-center whitespace-nowrap">
+                                <button
+                                    class="inline-flex items-center justify-center text-gray-600 transition-colors duration-150 bg-gray-100 rounded-lg w-7 h-7 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    [disabled]="updating" (click)="editReservation(reservation.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 16 16">
+                                        <path fill="currentColor"
+                                            d="M5 1a2 2 0 0 0-2 2v9.998a2 2 0 0 0 2 2h1.046l.25-1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.498 6h2.5v1.44a2.5 2.5 0 0 1 1-.405V5.413a1.5 1.5 0 0 0-.44-1.06L9.645 1.439A1.5 1.5 0 0 0 8.585 1zm6.791 4H9.5a.5.5 0 0 1-.5-.5V2.206zm1.207 3.06a1.56 1.56 0 0 0-.662.394L8.05 12.74a2.8 2.8 0 0 0-.722 1.257l-.009.033l-.302 1.211a.61.61 0 0 0 .738.74l1.211-.303a2.8 2.8 0 0 0 1.29-.73l4.288-4.288a1.56 1.56 0 0 0-1.545-2.6" />
+                                    </svg>
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div
+                class="flex flex-col gap-3 px-4 py-3 border-t border-gray-100 sm:flex-row sm:items-center sm:justify-between">
+                <p class="text-xs text-gray-500 other-text">
+                    Mostrando
+                    <span class="font-semibold text-gray-700 titles">{{ (currentPage - 1) * itemsPerPage + 1 }}</span>
+                    –
+                    <span class="font-semibold text-gray-700 titles">{{ Math.min(currentPage * itemsPerPage,
+                        reservations.length) }}</span>
+                    de
+                    <span class="font-semibold text-gray-700 titles">{{ reservations.length }}</span>
+                    reservas
+                </p>
+
+                <nav class="flex items-center gap-1">
+                    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+                        class="inline-flex items-center justify-center text-xs text-gray-600 transition-colors bg-white border border-gray-200 rounded-lg w-7 h-7 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed">
+                        &lt;
+                    </button>
+                    <button *ngFor="let page of getPages()" (click)="changePage(page)"
+                        class="inline-flex items-center justify-center text-xs transition-colors border rounded-lg w-7 h-7"
+                        [class.bg-black]="page === currentPage" [class.text-white]="page === currentPage"
+                        [class.border-black]="page === currentPage" [class.bg-white]="page !== currentPage"
+                        [class.text-gray-600]="page !== currentPage" [class.border-gray-200]="page !== currentPage"
+                        [class.hover:bg-gray-50]="page !== currentPage">
+                        {{ page }}
+                    </button>
+                    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages()"
+                        class="inline-flex items-center justify-center text-xs text-gray-600 transition-colors bg-white border border-gray-200 rounded-lg w-7 h-7 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed">
+                        &gt;
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Sin reservas -->
+        <div *ngIf="!loading && reservations.length === 0"
+            class="flex flex-col items-center justify-center py-16 text-center">
+            <div class="flex items-center justify-center w-12 h-12 mb-4 bg-gray-100 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M19 3h-1V1h-2v2H8V1H6v2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m0 18H5V9h14z" />
+                </svg>
+            </div>
+            <h3 class="mb-1 text-sm font-semibold text-gray-900 titles">Sin reservas activas</h3>
+            <p class="text-xs text-gray-500 other-text">Actualmente no hay reservas de vehículos registradas.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Modal Actualizar Estado -->
+<div *ngIf="showModal" class="fixed inset-0 z-50 flex items-center justify-center px-4">
+    <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" aria-hidden="true"></div>
+
+    <div class="relative z-10 w-full max-w-sm p-6 transition-all duration-300 shadow-xl bg-gray-50 rounded-2xl">
+
+        <!-- Header -->
+        <div class="flex items-center gap-3 mb-5">
+            <div class="flex items-center justify-center flex-shrink-0 bg-black rounded-lg w-9 h-9">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 2048 2048">
+                    <path fill="currentColor"
+                        d="M896 512v128H512V512zM512 896V768h384v128zm0 256v-128h256v128zM384 512v128H256V512zm0 256v128H256V768zm-128 384v-128h128v128zM128 128v1792h640v128H0V0h1115l549 549v219h-128V640h-512V128zm1024 91v293h293zm640 805h256v1024H896V1024h256V896h128v128h384V896h128zm128 896v-512h-896v512zm0-640v-128h-896v128z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-base font-semibold text-gray-900 titles">Actualizar Estado</h3>
+                <p class="text-xs text-gray-400 other-text">Cambia el estado de la reserva</p>
+            </div>
+        </div>
+
+        <!-- Select -->
+        <div class="mb-5">
+            <label for="status" class="block mb-1.5 text-xs font-medium text-gray-500 titles">Nuevo estado</label>
+            <div class="relative">
+                <select id="status" [(ngModel)]="newStatus"
+                    class="w-full px-3 py-2.5 text-sm bg-white border border-gray-200 rounded-lg appearance-none other-text focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all">
+                    <option value="" disabled selected>Selecciona un estado</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Activa">Activa</option>
+                    <option value="Completada">Completada</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
+            <p *ngIf="showError" class="mt-1.5 text-xs text-red-500 other-text">
+                Por favor selecciona un estado antes de continuar.
+            </p>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex gap-2">
+            <button (click)="closeModal()" [disabled]="updating"
+                class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg titles hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50">
+                Cancelar
+            </button>
+            <button (click)="updateStatus()" [disabled]="updating"
+                class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-black rounded-lg titles hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="currentColor" fill-rule="evenodd"
+                        d="M9.944 2.25h4.112c1.838 0 3.294 0 4.433.153c1.172.158 2.121.49 2.87 1.238c.748.749 1.08 1.698 1.238 2.87c.153 1.14.153 2.595.153 4.433V13a.75.75 0 0 1-1.5 0v-.25H2.75V13c0 1.907.002 3.262.14 4.29c.135 1.005.389 1.585.812 2.008s1.003.677 2.009.812c1.028.138 2.382.14 4.289.14h3a.75.75 0 0 1 0 1.5H9.944c-1.838 0-3.294 0-4.433-.153c-1.172-.158-2.121-.49-2.87-1.238c-.748-.749-1.08-1.698-1.238-2.87c-.153-1.14-.153-2.595-.153-4.433v-2.112c0-1.838 0-3.294.153-4.433c.158-1.172.49-2.121 1.238-2.87c.749-.748 1.698-1.08 2.87-1.238c1.14-.153 2.595-.153 4.433-.153m-7.194 9h18.5V11c0-1.907-.002-3.261-.14-4.29c-.135-1.005-.389-1.585-.812-2.008s-1.003-.677-2.009-.812c-1.027-.138-2.382-.14-4.289-.14h-4c-1.907 0-3.261.002-4.29.14c-1.005.135-1.585.389-2.008.812S3.025 5.705 2.89 6.71c-.138 1.029-.14 2.383-.14 4.29zM6 5.75a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2A.75.75 0 0 1 6 5.75m3 0a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2A.75.75 0 0 1 9 5.75"
+                        clip-rule="evenodd" />
+                </svg>
+                {{ updating ? 'Actualizando...' : 'Actualizar' }}
+            </button>
+        </div>
+
+    </div>
+</div>

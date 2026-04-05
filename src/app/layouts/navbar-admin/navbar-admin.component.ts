@@ -1,12 +1,12 @@
 import { Component, Renderer2, OnInit } from '@angular/core';;
 import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
-
+import { RouterModule } from '@angular/router';
 
 
 @Component({
   selector: 'app-navbar-admin',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar-admin.component.html',
   styleUrl: './navbar-admin.component.css'
 })
