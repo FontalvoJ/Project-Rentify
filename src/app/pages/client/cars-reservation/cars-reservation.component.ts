@@ -47,19 +47,19 @@ export class CarsReservationComponent implements OnInit {
   showAlert = false;
   showAlertReservationActive = false;
 
-// --- Reseñas  ---
+  // --- Reseñas  ---
   reviews: any[] = [];
   selectedCarForReviews: any = null;
   showReviewsModal = false;
 
 
- 
+
 
   constructor(private carService: CarService, private reservationService: ReservationService, private reviewService: ReviewService) { }
 
   ngOnInit(): void {
     this.fetchCars();
- 
+
   }
 
   // ──────────────────────────────────────────────
@@ -69,37 +69,23 @@ export class CarsReservationComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    forkJoin({
-      cars: this.carService.getAllCarsForEveryone(),
-      reservations: this.reservationService.getReservations()
-      
-    }).subscribe({
-      next: ({ cars, reservations }) => {
-       
-        
-        this.cars = cars.map(car => {
+    this.carService.getAllCarsForEveryone().subscribe({
+      next: (cars: CarData[]) => {
 
-          // Buscar reserva activa para este auto
-          const activeReservation = reservations.find(r =>
-            r.car === `${car.brand} ${car.model}` &&
-            r.status === 'Activa'
-          );
+        this.cars = cars.map(car => ({
+          ...car,
+          pricePerDay: (car.pricePerDay as any)?.$numberDecimal
+            ? Number((car.pricePerDay as any).$numberDecimal)
+            : car.pricePerDay,
 
-          const availableFrom = activeReservation
-            ? new Date(activeReservation.endDate)
-            : null;
+          isAvailable: typeof car.isAvailable === 'object' && car.isAvailable !== null
+            ? car.isAvailable
+            : { _id: '', status: 'Desconocido' },
 
-          return {
-            ...car,
-            pricePerDay: (car.pricePerDay as any)?.$numberDecimal
-              ? Number((car.pricePerDay as any).$numberDecimal)
-              : car.pricePerDay,
-            isAvailable: typeof car.isAvailable === 'object' && car.isAvailable !== null
-              ? car.isAvailable
-              : { _id: '', status: 'Desconocido' },
-            availableFrom
-          };
-        });
+          availableFrom: car.availableFrom
+            ? new Date(car.availableFrom)
+            : null
+        }));
 
         this.isLoading = false;
       },
@@ -109,6 +95,7 @@ export class CarsReservationComponent implements OnInit {
       }
     });
   }
+
 
   private buildReservationDTO(): CreateReservationDTO {
     return {
@@ -276,5 +263,5 @@ export class CarsReservationComponent implements OnInit {
   }
 
 
-  
+
 }
