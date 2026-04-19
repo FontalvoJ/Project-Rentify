@@ -22,13 +22,10 @@
                         <tr class="border-b border-gray-100 bg-gray-50">
                             <th
                                 class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
-                                Fecha orden</th>
+                                Fecha</th>
                             <th
                                 class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
                                 Vehículo</th>
-                            <th
-                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
-                                ID Cliente</th>
                             <th
                                 class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
                                 Cliente</th>
@@ -45,66 +42,106 @@
                                 class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
                                 Estado</th>
                             <th
+                                class="px-4 py-3 text-xs font-semibold tracking-wider text-left text-gray-500 uppercase titles">
+                                Pago</th>
+                            <th
                                 class="px-4 py-3 text-xs font-semibold tracking-wider text-center text-gray-500 uppercase titles">
-                                Editar</th>
+                                Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <tr *ngFor="let reservation of paginatedReservations"
                             class="transition-colors duration-150 hover:bg-gray-50">
 
-                            <td class="px-4 py-3 text-xs text-gray-600 other-text whitespace-nowrap">
-                                {{ reservation.createdAt | date: 'yyyy-MM-dd' }}
+                            <td class="px-4 py-3 text-xs text-gray-400 whitespace-nowrap other-text">
+                                {{ reservation.createdAt | date: 'dd/MM/yy' }}
                             </td>
 
-                            <td class="px-4 py-3 text-xs font-medium text-gray-900 other-text whitespace-nowrap">
+                            <td class="px-4 py-3 text-xs font-medium text-gray-900 whitespace-nowrap other-text">
                                 {{ reservation.car }}
                             </td>
 
-                            <td class="px-4 py-3 font-mono text-xs text-gray-500 other-text whitespace-nowrap">
-                                {{ reservation.clientId?.substring(0, 3) }}...{{
-                                reservation.clientId?.substring((reservation.clientId?.length ?? 0) - 3) }}
+                            <!-- Cliente: nombre + ID en secundario -->
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <p class="text-xs font-medium text-gray-700 other-text">{{ reservation.clientName }}</p>
+                                <p class="text-xs font-mono text-gray-300 mt-0.5">
+                                    {{ reservation.clientId?.substring(0, 4) }}...{{
+                                    reservation.clientId?.substring((reservation.clientId?.length ?? 0) - 4) }}
+                                </p>
                             </td>
 
-                            <td class="px-4 py-3 text-xs text-gray-700 other-text whitespace-nowrap">
-                                {{ reservation.clientName }}
+                            <td class="px-4 py-3 text-xs text-gray-600 whitespace-nowrap other-text">
+                                {{ reservation.startDate | date: 'dd/MM/yy' }}
                             </td>
 
-                            <td class="px-4 py-3 text-xs text-gray-600 other-text whitespace-nowrap">
-                                {{ reservation.startDate | date: 'yyyy-MM-dd' }}
-                            </td>
-
-                            <td class="px-4 py-3 text-xs text-gray-600 other-text whitespace-nowrap">
-                                {{ reservation.endDate | date: 'yyyy-MM-dd' }}
+                            <td class="px-4 py-3 text-xs text-gray-600 whitespace-nowrap other-text">
+                                {{ reservation.endDate | date: 'dd/MM/yy' }}
                             </td>
 
                             <td class="px-4 py-3 text-xs whitespace-nowrap other-text">
                                 <span class="font-semibold text-gray-900">{{ reservation.totalCost | currency }}</span>
-                                <span *ngIf="reservation.discountApplied" class="ml-1 font-medium text-green-600">(-{{
-                                    reservation.discountPercentage }}%)</span>
+                                <span *ngIf="reservation.discountApplied"
+                                    class="block text-xs font-medium text-green-600">-{{ reservation.discountPercentage
+                                    }}%</span>
                             </td>
 
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
                                     [ngClass]="{
-                                    'bg-green-100 text-green-700': reservation.status === 'Completada',
-                                    'bg-yellow-100 text-yellow-700': reservation.status === 'Pendiente',
-                                    'bg-red-100 text-red-700': reservation.status === 'Cancelada',
-                                    'bg-purple-100 text-purple-700': reservation.status === 'Activa'
-                                }">
+                                        'bg-green-100 text-green-700': reservation.status === 'Completada',
+                                        'bg-yellow-100 text-yellow-700': reservation.status === 'Pendiente',
+                                        'bg-red-100 text-red-700': reservation.status === 'Cancelada',
+                                        'bg-purple-100 text-purple-700': reservation.status === 'Activa'
+                                    }">
                                     {{ reservation.status }}
                                 </span>
                             </td>
 
-                            <td class="px-4 py-3 text-center whitespace-nowrap">
-                                <button
-                                    class="inline-flex items-center justify-center text-gray-600 transition-colors duration-150 bg-gray-100 rounded-lg w-7 h-7 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    [disabled]="updating" (click)="editReservation(reservation.id)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 16 16">
-                                        <path fill="currentColor"
-                                            d="M5 1a2 2 0 0 0-2 2v9.998a2 2 0 0 0 2 2h1.046l.25-1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3v2.5A1.5 1.5 0 0 0 9.498 6h2.5v1.44a2.5 2.5 0 0 1 1-.405V5.413a1.5 1.5 0 0 0-.44-1.06L9.645 1.439A1.5 1.5 0 0 0 8.585 1zm6.791 4H9.5a.5.5 0 0 1-.5-.5V2.206zm1.207 3.06a1.56 1.56 0 0 0-.662.394L8.05 12.74a2.8 2.8 0 0 0-.722 1.257l-.009.033l-.302 1.211a.61.61 0 0 0 .738.74l1.211-.303a2.8 2.8 0 0 0 1.29-.73l4.288-4.288a1.56 1.56 0 0 0-1.545-2.6" />
-                                    </svg>
-                                </button>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                                    [ngClass]="{
+                                        'bg-yellow-100 text-yellow-700': reservation.paymentStatus === 'Pendiente',
+                                        'bg-green-100 text-green-700': reservation.paymentStatus === 'Pagado'
+                                    }">
+                                    {{ reservation.paymentStatus }}
+                                </span>
+                            </td>
+
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <div class="flex items-center justify-center gap-1.5">
+
+                                    <!-- Pagar -->
+                                    <button *ngIf="canPay(reservation)" (click)="registerPayment(reservation.id)"
+                                        class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 transition-colors duration-150 titles">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2m0 14H4v-6h16zm0-10H4V6h16z" />
+                                        </svg>
+                                        Pagar
+                                    </button>
+
+                                    <!-- Activar -->
+                                    <button *ngIf="canActivate(reservation)" (click)="editReservation(reservation.id)"
+                                        class="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-150 titles">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2m0 18a8 8 0 1 1 8-8a8 8 0 0 1-8 8m-1-5l-3-3l1.41-1.41L11 12.17l4.59-4.58L17 9z" />
+                                        </svg>
+                                        Activar
+                                    </button>
+
+                                    <!-- Editar -->
+                                    <button
+                                        *ngIf="reservation.status !== 'Completada' && reservation.status !== 'Cancelada'"
+                                        (click)="editReservation(reservation.id)"
+                                        class="inline-flex items-center justify-center text-gray-600 transition-colors duration-150 bg-gray-100 rounded-lg w-7 h-7 hover:bg-gray-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83l3.75 3.75z" />
+                                        </svg>
+                                    </button>
+
+                                </div>
                             </td>
 
                         </tr>
@@ -125,7 +162,6 @@
                     <span class="font-semibold text-gray-700 titles">{{ reservations.length }}</span>
                     reservas
                 </p>
-
                 <nav class="flex items-center gap-1">
                     <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
                         class="inline-flex items-center justify-center text-xs text-gray-600 transition-colors bg-white border border-gray-200 rounded-lg w-7 h-7 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed">
@@ -135,8 +171,7 @@
                         class="inline-flex items-center justify-center text-xs transition-colors border rounded-lg w-7 h-7"
                         [class.bg-black]="page === currentPage" [class.text-white]="page === currentPage"
                         [class.border-black]="page === currentPage" [class.bg-white]="page !== currentPage"
-                        [class.text-gray-600]="page !== currentPage" [class.border-gray-200]="page !== currentPage"
-                        [class.hover:bg-gray-50]="page !== currentPage">
+                        [class.text-gray-600]="page !== currentPage" [class.border-gray-200]="page !== currentPage">
                         {{ page }}
                     </button>
                     <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages()"

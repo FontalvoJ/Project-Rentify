@@ -92,21 +92,21 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" [disabled]="signinForm.invalid || loading || blocked"
-                            class="flex items-center justify-center w-full gap-2 py-3 text-sm font-semibold text-white transition-all bg-black rounded-lg shadow-md titles hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg">
-
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
-                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2">
-                                    <path d="M20 12a8 8 0 0 0-8-8m0 16a7.99 7.99 0 0 0 6.245-3" />
-                                    <path stroke-linejoin="round" d="M4 12h10m0 0l-3-3m3 3l-3 3" />
-                                </g>
-                            </svg>
-
-                            <span *ngIf="!blocked && !loading">Iniciar Sesión</span>
-                            <span *ngIf="loading">Cargando...</span>
-                            <span *ngIf="blocked">Intenta en {{ countdown }}s</span>
-
-                        </button>
+                    <button type="submit" [disabled]="signinForm.invalid || loading || blocked"
+                        class="flex items-center justify-center w-full gap-2 py-3 text-sm font-semibold text-white transition-all bg-black rounded-lg shadow-md titles hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg focus:outline-none focus:ring-0 focus:ring-offset-0 focus:shadow-none active:shadow-none">
+                    
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2">
+                                <path d="M20 12a8 8 0 0 0-8-8m0 16a7.99 7.99 0 0 0 6.245-3" />
+                                <path stroke-linejoin="round" d="M4 12h10m0 0l-3-3m3 3l-3 3" />
+                            </g>
+                        </svg>
+                    
+                        <span *ngIf="!blocked && !loading">Iniciar Sesión</span>
+                        <span *ngIf="loading">Cargando...</span>
+                        <span *ngIf="blocked">Intenta en {{ countdown }}s</span>
+                    
+                    </button>
 
                     </form>
                 </div>

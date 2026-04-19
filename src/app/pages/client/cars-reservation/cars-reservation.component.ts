@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 import { NavbarClientComponent } from "../../../layouts/navbar-client/navbar-client.component";
 
 import { CarService } from '../../../services/cars/cars.service';
 import { CarData } from '../../../models/cars/car-data';
 import { ReservationService } from '../../../services/reservations/reservation.service';
+
 import { CreateReservationDTO } from '../../../models/reservations/create-reservation.dto';
+import { ReviewService } from '../../../services/review/review.service';
 
 @Component({
   selector: 'app-cars-reservation',
@@ -44,10 +47,19 @@ export class CarsReservationComponent implements OnInit {
   showAlert = false;
   showAlertReservationActive = false;
 
-  constructor(private carService: CarService, private reservationService: ReservationService) { }
+// --- Reseñas  ---
+  reviews: any[] = [];
+  selectedCarForReviews: any = null;
+  showReviewsModal = false;
+
+
+ 
+
+  constructor(private carService: CarService, private reservationService: ReservationService, private reviewService: ReviewService) { }
 
   ngOnInit(): void {
     this.fetchCars();
+ 
   }
 
   // ──────────────────────────────────────────────
@@ -57,18 +69,38 @@ export class CarsReservationComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.carService.getAllCarsForEveryone().subscribe({
-      next: (cars: CarData[]) => {
-        this.cars = cars.map(car => ({
-          ...car,
-          pricePerDay: (car.pricePerDay as any)?.$numberDecimal
-            ? Number((car.pricePerDay as any).$numberDecimal)
-            : car.pricePerDay,
-          isAvailable: typeof car.isAvailable === 'object' && car.isAvailable !== null
-            ? car.isAvailable
-            : { _id: '', status: 'Desconocido' },
-             availableFrom: car.availableFrom || null,
-        }));
+    forkJoin({
+      cars: this.carService.getAllCarsForEveryone(),
+      reservations: this.reservationService.getReservations()
+      
+    }).subscribe({
+      next: ({ cars, reservations }) => {
+       
+        
+        this.cars = cars.map(car => {
+
+          // Buscar reserva activa para este auto
+          const activeReservation = reservations.find(r =>
+            r.car === `${car.brand} ${car.model}` &&
+            r.status === 'Activa'
+          );
+
+          const availableFrom = activeReservation
+            ? new Date(activeReservation.endDate)
+            : null;
+
+          return {
+            ...car,
+            pricePerDay: (car.pricePerDay as any)?.$numberDecimal
+              ? Number((car.pricePerDay as any).$numberDecimal)
+              : car.pricePerDay,
+            isAvailable: typeof car.isAvailable === 'object' && car.isAvailable !== null
+              ? car.isAvailable
+              : { _id: '', status: 'Desconocido' },
+            availableFrom
+          };
+        });
+
         this.isLoading = false;
       },
       error: () => {
@@ -208,4 +240,41 @@ export class CarsReservationComponent implements OnInit {
       setTimeout(() => (this.showAlertReservationActive = false), 3000);
     }
   }
+
+  loadReviews(carId: string): void {
+    console.log('Cargando reseñas para:', carId);
+
+    this.reviewService.getReviewsByCar(carId).subscribe({
+      next: (res) => {
+        console.log('RESPUESTA BACKEND:', res); // 👈 IMPORTANTE
+
+        this.reviews = res.data;
+        this.showReviewsModal = true;
+      },
+      error: (err) => {
+        console.error('ERROR:', err); // 👈 IMPORTANTE
+      }
+    });
+  }
+
+  viewReviews(car: any): void {
+    console.log('CLICK en reseñas', car);
+
+    this.selectedCarForReviews = car;
+
+    this.reviewService.getReviewsByCar(car._id).subscribe({
+      next: (res: any) => {
+        console.log('RESPUESTA BACKEND:', res);
+
+        this.reviews = res.data || [];
+        this.showReviewsModal = true; // 👈 ESTO ES CLAVE
+      },
+      error: (err) => {
+        console.error('Error cargando reseñas', err);
+      }
+    });
+  }
+
+
+  
 }

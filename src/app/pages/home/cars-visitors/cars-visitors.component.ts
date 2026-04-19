@@ -7,6 +7,7 @@ import { NavbarHomeComponent } from "../../../layouts/navbar-home/navbar-home.co
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+
 @Component({
   selector: 'app-cars-visitors',
   imports: [CommonModule, NavbarHomeComponent, RouterModule],
@@ -58,7 +59,7 @@ export class CarsVisitorsComponent implements OnInit {
       isAvailable: typeof car.isAvailable === 'object' && car.isAvailable !== null
         ? car.isAvailable
         : { _id: '', status: 'Desconocido' },
-        availableFrom: car.availableFrom || null,
+      availableFrom: car.availableFrom || null,
     }));
   }
 }

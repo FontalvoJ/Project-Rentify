@@ -1,8 +1,8 @@
 export interface Reservation {
     id: string;
     car: string;
-
-    clientId?: string; 
+    carId: string;
+    clientId?: string;
     clientName?: string | null;
 
     startDate: string;
@@ -16,5 +16,6 @@ export interface Reservation {
     discountPercentage?: number;
 
     status: string;
+    paymentStatus: 'Pendiente' | 'Pagado';
     createdAt?: string;
 }
