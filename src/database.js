@@ -1,12 +1,10 @@
-/* import mongoose from "mongoose";
+/*import mongoose from "mongoose";
 
 export const connectDB = async () => {
   try {
     await mongoose.connect("mongodb://127.0.0.1:27017/dbs_rentify");
 
     console.log("🌟 Database is Connected");
-    
-
 
     mongoose.connection.on("error", (err) => {
       console.error("❌ Error de conexión a MongoDB:", err.message);

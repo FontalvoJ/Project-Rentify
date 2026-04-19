@@ -5,7 +5,6 @@ import ResState from "../../models/ResState.js";
 import Reservation from "../../models/Reservations.js";
 
 export default class CarService extends ICarService {
- 
   /**
    * Aplica disponibilidad real según reservas activas
    */
@@ -23,8 +22,6 @@ export default class CarService extends ICarService {
 
     const activeReservations = await Reservation.find({
       resStateId: activaState._id,
-      startDate: { $lte: now },
-      endDate: { $gte: now },
     }).select("carId endDate");
 
     // Map de carId → endDate
