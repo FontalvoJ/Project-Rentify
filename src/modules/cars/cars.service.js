@@ -22,12 +22,20 @@ export default class CarService extends ICarService {
 
     const activeReservations = await Reservation.find({
       resStateId: activaState._id,
-    }).select("carId endDate");
+    })
+      .sort({ endDate: -1 })
+      .select("carId endDate");
 
     // Map de carId → endDate
-    const reservedCarsMap = new Map(
-      activeReservations.map((r) => [r.carId.toString(), r.endDate]),
-    );
+    const reservedCarsMap = new Map();
+
+    for (const r of activeReservations) {
+      const carId = r.carId.toString();
+
+      if (!reservedCarsMap.has(carId)) {
+        reservedCarsMap.set(carId, r.endDate);
+      }
+    }
 
     return cars.map((car) => {
       const carId = car._id.toString();
