@@ -29,8 +29,8 @@ export const routes: Routes = [
   // Admin rutas protegidas
   {
     path: '',
-    canActivateChild: [authGuard],   // <-- se aplica a todas las rutas hijas
-    data: { roles: ['admin'] },      // <-- solo admins
+    canActivateChild: [authGuard],   
+    data: { roles: ['admin'] },      
     children: [
       { path: 'dashboard-admin', component: DashboardAdminComponent },
       { path: 'cars-reservations', component: ListCarsReservationsComponent },
@@ -42,8 +42,8 @@ export const routes: Routes = [
   // Cliente rutas protegidas
   {
     path: '',
-    canActivateChild: [authGuard],   // <-- se aplica a todas las rutas hijas
-    data: { roles: ['client'] },     // <-- solo clientes
+    canActivateChild: [authGuard],   
+    data: { roles: ['client'] },     
     children: [
       { path: 'dashboard-client', component: DashboardClientComponent },
       { path: 'update-info', component: UpdateInfoComponent },
