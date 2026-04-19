@@ -8,6 +8,7 @@ import reservationRoutes from "./modules/reservations/reservation.routes.js";
 import clientRoutes from "./modules/client/client.routes";
 import chatbotRoutes from "./modules/chatbot/chatbot.routes.js";
 
+
 const app = express();
 
 app.use(morgan("dev"));

@@ -31,4 +31,26 @@ router.patch(
   reservationController.updateReservationStatus,
 );
 
+// 🔹 Registrar pago de una reserva (solo admin)
+router.patch(
+  "/registerPayment/:id",
+  [authJwt.verifyToken, validateRoles("admin")],
+  reservationController.registerPayment,
+);
+
+// 🔹 Crear reseña para una reserva (solo cliente)
+router.post(
+  "/createReview",
+  [authJwt.verifyToken, validateRoles("client")],
+  reservationController.createReview,
+);
+
+// 🔹 Obtener reseñas de un auto
+router.get(
+  "/reviews/:carId",
+  [authJwt.verifyToken],
+  reservationController.getReviewsByCar,
+);
+
+
 export default router;

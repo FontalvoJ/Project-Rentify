@@ -7,6 +7,7 @@ import config from "../../config.js";
 import { AuthResponseDTO } from "../auth/authResponse.js";
 
 export class AuthServiceMongoose extends IAuthService {
+  
   async registerUser(userData, roleName) {
     const role = await Role.findOne({ name: roleName });
     if (!role) {
@@ -14,6 +15,7 @@ export class AuthServiceMongoose extends IAuthService {
     }
 
     const hashedPassword = await User.encryptPassword(userData.password);
+    
     const newUser = new User({
       name: userData.name,
       email: userData.email,
@@ -54,12 +56,13 @@ export class AuthServiceMongoose extends IAuthService {
       expiresIn: "24h",
     });
 
-    console.log("Nuevo token generado:", token);
+   // console.log("Nuevo token generado:", token);
 
     return new AuthResponseDTO({
       token,
       role: user.roles[0].name,
       name: user.name,
-    });
+    }
+  );
   }
 }

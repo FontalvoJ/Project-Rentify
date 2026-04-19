@@ -28,7 +28,7 @@ const carSchema = new Schema(
       ref: "AutoAvail",
       required: true,
     },
-  
+
     pricePerDay: {
       type: mongoose.Schema.Types.Decimal128,
       required: true,

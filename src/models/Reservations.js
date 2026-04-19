@@ -49,13 +49,29 @@ const reservationSchema = new mongoose.Schema(
       ref: "ResState",
       required: true,
     },
+    paymentStatus: {
+      type: String,
+      enum: ["Pendiente", "Pagado"],
+      default: "Pendiente",
+    },
+
+    paidAt: {
+      type: Date,
+      default: null,
+    },
+
+    validatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
     collection: "Reservations",
     toJSON: { getters: true },
-  }
+  },
 );
 
 const Reservation = mongoose.model("Reservations", reservationSchema);
