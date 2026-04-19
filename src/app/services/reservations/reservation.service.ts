@@ -98,4 +98,25 @@ export class ReservationService {
     );
   }
 
+  /**
+ * Registrar pago de una reserva (solo admin)
+ */
+  registerPayment(reservationId: string): Observable<any> {
+
+    if (!reservationId) {
+      return throwError(() => new Error('ID de reserva requerido'));
+    }
+
+    const headers = this.getAuthHeaders();
+
+    return this.http.patch<{ message: string; data: any }>(
+      `${this.API_URL}registerPayment/${reservationId}`,
+      {},
+      { headers }
+    ).pipe(
+      map(response => response.data),
+      catchError(this.handleError)
+    );
+  }
+
 }

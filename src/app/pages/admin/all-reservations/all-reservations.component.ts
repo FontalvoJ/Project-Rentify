@@ -128,4 +128,39 @@ export class AllReservationsComponent implements OnInit {
         }
       });
   }
+
+  registerPayment(reservationId: string): void {
+
+    if (!reservationId) return;
+
+    this.updating = true;
+
+    this.reservationService.registerPayment(reservationId).subscribe({
+      next: () => {
+
+        // actualizar localmente
+        const reservation = this.reservations.find(r => r.id === reservationId);
+
+        if (reservation) {
+          reservation.paymentStatus = 'Pagado';
+        }
+
+        this.updatePagination();
+        this.updating = false;
+
+      },
+      error: (err) => {
+        this.errorMessage = err?.error?.message || 'Error al registrar pago';
+        this.updating = false;
+      }
+    });
+  }
+
+  canPay(res: Reservation): boolean {
+    return res.paymentStatus === 'Pendiente';
+  }
+
+  canActivate(res: Reservation): boolean {
+    return res.paymentStatus === 'Pagado' && res.status === 'Pendiente';
+  }
 }
