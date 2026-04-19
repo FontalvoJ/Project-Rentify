@@ -65,9 +65,14 @@ export default class ReservationService extends IReservationService {
         throw new Error("El auto no está disponible");
       }
 
+      const blockingStates = await ResState.find({
+        status: { $in: ["Activa", "Pendiente"] },
+      });
+
       const overlapping = await withSession(
         Reservation.findOne({
           carId,
+          resStateId: { $in: blockingStates.map((s) => s._id) },
           startDate: { $lt: end },
           endDate: { $gt: start },
         }),
