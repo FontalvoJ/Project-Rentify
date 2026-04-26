@@ -214,3 +214,102 @@
 </section>
 
 <app-footer></app-footer>
+
+<!-- Botón flotante -->
+<button (click)="toggleChat()" [attr.aria-label]="isChatOpen ? 'Cerrar chat' : 'Abrir chat'"
+    class="fixed z-50 flex items-center gap-2 text-sm font-semibold text-white transition-all duration-300 border-none shadow-xl cursor-pointer bottom-6 right-6"
+    [ngClass]="isChatOpen
+        ? 'bg-red-500 hover:bg-red-600 p-3.5 rounded-full'
+        : 'bg-gray-900 hover:bg-gray-700 px-4 py-3 rounded-full'">
+    <svg *ngIf="!isChatOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        class="w-5 h-5">
+        <path fill="#fff"
+            d="M19 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h4l3 3l3-3h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-5.12 10.88L12 17l-1.88-4.12L6 11l4.12-1.88L12 5l1.88 4.12L18 11z" />
+    </svg>
+    <span *ngIf="!isChatOpen" class="whitespace-nowrap titles">Ayuda</span>
+    <svg *ngIf="isChatOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        class="w-4 h-4">
+        <path fill="#fff"
+            d="M19 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h4l3 3l3-3h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-5.12 10.88L12 17l-1.88-4.12L6 11l4.12-1.88L12 5l1.88 4.12L18 11z" />
+    </svg>
+</button>
+
+<!-- Ventana del chat -->
+<div class="fixed bottom-20 right-6 z-40 w-[340px] max-h-[520px] bg-white rounded-2xl shadow-xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right sm:w-[360px] sm:max-h-[560px]"
+    [ngClass]="isChatOpen
+        ? 'opacity-100 scale-100 pointer-events-auto'
+        : 'opacity-0 scale-95 pointer-events-none'" role="dialog" aria-label="Chat de soporte Rentify">
+
+    <!-- Header -->
+    <div class="flex items-center flex-shrink-0 gap-3 px-4 py-3 text-white bg-gray-900">
+        <div class="flex items-center justify-center flex-shrink-0 bg-black rounded-lg w-9 h-9">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-white">
+                <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z" />
+            </svg>
+        </div>
+        <div class="flex flex-col flex-1 min-w-0">
+            <span class="text-sm font-semibold titles">Rentify Bot</span>
+            <span class="flex items-center gap-1 text-xs text-white/60 other-text">
+                <span class="w-1.5 h-1.5 bg-green-400 rounded-full inline-block animate-pulse"></span>
+                En línea
+            </span>
+        </div>
+        <button (click)="toggleChat()"
+            class="flex items-center justify-center transition-colors duration-200 bg-transparent border-none rounded-lg cursor-pointer w-7 h-7 text-white/50 hover:text-white hover:bg-white/10"
+            aria-label="Cerrar chat">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mensajes -->
+    <div #chatBody class="flex flex-col flex-1 gap-3 p-4 overflow-y-auto bg-gray-50 scroll-smooth">
+        <ng-container *ngFor="let msg of messages">
+
+            <!-- Bot -->
+            <div *ngIf="msg.from === 'bot'" class="flex flex-col items-start max-w-[80%]">
+                <div
+                    class="bg-white text-gray-900 px-3.5 py-2.5 rounded-2xl rounded-bl-sm shadow-sm text-xs leading-relaxed other-text">
+                    <pre class="whitespace-pre-wrap font-[inherit] text-[inherit] m-0">{{ msg.text }}</pre>
+                </div>
+                <span class="text-[10px] text-gray-400 mt-1 px-1 other-text">{{ msg.time }}</span>
+            </div>
+
+            <!-- Usuario -->
+            <div *ngIf="msg.from === 'user'" class="flex flex-col items-end max-w-[80%] self-end">
+                <div
+                    class="bg-gray-900 text-white px-3.5 py-2.5 rounded-2xl rounded-br-sm text-xs leading-relaxed other-text">
+                    <p class="m-0 break-words">{{ msg.text }}</p>
+                </div>
+                <span class="text-[10px] text-gray-400 mt-1 px-1 other-text">{{ msg.time }}</span>
+            </div>
+
+        </ng-container>
+
+        <!-- Typing -->
+        <div *ngIf="isTyping" class="flex flex-col items-start max-w-[80%]">
+            <div class="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input -->
+    <div class="flex items-center flex-shrink-0 gap-2 px-3 py-3 bg-white border-t border-gray-100">
+        <input type="text" [(ngModel)]="userInput" (keydown)="onKeyDown($event)" placeholder="Escribe un mensaje..."
+            [disabled]="isTyping" maxlength="200" autocomplete="off"
+            class="flex-1 px-4 py-2 text-xs text-gray-900 transition-colors duration-200 border border-gray-200 rounded-full outline-none bg-gray-50 focus:border-gray-900 focus:bg-white disabled:opacity-50 disabled:cursor-not-allowed other-text" />
+        <button (click)="sendMessage()" [disabled]="!userInput.trim() || isTyping" aria-label="Enviar mensaje"
+            class="flex items-center justify-center flex-shrink-0 text-white transition-all duration-200 border-none rounded-full cursor-pointer w-9 h-9 hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed"
+            [ngClass]="!userInput.trim() || isTyping ? 'bg-gray-200' : 'bg-gray-900 hover:bg-gray-700'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+        </button>
+    </div>
+
+</div>
