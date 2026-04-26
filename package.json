@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "RentifyAPI 🚗🔑 es una plataforma segura y eficiente para gestionar el alquiler de vehículos en tiempo real 📅. Diseñada tanto para administradores como para clientes, permite a los administradores autenticar usuarios, actualizar datos de clientes y vehículos, listar clientes, añadir autos para reservación y gestionar las reservaciones mediante su activación o eliminación 📊. Por otro lado, los clientes pueden registrarse y acceder de forma segura, realizar reservaciones, listar sus reservas activas, actualizar su información personal y eliminar su cuenta cuando lo deseen 🔄. Con una integración fluida y funcionalidades intuitivas, RentifyAPI garantiza una experiencia de alquiler cómoda y confiable para usuarios en cualquier parte del mundo 🌍.",
   "dependencies": {
+    "axios": "^1.15.1",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
