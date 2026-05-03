@@ -389,4 +389,45 @@ export default class ReservationService extends IReservationService {
       })
       .sort({ createdAt: -1 });
   }
+
+  async completeExpiredReservations() {
+    const now = new Date();
+
+    // Estados
+    const activeState = await ResState.findOne({
+      status: "Activa",
+    });
+
+    const completedState = await ResState.findOne({
+      status: "Completada",
+    });
+
+    const disponible = await CarAvailability.findOne({
+      status: "Disponible",
+    });
+
+    if (!activeState || !completedState || !disponible) {
+      throw new Error("Estados no configurados");
+    }
+
+    // Buscar reservas activas vencidas
+    const expiredReservations = await Reservation.find({
+      resStateId: activeState._id,
+      endDate: { $lte: now },
+    });
+
+    for (const reservation of expiredReservations) {
+      // Completar reserva
+      reservation.resStateId = completedState._id;
+
+      await reservation.save();
+
+      // Liberar auto
+      await Cars.findByIdAndUpdate(reservation.carId, {
+        isAvailable: disponible._id,
+      });
+
+      console.log(`Reserva ${reservation._id} completada automáticamente`);
+    }
+  }
 }

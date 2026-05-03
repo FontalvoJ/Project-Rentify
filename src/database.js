@@ -24,7 +24,6 @@ export const connectDB = async () => {
 let isDBConnected = false;
 export const isDatabaseConnected = () => isDBConnected;*/
 
-
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
