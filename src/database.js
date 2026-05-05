@@ -27,6 +27,9 @@ export const isDatabaseConnected = () => isDBConnected;*/
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
+import dns from "dns";
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 dotenv.config({
   path: path.resolve(process.cwd(), ".env"),
@@ -45,5 +48,3 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
-
-connectDB();
